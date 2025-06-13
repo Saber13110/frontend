@@ -245,25 +245,25 @@ export class HomeComponent implements OnInit, OnDestroy {
   private initializeServices(): void {
     this.servicesList = [
       {
-        title: 'Express Delivery',
-        description: 'Fast and reliable delivery service for urgent packages',
-        image: 'assets/images/services/express-delivery.jpg',
-        icon: 'fas fa-truck',
-        link: '/services/express'
+        title: 'Suivi par courrier',
+        description: 'Recevez les mises \u00e0 jour de vos colis directement par e-mail',
+        image: 'assets/images/services/track-by-mail.jpg',
+        icon: 'fas fa-envelope',
+        link: '/services/track-by-mail'
       },
       {
-        title: 'International Shipping',
-        description: 'Worldwide shipping solutions for your global needs',
-        image: 'assets/images/services/international-shipping.jpg',
-        icon: 'fas fa-globe',
-        link: '/services/international'
+        title: 'G\u00e9n\u00e9rer un code-barres',
+        description: 'Cr\u00e9ez un code-barres pour identifier facilement vos colis',
+        image: 'assets/images/services/generate-barcode.jpg',
+        icon: 'fas fa-barcode',
+        link: '/services/generate-barcode'
       },
       {
-        title: 'Warehousing',
-        description: 'Secure storage solutions for your goods',
-        image: 'assets/images/services/warehousing.jpg',
-        icon: 'fas fa-warehouse',
-        link: '/services/warehousing'
+        title: 'Activer les notifications',
+        description: 'Soyez alert\u00e9 instantan\u00e9ment de chaque mise \u00e0 jour',
+        image: 'assets/images/services/activate-notifications.jpg',
+        icon: 'fas fa-bell',
+        link: '/services/notifications'
       }
     ];
   }
