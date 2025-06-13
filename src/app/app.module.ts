@@ -9,7 +9,7 @@ import { TrackingAdviceComponent } from './pages/help/tracking-advice/tracking-a
 import { TrackingToolsComponent } from './pages/help/tracking-tools/tracking-tools.component';
 import { FaqsComponent } from './pages/help/faqs/faqs.component';
 import { ContactUsComponent } from './pages/help/contact-us/contact-us.component';
-import { NotificationService } from './services/notification.service';
+import { NotificationService } from './shared/services/notification.service';
 
 @NgModule({
   declarations: [
