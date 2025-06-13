@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, OnDestroy, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule, Router } from '@angular/router';
@@ -6,6 +6,18 @@ import { trigger, transition, style, animate } from '@angular/animations';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { News } from '../../shared/models/news.model';
+import { Location } from '../../shared/models/location.model';
+import { FAQ } from '../../shared/models/faq.model';
+import { Notification } from '../../shared/models/notification.model';
+import { ServiceItem } from '../../shared/models/service-item.model';
+import { HeroSectionComponent } from './components/hero/hero-section.component';
+import { ServicesSectionComponent } from './components/services/services-section.component';
+import { NewsSectionComponent } from './components/news/news-section.component';
+import { LocationsSectionComponent } from './components/locations/locations-section.component';
+import { FaqSectionComponent } from './components/faq/faq-section.component';
+import { CtaSectionComponent } from './components/cta/cta-section.component';
+import { NotificationsComponent } from './components/notifications/notifications.component';
 
 // Import Google Maps types
 declare global {
@@ -14,58 +26,26 @@ declare global {
   }
 }
 
-interface News {
-  id: number;
-  title: string;
-  content: string;
-  image: string;
-  imageUrl: string;
-  date: Date;
-  category: string;
-  summary: string;
-  slug: string;
-}
-
-interface Location {
-  id: number;
-  name: string;
-  address: string;
-  phone: string;
-  email: string;
-  coordinates: {
-    lat: number;
-    lng: number;
-  };
-  hours: string;
-}
-
-interface FAQ {
-  question: string;
-  answer: string;
-  isOpen: boolean;
-}
-
-interface Notification {
-  id: number;
-  type: 'success' | 'warning' | 'error';
-  title: string;
-  message: string;
-}
-
-interface ServiceItem {
-  title: string;
-  description: string;
-  icon: string;
-  image: string;
-  link: string;
-}
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    RouterModule,
+    HeroSectionComponent,
+    ServicesSectionComponent,
+    NewsSectionComponent,
+    LocationsSectionComponent,
+    FaqSectionComponent,
+    CtaSectionComponent,
+    NotificationsComponent
+  ],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
+  encapsulation: ViewEncapsulation.None,
   animations: [
     trigger('fadeInOut', [
       transition(':enter', [
@@ -358,10 +338,12 @@ export class HomeComponent implements OnInit, OnDestroy {
       id: Date.now(),
       type,
       title,
-      message
+      message,
+      duration: 5000,
+      visible: true
     };
     this.notifications.push(notification);
-    setTimeout(() => this.removeNotification(notification), 5000);
+    setTimeout(() => this.removeNotification(notification), notification.duration);
   }
 
   // === SUPPRIMER NOTIF

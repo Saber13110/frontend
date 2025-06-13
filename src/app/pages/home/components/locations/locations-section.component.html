@@ -1,0 +1,24 @@
+<section class="locations-section">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">Our Locations</h2>
+      <p class="section-subtitle">Find the nearest agency to you</p>
+    </div>
+    <div class="locations-container">
+      <div #mapContainer id="map" class="map-container"></div>
+      <div class="locations-list">
+        <div class="location-card" *ngFor="let location of locations"
+             [class.active]="location === selectedLocation"
+             (click)="selectLocation.emit(location)">
+          <h3>{{location.name}}</h3>
+          <div class="location-details">
+            <p><i class="fas fa-map-marker-alt"></i> {{location.address}}</p>
+            <p><i class="fas fa-phone"></i> {{location.phone}}</p>
+            <p><i class="fas fa-envelope"></i> {{location.email}}</p>
+            <p><i class="fas fa-clock"></i> {{location.hours}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
