@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { NotificationService } from '../../../services/notification.service';
+import { NotificationService } from '../../../shared/services/notification.service';
 
 interface ContactOption {
   id: string;
