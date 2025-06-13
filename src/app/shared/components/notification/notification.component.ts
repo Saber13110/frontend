@@ -1,15 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NotificationService } from '../../services/notification.service';
 import { Subscription } from 'rxjs';
-
-export interface Notification {
-  id: number;
-  type: 'success' | 'error' | 'warning' | 'info' | 'primary';
-  title: string;
-  message: string;
-  duration: number;
-  visible: boolean;
-}
+import { Notification } from '../../models/notification.model';
 
 @Component({
   selector: 'app-notification',
