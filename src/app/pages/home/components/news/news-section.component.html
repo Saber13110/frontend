@@ -1,0 +1,25 @@
+<section class="news">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">Latest News</h2>
+      <p class="section-subtitle">Stay informed about our latest news</p>
+    </div>
+    <div class="news__grid">
+      <div class="news__card" *ngFor="let item of news">
+        <div class="news__card-image">
+          <img [src]="item.image" [alt]="item.title" loading="lazy" (error)="item.image = './assets/images/news/default.jpg'">
+          <span class="news__card-category">{{item.category}}</span>
+        </div>
+        <div class="news__card-content">
+          <div class="news__card-date">{{item.date | date:'longDate'}}</div>
+          <h3>{{item.title}}</h3>
+          <p>{{item.content}}</p>
+          <a [routerLink]="['/news', item.slug]" class="news__card-link">
+            Read More
+            <i class="fas fa-arrow-right"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

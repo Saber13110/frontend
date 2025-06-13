@@ -1,0 +1,59 @@
+<section class="hero">
+  <div class="hero__content">
+    <h1 class="hero__title">Track your packages in real-time</h1>
+    <p class="hero__subtitle">Enter your tracking number to know the status of your delivery</p>
+
+    <div class="hero__features">
+      <div class="hero__feature-card" [class.active]="selectedHeroFeature === 'barcode_scan'" (click)="onSelectFeature('barcode_scan')">
+        <i class="fas fa-barcode hero__feature-icon"></i>
+        <p class="hero__feature-text">Scan<br>Barcode</p>
+      </div>
+      <div class="hero__feature-card" [class.active]="selectedHeroFeature === null" (click)="onSelectFeature(null)">
+        <i class="fas fa-search hero__feature-icon"></i>
+        <p class="hero__feature-text">TRACK</p>
+      </div>
+      <div class="hero__feature-card" [class.active]="selectedHeroFeature === 'obtain_proof'" (click)="onSelectFeature('obtain_proof')">
+        <i class="fas fa-file-alt hero__feature-icon"></i>
+        <p class="hero__feature-text">Obtain your<br>proof</p>
+      </div>
+    </div>
+
+    <div class="hero__tracking">
+      <div *ngIf="selectedHeroFeature === null" class="tracking-form">
+        <form [formGroup]="trackingForm" (ngSubmit)="onSubmit()">
+          <div class="tracking-form__input-group">
+            <input type="text" formControlName="trackingNumber" class="tracking-form__input" placeholder="Enter your tracking number">
+            <button type="submit" class="tracking-form__btn">
+              <i class="fas fa-search"></i>
+              Track
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <div *ngIf="selectedHeroFeature === 'barcode_scan'" class="barcode-scan-option">
+        <p>Upload a barcode image or use Pro Scan to track your package.</p>
+        <div class="upload-box" (click)="fileInput.click()">
+          <i class="fas fa-cloud-upload-alt upload-icon"></i>
+          <p>Drag and drop or click to upload</p>
+          <input type="file" accept="image/*" (change)="onBarcodeFileSelected($event)" #fileInput hidden>
+        </div>
+        <button class="btn btn--primary mt-3">Pro Scan (Webcam - Coming Soon)</button>
+      </div>
+
+      <div *ngIf="selectedHeroFeature === 'obtain_proof'" class="obtain-proof-option">
+        <p>Enter tracking ID to download your proof of delivery.</p>
+        <form [formGroup]="trackingForm" (ngSubmit)="onSubmit()">
+          <div class="tracking-form__input-group">
+            <input type="text" formControlName="trackingNumber" class="tracking-form__input" placeholder="Enter tracking ID">
+            <button type="submit" class="tracking-form__btn">
+              <i class="fas fa-download"></i>
+              Download Proof
+            </button>
+          </div>
+        </form>
+      </div>
+
+    </div>
+  </div>
+</section>
