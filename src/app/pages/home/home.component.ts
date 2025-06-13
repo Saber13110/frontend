@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild, ElementRef, OnDestroy } from '@angular/co
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule, Router } from '@angular/router';
+import { NotificationService } from '../../shared/services/notification.service';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subject } from 'rxjs';
@@ -45,12 +46,6 @@ interface FAQ {
   isOpen: boolean;
 }
 
-interface Notification {
-  id: number;
-  type: 'success' | 'warning' | 'error';
-  title: string;
-  message: string;
-}
 
 interface ServiceItem {
   title: string;
@@ -88,9 +83,6 @@ export class HomeComponent implements OnInit, OnDestroy {
   // === Auth fake pour afficher outils avancés (à remplacer plus tard)
   isLoggedIn = true;
 
-  // === Notifications en file d'attente
-  notifications: Notification[] = [];
-  currentNotifs: Notification[] = [];
 
   // === Liste d'actualités
   news: News[] = [];
@@ -118,7 +110,8 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   constructor(
     private fb: FormBuilder,
-    private router: Router
+    private router: Router,
+    private notificationService: NotificationService
   ) {
     this.trackingForm = this.fb.group({
       trackingNumber: ['', [Validators.required, Validators.pattern('^[A-Z0-9]{10,}$')]]
@@ -333,16 +326,14 @@ export class HomeComponent implements OnInit, OnDestroy {
   trackPackage(): void {
     if (!this.trackingForm.get('trackingNumber')?.value.trim()) return;
 
-    this.addNotification(
-      'success',
+    this.notificationService.success(
       'Recherche en cours',
       `Recherche du colis #${this.trackingForm.get('trackingNumber')?.value}...`
     );
 
     setTimeout(() => {
       // TODO: remplacer par appel vers FastAPI → GET /api/tracking/:id
-      this.addNotification(
-        'success',
+      this.notificationService.success(
         'Colis trouvé',
         `Colis #${this.trackingForm.get('trackingNumber')?.value} en transit.`
       );
@@ -353,21 +344,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   // === AJOUTER NOTIFICATION FLOTTANTE
-  addNotification(type: 'success' | 'warning' | 'error', title: string, message: string): void {
-    const notification: Notification = {
-      id: Date.now(),
-      type,
-      title,
-      message
-    };
-    this.notifications.push(notification);
-    setTimeout(() => this.removeNotification(notification), 5000);
-  }
 
-  // === SUPPRIMER NOTIF
-  removeNotification(notification: Notification): void {
-    this.notifications = this.notifications.filter(n => n.id !== notification.id);
-  }
 
   // === NOTIFICATIONS AUTO (ex: alerte livraison)
   autoPushNotifications(): void {
@@ -387,7 +364,18 @@ export class HomeComponent implements OnInit, OnDestroy {
     let i = 0;
     const interval = setInterval(() => {
       if (i < auto.length) {
-        this.addNotification(auto[i].type, auto[i].title, auto[i].message);
+        const { type, title, message } = auto[i];
+        switch (type) {
+          case 'success':
+            this.notificationService.success(title, message);
+            break;
+          case 'warning':
+            this.notificationService.warning(title, message);
+            break;
+          case 'error':
+            this.notificationService.error(title, message);
+            break;
+        }
         i++;
       } else {
         clearInterval(interval);
@@ -441,14 +429,12 @@ export class HomeComponent implements OnInit, OnDestroy {
       const trackingId = this.barcodeForm.get('trackingId')?.value;
       // TODO: Implement actual barcode generation logic
       // For now, just show a notification
-      this.addNotification(
-        'success',
+      this.notificationService.success(
         'Barcode Generated',
         `Barcode for tracking ID ${trackingId} has been generated.`
       );
     } else {
-      this.addNotification(
-        'error',
+      this.notificationService.error(
         'Invalid Input',
         'Please enter a valid tracking ID (minimum 10 alphanumeric characters).'
       );
