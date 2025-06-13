@@ -94,6 +94,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   // === Liste d'actualités
   news: News[] = [];
+  currentNewsIndex = 0;
 
   // === Liste FAQ
   faqList: FAQ[] = [];
@@ -409,6 +410,22 @@ export class HomeComponent implements OnInit, OnDestroy {
   nextService(): void {
     if (this.currentServiceIndex < this.servicesList.length - 1) {
       this.currentServiceIndex++;
+    }
+  }
+
+  prevNews(): void {
+    if (this.currentNewsIndex > 0) {
+      this.currentNewsIndex--;
+    } else {
+      this.currentNewsIndex = this.news.length - 1;
+    }
+  }
+
+  nextNews(): void {
+    if (this.currentNewsIndex < this.news.length - 1) {
+      this.currentNewsIndex++;
+    } else {
+      this.currentNewsIndex = 0;
     }
   }
 

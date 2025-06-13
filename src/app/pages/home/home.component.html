@@ -106,21 +106,30 @@
       <h2 class="section-title">Latest News</h2>
       <p class="section-subtitle">Stay informed about our latest news</p>
     </div>
-    <div class="news__grid">
-      <div class="news__card" *ngFor="let item of news">        <div class="news__card-image">
-          <img [src]="item.image" [alt]="item.title" loading="lazy" (error)="item.image = './assets/images/news/default.jpg'">
-          <span class="news__card-category">{{item.category}}</span>
-        </div>
-        <div class="news__card-content">
-          <div class="news__card-date">{{item.date | date:'longDate'}}</div>
-          <h3>{{item.title}}</h3>
-          <p>{{item.content}}</p>
-          <a [routerLink]="['/news', item.slug]" class="news__card-link">
-            Read More
-            <i class="fas fa-arrow-right"></i>
-          </a>
+    <div class="news__carousel">
+      <button class="news__nav news__nav--prev" (click)="prevNews()" aria-label="Previous">
+        <i class="fas fa-chevron-left"></i>
+      </button>
+      <div class="news__track" [style.transform]="'translateX(-' + currentNewsIndex * 100 + '%)'">
+        <div class="news__card" *ngFor="let item of news">
+          <div class="news__card-image">
+            <img [src]="item.image" [alt]="item.title" loading="lazy" (error)="item.image = './assets/images/news/default.jpg'">
+            <span class="news__card-category">{{item.category}}</span>
+          </div>
+          <div class="news__card-content">
+            <div class="news__card-date">{{item.date | date:'longDate'}}</div>
+            <h3>{{item.title}}</h3>
+            <p>{{item.content}}</p>
+            <a [routerLink]="['/news', item.slug]" class="news__card-link">
+              Read More
+              <i class="fas fa-arrow-right"></i>
+            </a>
+          </div>
         </div>
       </div>
+      <button class="news__nav news__nav--next" (click)="nextNews()" aria-label="Next">
+        <i class="fas fa-chevron-right"></i>
+      </button>
     </div>
   </div>
 </section>
