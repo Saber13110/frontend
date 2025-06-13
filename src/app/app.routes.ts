@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 import { ADVANCED_SHIPMENT_TRACKING_ROUTES } from './pages/advanced-shipment-tracking/advanced-shipment-tracking.routes';
-import { HISTORY_ROUTES } from './components/history/history.routes';
+import { HISTORY_ROUTES } from './pages/history/history.routes';
 import { HOME_ROUTES } from './pages/home/home.routes';
 
 export const routes: Routes = [
