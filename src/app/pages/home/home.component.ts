@@ -6,6 +6,9 @@ import { trigger, transition, style, animate } from '@angular/animations';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { BrowserMultiFormatReader } from '@zxing/browser';
+import { saveAs } from 'file-saver';
+import { TrackingService } from '../../features/tracking/services/tracking.service';
 
 // Import Google Maps types
 declare global {
@@ -118,7 +121,8 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   constructor(
     private fb: FormBuilder,
-    private router: Router
+    private router: Router,
+    private trackingService: TrackingService
   ) {
     this.trackingForm = this.fb.group({
       trackingNumber: ['', [Validators.required, Validators.pattern('^[A-Z0-9]{10,}$')]]
@@ -323,33 +327,37 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
-    if (this.trackingForm.valid) {
-      const trackingNumber = this.trackingForm.get('trackingNumber')?.value;
-      this.router.navigate(['/tracking', trackingNumber]);
+    if (!this.trackingForm.valid) {
+      return;
+    }
+
+    if (this.selectedHeroFeature === 'obtain_proof') {
+      this.obtainProof();
+    } else {
+      this.trackPackage();
     }
   }
 
   // === TRAITEMENT TRACKING
   trackPackage(): void {
-    if (!this.trackingForm.get('trackingNumber')?.value.trim()) return;
+    const id = this.trackingForm.get('trackingNumber')?.value.trim();
+    if (!id) return;
 
     this.addNotification(
       'success',
       'Recherche en cours',
-      `Recherche du colis #${this.trackingForm.get('trackingNumber')?.value}...`
+      `Recherche du colis #${id}...`
     );
 
-    setTimeout(() => {
-      // TODO: remplacer par appel vers FastAPI → GET /api/tracking/:id
-      this.addNotification(
-        'success',
-        'Colis trouvé',
-        `Colis #${this.trackingForm.get('trackingNumber')?.value} en transit.`
-      );
-
-      // Rediriger vers la page résultat
-      this.router.navigate(['/tracking/result', this.trackingForm.get('trackingNumber')?.value]);
-    }, 2000);
+    this.trackingService.getTrackingData(id).pipe(takeUntil(this.destroy$)).subscribe({
+      next: () => {
+        this.addNotification('success', 'Colis trouvé', `Colis #${id} en transit.`);
+        this.router.navigate(['/tracking/result', id]);
+      },
+      error: () => {
+        this.addNotification('error', 'Erreur', 'Numéro de suivi invalide ou introuvable');
+      }
+    });
   }
 
   // === AJOUTER NOTIFICATION FLOTTANTE
@@ -426,11 +434,36 @@ export class HomeComponent implements OnInit, OnDestroy {
   onBarcodeFileSelected(event: any): void {
     const file: File = event.target.files[0];
     if (file) {
-      console.log('Fichier de code-barres sélectionné :', file.name);
-      // TODO: Implémenter la logique pour lire l'image et extraire le code-barres
-      // Vous aurez besoin d'une bibliothèque de lecture de code-barres (ex: ZXing)
-      // et potentiellement d'envoyer l'image ou le code décodé au backend.
+      const reader = new FileReader();
+      reader.onload = async () => {
+        try {
+          const codeReader = new BrowserMultiFormatReader();
+          const result = await codeReader.decodeFromImageUrl(reader.result as string);
+          this.trackingForm.get('trackingNumber')?.setValue(result.getText());
+          this.addNotification('success', 'Code scanné', `ID détecté: ${result.getText()}`);
+          this.trackPackage();
+        } catch (err) {
+          console.error('Barcode decode error:', err);
+          this.addNotification('error', 'Échec du scan', 'Impossible de lire le code-barres');
+        }
+      };
+      reader.readAsDataURL(file);
     }
+  }
+
+  obtainProof(): void {
+    const id = this.trackingForm.get('trackingNumber')?.value.trim();
+    if (!id) return;
+
+    this.trackingService.downloadProofOfDelivery(id).pipe(takeUntil(this.destroy$)).subscribe({
+      next: (blob: Blob) => {
+        saveAs(blob, `proof-${id}.pdf`);
+        this.addNotification('success', 'Téléchargement', 'Preuve de livraison téléchargée');
+      },
+      error: () => {
+        this.addNotification('error', 'Erreur', 'Impossible de récupérer la preuve');
+      }
+    });
   }
 
   // TODO: Ajouter la logique pour 'Obtain your proof' (saisie ID et bouton télécharger)
