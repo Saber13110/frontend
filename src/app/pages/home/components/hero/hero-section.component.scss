@@ -1,3 +1,5 @@
+@use "../../home.component.scss" as *;
+@use "sass:color";
 // Hero Section
 .hero {
   background: url('/assets/images/hero/hero-bg.jpg') center/cover no-repeat;

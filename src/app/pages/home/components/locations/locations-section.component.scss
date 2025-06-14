@@ -1,3 +1,5 @@
+@use "../../home.component.scss" as *;
+@use "sass:color";
 // Locations Section
 .locations-section {
   @include section-padding;

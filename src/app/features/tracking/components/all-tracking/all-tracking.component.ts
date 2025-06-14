@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule, Router } from '@angular/router';
+import { firstValueFrom } from 'rxjs';
+import { TrackingService } from '../../services/tracking.service';
+import { NotificationService } from '../../../../shared/services/notification.service';
 
 // TODO: Backend - Create Tracking Interfaces
 interface TrackingRequest {
@@ -61,9 +64,8 @@ export class AllTrackingComponent implements OnInit {
 
   constructor(
     private router: Router,
-    // TODO: Inject services
-    // private trackingService: TrackingService,
-    // private notificationService: NotificationService
+    private trackingService: TrackingService,
+    private notificationService: NotificationService
   ) {}
 
   ngOnInit(): void {
@@ -135,19 +137,8 @@ export class AllTrackingComponent implements OnInit {
 
     this.isLoading = true;
     try {
-      // TODO: Implement tracking service call
-      /*
-      const result = await this.trackingService.track({
-        trackingNumber: this.trackingNumber,
-        type: 'number'
-      });
-      this.notificationService.success('Tracking information retrieved successfully');
-      // Navigate to results page or show results
-      */
-      
-      // Simulation for development
-      console.log('Tracking package:', this.trackingNumber);
-      alert(`Recherche du colis: ${this.trackingNumber}\n\n(Intégration API à venir)`);
+      await firstValueFrom(this.trackingService.getTrackingData(this.trackingNumber));
+      this.notificationService.success('Tracking information retrieved successfully', '');
       this.router.navigate(['/tracking/result'], {
         queryParams: {
           number: this.trackingNumber,
@@ -156,7 +147,7 @@ export class AllTrackingComponent implements OnInit {
       });
     } catch (error) {
       console.error('Tracking error:', error);
-      // this.notificationService.error('Failed to retrieve tracking information');
+      this.notificationService.error('Failed to retrieve tracking information', '');
     } finally {
       this.isLoading = false;
     }
@@ -168,12 +159,8 @@ export class AllTrackingComponent implements OnInit {
 
     this.isLoading = true;
     try {
-      // TODO: Implement reference tracking
-      console.log('Tracking by reference:', {
-        reference: this.referenceNumber,
-        country: this.selectedCountry
-      });
-      alert(`Recherche par référence: ${this.referenceNumber}\nPays: ${this.selectedCountry}\n\n(Intégration API à venir)`);
+      await firstValueFrom(this.trackingService.getTrackingData(this.referenceNumber));
+      this.notificationService.success('Tracking information retrieved successfully', '');
       this.router.navigate(['/tracking/result'], {
         queryParams: {
           number: this.referenceNumber,
@@ -182,6 +169,7 @@ export class AllTrackingComponent implements OnInit {
       });
     } catch (error) {
       console.error('Reference tracking error:', error);
+      this.notificationService.error('Failed to retrieve tracking information', '');
     } finally {
       this.isLoading = false;
     }
@@ -193,12 +181,8 @@ export class AllTrackingComponent implements OnInit {
 
     this.isLoading = true;
     try {
-      // TODO: Implement TCN tracking
-      console.log('Tracking by TCN:', {
-        tcn: this.tcnNumber,
-        shipDate: this.shipDate
-      });
-      alert(`Recherche TCN: ${this.tcnNumber}\nDate: ${this.shipDate}\n\n(Intégration API à venir)`);
+      await firstValueFrom(this.trackingService.getTrackingData(this.tcnNumber));
+      this.notificationService.success('Tracking information retrieved successfully', '');
       this.router.navigate(['/tracking/result'], {
         queryParams: {
           number: this.tcnNumber,
@@ -207,6 +191,7 @@ export class AllTrackingComponent implements OnInit {
       });
     } catch (error) {
       console.error('TCN tracking error:', error);
+      this.notificationService.error('Failed to retrieve tracking information', '');
     } finally {
       this.isLoading = false;
     }

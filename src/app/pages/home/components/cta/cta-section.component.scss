@@ -1,3 +1,5 @@
+@use "../../home.component.scss" as *;
+@use "sass:color";
 // CTA Section
 .cta {
   @include section-padding;

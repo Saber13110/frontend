@@ -1,3 +1,5 @@
+@use "../../home.component.scss" as *;
+@use "sass:color";
 // Services Section
 .services {
   @include section-padding;
