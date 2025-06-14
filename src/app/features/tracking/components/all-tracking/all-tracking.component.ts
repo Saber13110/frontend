@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { BarcodeService } from '../../../../shared/services/barcode.service';
 
 // TODO: Backend - Create Tracking Interfaces
 interface TrackingRequest {
@@ -60,6 +61,7 @@ export class AllTrackingComponent implements OnInit {
   isProofValid: boolean = false;
 
   constructor(
+    private barcodeService: BarcodeService,
     // TODO: Inject services
     // private trackingService: TrackingService,
     // private notificationService: NotificationService
@@ -107,21 +109,13 @@ export class AllTrackingComponent implements OnInit {
     }
 
     try {
-      // TODO: Implement barcode scanning
-      /*
-      const result = await this.barcodeService.startScanning();
+      const result = await this.barcodeService.scan();
       if (result) {
         this.trackingNumber = result;
         this.validateInput('tracking', result);
+      } else {
+        alert('Aucun code-barres détecté.');
       }
-      */
-      
-      // Simulation for development
-      alert('Scanner de code-barres activé!\n\n(Fonctionnalité à intégrer avec l\'API caméra)');
-      setTimeout(() => {
-        this.trackingNumber = 'GBX123456789';
-        this.validateInput('tracking', this.trackingNumber);
-      }, 2000);
     } catch (error) {
       console.error('Barcode scanning error:', error);
       alert('Erreur lors du scan du code-barres.');
