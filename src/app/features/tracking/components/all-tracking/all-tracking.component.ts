@@ -46,7 +46,7 @@ export class AllTrackingComponent implements OnInit {
   isMobile: boolean = false;
 
   // Form values
-  trackingNumber: string = '';
+  trackingNumbers: string = '';
   referenceNumber: string = '';
   selectedCountry: string = '';
   tcnNumber: string = '';
@@ -87,7 +87,14 @@ export class AllTrackingComponent implements OnInit {
   validateInput(type: string, value: string): void {
     switch(type) {
       case 'tracking':
-        this.isTrackingValid = value.length >= 8;
+        const numbers = value
+          .split('\n')
+          .map(v => v.trim())
+          .filter(v => v);
+        this.isTrackingValid =
+          numbers.length > 0 &&
+          numbers.length <= 30 &&
+          numbers.every(n => n.length >= 8);
         break;
       case 'reference':
         this.isReferenceValid = value.length >= 3 && this.selectedCountry !== '';
@@ -112,7 +119,7 @@ export class AllTrackingComponent implements OnInit {
       /*
       const result = await this.barcodeService.startScanning();
       if (result) {
-        this.trackingNumber = result;
+        this.trackingNumbers = result;
         this.validateInput('tracking', result);
       }
       */
@@ -120,8 +127,8 @@ export class AllTrackingComponent implements OnInit {
       // Simulation for development
       alert('Scanner de code-barres activé!\n\n(Fonctionnalité à intégrer avec l\'API caméra)');
       setTimeout(() => {
-        this.trackingNumber = 'GBX123456789';
-        this.validateInput('tracking', this.trackingNumber);
+        this.trackingNumbers = 'GBX123456789';
+        this.validateInput('tracking', this.trackingNumbers);
       }, 2000);
     } catch (error) {
       console.error('Barcode scanning error:', error);
@@ -135,10 +142,14 @@ export class AllTrackingComponent implements OnInit {
 
     this.isLoading = true;
     try {
+      const numbers = this.trackingNumbers
+        .split('\n')
+        .map(n => n.trim())
+        .filter(n => n);
       // TODO: Implement tracking service call
       /*
       const result = await this.trackingService.track({
-        trackingNumber: this.trackingNumber,
+        trackingNumbers: numbers,
         type: 'number'
       });
       this.notificationService.success('Tracking information retrieved successfully');
@@ -146,14 +157,16 @@ export class AllTrackingComponent implements OnInit {
       */
       
       // Simulation for development
-      console.log('Tracking package:', this.trackingNumber);
-      alert(`Recherche du colis: ${this.trackingNumber}\n\n(Intégration API à venir)`);
-      this.router.navigate(['/tracking/result'], {
-        queryParams: {
-          number: this.trackingNumber,
-          type: 'number'
-        }
-      });
+      console.log('Tracking packages:', numbers);
+      alert(`Recherche des colis: ${numbers.join(', ')}\n\n(Intégration API à venir)`);
+      if (numbers.length) {
+        this.router.navigate(['/tracking/result'], {
+          queryParams: {
+            number: numbers[0],
+            type: 'number'
+          }
+        });
+      }
     } catch (error) {
       console.error('Tracking error:', error);
       // this.notificationService.error('Failed to retrieve tracking information');

@@ -39,7 +39,7 @@ describe('TrackingResultComponent', () => {
 
     component.saveScheduleDelivery();
 
-    expect(trackingService.updateDeliveryOptions).toHaveBeenCalledWith('GBX123456', { schedule: component.scheduleForm });
+    expect(trackingService.updateDeliveryOptions).toHaveBeenCalledWith(['GBX123456'], { schedule: component.scheduleForm });
     expect(notificationService.success).toHaveBeenCalled();
   });
 
@@ -57,7 +57,7 @@ describe('TrackingResultComponent', () => {
 
     component.saveAddressChange();
 
-    expect(trackingService.updateDeliveryOptions).toHaveBeenCalledWith('GBX123456', { address: component.addressForm });
+    expect(trackingService.updateDeliveryOptions).toHaveBeenCalledWith(['GBX123456'], { address: component.addressForm });
     expect(notificationService.success).toHaveBeenCalled();
   });
 
@@ -67,7 +67,7 @@ describe('TrackingResultComponent', () => {
 
     component.saveHoldLocation();
 
-    expect(trackingService.updateDeliveryOptions).toHaveBeenCalledWith('GBX123456', { holdLocation: 'loc1' });
+    expect(trackingService.updateDeliveryOptions).toHaveBeenCalledWith(['GBX123456'], { holdLocation: 'loc1' });
     expect(notificationService.success).toHaveBeenCalled();
   });
 
@@ -77,7 +77,7 @@ describe('TrackingResultComponent', () => {
 
     component.saveDeliveryInstructions();
 
-    expect(trackingService.updateDeliveryOptions).toHaveBeenCalledWith('GBX123456', { instructions: component.instructionsForm });
+    expect(trackingService.updateDeliveryOptions).toHaveBeenCalledWith(['GBX123456'], { instructions: component.instructionsForm });
     expect(notificationService.success).toHaveBeenCalled();
   });
 

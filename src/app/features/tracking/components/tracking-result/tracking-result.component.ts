@@ -203,7 +203,7 @@ export class TrackingResultComponent implements OnInit, AfterViewInit {
     this.isLoading = true;
     this.error = false;
     
-    this.trackingService.getTrackingData(this.trackingNumber)
+    this.trackingService.getTrackingData([this.trackingNumber])
       .subscribe({
         next: (data: TrackingData) => {
           this.trackingData = data;
@@ -330,7 +330,7 @@ export class TrackingResultComponent implements OnInit, AfterViewInit {
   
   // ==== FORM SUBMISSION METHODS ====
   saveScheduleDelivery(): void {
-    this.trackingService.updateDeliveryOptions(this.trackingNumber, { schedule: this.scheduleForm })
+    this.trackingService.updateDeliveryOptions([this.trackingNumber], { schedule: this.scheduleForm })
       .subscribe({
         next: () => {
           this.notificationService.success('Delivery scheduled', 'Your delivery has been scheduled.');
@@ -348,7 +348,7 @@ export class TrackingResultComponent implements OnInit, AfterViewInit {
       return;
     }
 
-    this.trackingService.updateDeliveryOptions(this.trackingNumber, { address: this.addressForm })
+    this.trackingService.updateDeliveryOptions([this.trackingNumber], { address: this.addressForm })
       .subscribe({
         next: () => {
           this.notificationService.success('Address updated', 'Delivery address has been updated successfully.');
@@ -366,7 +366,7 @@ export class TrackingResultComponent implements OnInit, AfterViewInit {
       return;
     }
 
-    this.trackingService.updateDeliveryOptions(this.trackingNumber, { holdLocation: this.locationForm.selectedId })
+    this.trackingService.updateDeliveryOptions([this.trackingNumber], { holdLocation: this.locationForm.selectedId })
       .subscribe({
         next: () => {
           this.notificationService.success('Location selected', 'Package will be held at the selected location.');
@@ -380,7 +380,7 @@ export class TrackingResultComponent implements OnInit, AfterViewInit {
   }
   
   saveDeliveryInstructions(): void {
-    this.trackingService.updateDeliveryOptions(this.trackingNumber, { instructions: this.instructionsForm })
+    this.trackingService.updateDeliveryOptions([this.trackingNumber], { instructions: this.instructionsForm })
       .subscribe({
         next: () => {
           this.notificationService.success('Instructions saved', 'Delivery instructions have been saved.');

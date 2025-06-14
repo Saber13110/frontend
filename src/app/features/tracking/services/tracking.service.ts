@@ -28,7 +28,8 @@ export class TrackingService {
 
   constructor(private http: HttpClient) { }
 
-  getTrackingData(trackingNumber: string): Observable<TrackingData> {
+  getTrackingData(trackingNumbers: string[]): Observable<TrackingData> {
+    const trackingNumber = trackingNumbers[0];
     // Validation du numéro de suivi
     if (!trackingNumber || !trackingNumber.trim()) {
       return throwError(() => new Error('Veuillez fournir un numéro de suivi valide'));
@@ -133,7 +134,8 @@ export class TrackingService {
   }
 
   // Other methods would be implemented here in a real application
-  saveToFavorites(trackingNumber: string): Observable<any> {
+  saveToFavorites(trackingNumbers: string[]): Observable<any> {
+    const trackingNumber = trackingNumbers[0];
     if (!trackingNumber || !trackingNumber.trim()) {
       return throwError(() => new Error('Numéro de suivi invalide'));
     }
@@ -148,7 +150,8 @@ export class TrackingService {
     );
   }
   
-  updateDeliveryOptions(trackingNumber: string, options: any): Observable<any> {
+  updateDeliveryOptions(trackingNumbers: string[], options: any): Observable<any> {
+    const trackingNumber = trackingNumbers[0];
     if (!trackingNumber || !trackingNumber.trim()) {
       return throwError(() => new Error('Numéro de suivi invalide'));
     }
