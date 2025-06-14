@@ -1,0 +1,15 @@
+<section *ngIf="article" class="news-detail">
+  <div class="container">
+    <h1>{{ article.title }}</h1>
+    <p class="news-date">{{ article.date | date:'longDate' }}</p>
+    <img [src]="article.imageUrl" [alt]="article.title" loading="lazy" (error)="article.imageUrl = './assets/images/news/default.jpg'">
+    <div class="news-content">
+      <p>{{ article.content }}</p>
+    </div>
+  </div>
+</section>
+<section *ngIf="!article" class="news-detail">
+  <div class="container">
+    <p>Article not found.</p>
+  </div>
+</section>

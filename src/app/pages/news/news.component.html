@@ -1,0 +1,15 @@
+<section class="news-list">
+  <div class="container">
+    <h1>News</h1>
+    <div class="news-grid">
+      <div class="news-card" *ngFor="let item of newsList">
+        <img [src]="item.image" [alt]="item.title" loading="lazy" (error)="item.image = './assets/images/news/default.jpg'">
+        <div class="news-card-content">
+          <h2>{{ item.title }}</h2>
+          <p>{{ item.summary }}</p>
+          <a [routerLink]="['/news', item.slug]">Read more</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
