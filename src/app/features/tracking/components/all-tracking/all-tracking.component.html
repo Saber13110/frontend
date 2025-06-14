@@ -89,10 +89,9 @@
           <a href="#" class="need-help">NEED HELP?</a>
           
           <div style="text-align: center;">
-            <button 
-              type="submit" 
-              class="track-btn" 
-              [class.enabled]="isTrackingValid"
+            <button
+              type="submit"
+              class="btn btn-primary"
               [disabled]="!isTrackingValid || isLoading">
               <span *ngIf="!isLoading">TRACK</span>
               <span *ngIf="isLoading">TRACKING...</span>
@@ -142,10 +141,9 @@
           <a href="#" class="need-help">NEED HELP?</a>
           
           <div style="text-align: center;">
-            <button 
-              type="submit" 
-              class="track-btn" 
-              [class.enabled]="isReferenceValid"
+            <button
+              type="submit"
+              class="btn btn-primary"
               [disabled]="!isReferenceValid || isLoading">
               <span *ngIf="!isLoading">TRACK</span>
               <span *ngIf="isLoading">TRACKING...</span>
@@ -194,10 +192,9 @@
           <a href="#" class="need-help">NEED HELP?</a>
           
           <div style="text-align: center;">
-            <button 
-              type="submit" 
-              class="track-btn" 
-              [class.enabled]="isTCNValid"
+            <button
+              type="submit"
+              class="btn btn-primary"
               [disabled]="!isTCNValid || isLoading">
               <span *ngIf="!isLoading">TRACK</span>
               <span *ngIf="isLoading">TRACKING...</span>
@@ -223,10 +220,9 @@
           </div>
           
           <div style="text-align: center;">
-            <button 
-              type="submit" 
-              class="track-btn enabled" 
-              [class.enabled]="isProofValid"
+            <button
+              type="submit"
+              class="btn btn-primary"
               [disabled]="!isProofValid || isLoading">
               <span *ngIf="!isLoading">DOWNLOAD</span>
               <span *ngIf="isLoading">DOWNLOADING...</span>

@@ -229,34 +229,6 @@ body {
 }
 
 // Track Button
-.track-btn {
-  background-color: #d0d0d0;
-  color: var(--text-dark);
-  border: none;
-  padding: 15px 40px;
-  border-radius: 4px;
-  font-size: 16px;
-  font-weight: 500;
-  cursor: pointer;
-  margin-top: 20px;
-  transition: var(--transition);
-
-  &.enabled {
-    background: var(--primary-purple);
-    color: var(--white);
-
-    &:hover:not(:disabled) {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 15px rgba(77, 20, 140, 0.3);
-    }
-  }
-
-  &:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-    transform: none;
-  }
-}
 
 .need-help {
   color: var(--secondary-blue);
