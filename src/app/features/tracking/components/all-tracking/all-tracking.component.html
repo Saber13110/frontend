@@ -57,15 +57,15 @@
         <form class="tracking-form" (ngSubmit)="trackPackage($event)">
           <div class="form-group">
             <label class="form-label" for="trackingInput">Tracking number*</label>
-            <input 
-              type="text" 
+            <textarea
               id="trackingInput"
-              class="form-input" 
-              placeholder="Enter tracking number"
+              class="form-input"
+              placeholder="Enter tracking numbers (one per line)"
               [(ngModel)]="trackingNumber"
               name="trackingNumber"
+              rows="5"
               (input)="validateInput('tracking', trackingNumber)"
-            >
+            ></textarea>
           </div>
 
           <!-- ===== SCAN BARCODE SECTION ===== -->

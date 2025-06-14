@@ -47,6 +47,7 @@ export class AllTrackingComponent implements OnInit {
 
   // Form values
   trackingNumber: string = '';
+  trackingNumbers: string[] = [];
   referenceNumber: string = '';
   selectedCountry: string = '';
   tcnNumber: string = '';
@@ -83,10 +84,25 @@ export class AllTrackingComponent implements OnInit {
     this.activeTab = tabId;
   }
 
+  private parseTrackingNumbers(value: string): string[] {
+    return value
+      .split('\n')
+      .map(v => v.trim())
+      .filter(v => v !== '');
+  }
+
   validateInput(type: string, value: string): void {
     switch(type) {
       case 'tracking':
-        this.isTrackingValid = value.length >= 8;
+        this.trackingNumbers = this.parseTrackingNumbers(value);
+        if (this.trackingNumbers.length > 30) {
+          this.trackingNumbers = this.trackingNumbers.slice(0, 30);
+          this.trackingNumber = this.trackingNumbers.join('\n');
+        }
+        this.isTrackingValid =
+          this.trackingNumbers.length > 0 &&
+          this.trackingNumbers.length <= 30 &&
+          this.trackingNumbers.every(num => num.length >= 8);
         break;
       case 'reference':
         this.isReferenceValid = value.length >= 3 && this.selectedCountry !== '';
@@ -119,7 +135,10 @@ export class AllTrackingComponent implements OnInit {
       // Simulation for development
       alert('Scanner de code-barres activé!\n\n(Fonctionnalité à intégrer avec l\'API caméra)');
       setTimeout(() => {
-        this.trackingNumber = 'GBX123456789';
+        const result = 'GBX123456789';
+        const current = this.parseTrackingNumbers(this.trackingNumber);
+        current.push(result);
+        this.trackingNumber = current.slice(0, 30).join('\n');
         this.validateInput('tracking', this.trackingNumber);
       }, 2000);
     } catch (error) {
@@ -130,6 +149,7 @@ export class AllTrackingComponent implements OnInit {
 
   async trackPackage(event: Event): Promise<void> {
     event.preventDefault();
+    this.validateInput('tracking', this.trackingNumber);
     if (!this.isTrackingValid) return;
 
     this.isLoading = true;
@@ -145,8 +165,8 @@ export class AllTrackingComponent implements OnInit {
       */
       
       // Simulation for development
-      console.log('Tracking package:', this.trackingNumber);
-      alert(`Recherche du colis: ${this.trackingNumber}\n\n(Intégration API à venir)`);
+      console.log('Tracking package:', this.trackingNumbers);
+      alert(`Recherche du colis:\n${this.trackingNumbers.join('\n')}\n\n(Intégration API à venir)`);
     } catch (error) {
       console.error('Tracking error:', error);
       // this.notificationService.error('Failed to retrieve tracking information');
