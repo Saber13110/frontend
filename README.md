@@ -53,3 +53,16 @@ src/environments/*.local.ts
 ```
 
 Update your build configuration if needed to use the local files. For simple development you can replace the original environment files manually before running `ng serve`.
+
+## Backend API
+
+The application expects a backend exposing a REST API. The base URL is configured via `environment.apiUrl` in the Angular environment files. By default the development value is `http://localhost:8000/api`.
+
+### Available endpoints
+
+| Method | Endpoint                        | Description                             |
+|--------|---------------------------------|-----------------------------------------|
+| `GET`  | `/tracking/:number`             | Retrieve tracking information by number |
+| `POST` | `/tracking/reference`           | Retrieve tracking information by reference (body: `{ reference: string }`) |
+
+Make sure the API server is running and that `environment.apiUrl` points to the correct host and port.
