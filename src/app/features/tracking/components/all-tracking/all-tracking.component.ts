@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { TrackingService } from '../../services/tracking.service';
 
 // TODO: Backend - Create Tracking Interfaces
 interface TrackingRequest {
@@ -59,11 +60,7 @@ export class AllTrackingComponent implements OnInit {
   isTCNValid: boolean = false;
   isProofValid: boolean = false;
 
-  constructor(
-    // TODO: Inject services
-    // private trackingService: TrackingService,
-    // private notificationService: NotificationService
-  ) {}
+  constructor(private trackingService: TrackingService) {}
 
   ngOnInit(): void {
     this.checkDevice();
@@ -198,15 +195,22 @@ export class AllTrackingComponent implements OnInit {
     if (!this.isProofValid) return;
 
     this.isLoading = true;
-    try {
-      // TODO: Implement proof of delivery download
-      console.log('Getting proof of delivery for:', this.proofNumber);
-      alert(`Téléchargement de la preuve de livraison pour: ${this.proofNumber}\n\n(Intégration API à venir)`);
-    } catch (error) {
-      console.error('Proof of delivery error:', error);
-    } finally {
-      this.isLoading = false;
-    }
+    this.trackingService.getProofOfDelivery(this.proofNumber).subscribe({
+      next: blob => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `proof-${this.proofNumber}.pdf`;
+        a.click();
+        window.URL.revokeObjectURL(url);
+      },
+      error: err => {
+        console.error('Proof of delivery error:', err);
+      },
+      complete: () => {
+        this.isLoading = false;
+      }
+    });
   }
 }
 

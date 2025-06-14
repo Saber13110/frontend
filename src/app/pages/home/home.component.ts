@@ -11,6 +11,8 @@ import { Location } from '../../shared/models/location.model';
 import { FAQ } from '../../shared/models/faq.model';
 import { Notification } from '../../shared/models/notification.model';
 import { ServiceItem } from '../../shared/models/service-item.model';
+import { TrackingService } from '../../features/tracking/services/tracking.service';
+import { BarcodeReaderService } from '../../shared/services/barcode-reader.service';
 import { HeroSectionComponent } from './components/hero/hero-section.component';
 import { ServicesSectionComponent } from './components/services/services-section.component';
 import { NewsSectionComponent } from './components/news/news-section.component';
@@ -98,7 +100,9 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   constructor(
     private fb: FormBuilder,
-    private router: Router
+    private router: Router,
+    private barcodeReader: BarcodeReaderService,
+    private trackingService: TrackingService
   ) {
     this.trackingForm = this.fb.group({
       trackingNumber: ['', [Validators.required, Validators.pattern('^[A-Z0-9]{10,}$')]]
@@ -303,8 +307,25 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
-    if (this.trackingForm.valid) {
-      const trackingNumber = this.trackingForm.get('trackingNumber')?.value;
+    if (!this.trackingForm.valid) return;
+    const trackingNumber = this.trackingForm.get('trackingNumber')?.value;
+
+    if (this.selectedHeroFeature === 'obtain_proof') {
+      this.trackingService.getProofOfDelivery(trackingNumber).subscribe({
+        next: blob => {
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `proof-${trackingNumber}.pdf`;
+          a.click();
+          window.URL.revokeObjectURL(url);
+        },
+        error: err => {
+          console.error('Proof download error', err);
+          this.addNotification('error', 'Download Failed', 'Unable to fetch proof of delivery.');
+        }
+      });
+    } else {
       this.router.navigate(['/tracking', trackingNumber]);
     }
   }
@@ -408,10 +429,15 @@ export class HomeComponent implements OnInit, OnDestroy {
   onBarcodeFileSelected(event: any): void {
     const file: File = event.target.files[0];
     if (file) {
-      console.log('Fichier de code-barres sélectionné :', file.name);
-      // TODO: Implémenter la logique pour lire l'image et extraire le code-barres
-      // Vous aurez besoin d'une bibliothèque de lecture de code-barres (ex: ZXing)
-      // et potentiellement d'envoyer l'image ou le code décodé au backend.
+      this.barcodeReader.decodeBarcode(file)
+        .then(code => {
+          this.trackingForm.patchValue({ trackingNumber: code });
+          this.router.navigate(['/tracking', code]);
+        })
+        .catch(err => {
+          console.error('Barcode decode error:', err);
+          this.addNotification('error', 'Decode Failed', 'Unable to read the barcode.');
+        });
     }
   }
 

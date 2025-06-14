@@ -162,4 +162,17 @@ export class TrackingService {
       })
     );
   }
-} 
+
+  getProofOfDelivery(trackingNumber: string): Observable<Blob> {
+    if (!trackingNumber || !trackingNumber.trim()) {
+      return throwError(() => new Error('Numéro de suivi invalide'));
+    }
+    const url = `${this.apiUrl}/tracking/proof/${encodeURIComponent(trackingNumber)}`;
+    return this.http.get(url, { responseType: 'blob' }).pipe(
+      catchError(error => {
+        console.error('Error fetching proof of delivery:', error);
+        return throwError(() => new Error('Erreur lors du téléchargement de la preuve de livraison'));
+      })
+    );
+  }
+}
