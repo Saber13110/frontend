@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { NgClass, NgIf, NgFor, NgStyle } from '@angular/common';
 import { TrackingData } from '../../models/tracking-data.model';
 import { TrackingService } from '../../services/tracking.service';
+import { NotificationService } from '../../../../shared/services/notification.service';
 
 // Declare Leaflet to avoid TypeScript errors
 declare const L: any;
@@ -108,7 +109,8 @@ export class TrackingResultComponent implements OnInit, AfterViewInit {
 
   constructor(
     private route: ActivatedRoute,
-    private trackingService: TrackingService
+    private trackingService: TrackingService,
+    private notificationService: NotificationService
   ) { }
 
   ngOnInit(): void {
@@ -328,59 +330,67 @@ export class TrackingResultComponent implements OnInit, AfterViewInit {
   
   // ==== FORM SUBMISSION METHODS ====
   saveScheduleDelivery(): void {
-    // This would call an API endpoint to update delivery schedule
-    console.log('Schedule data to submit:', this.scheduleForm);
-    
-    // Simulate API call
-    setTimeout(() => {
-      alert('Delivery has been scheduled successfully!');
-      this.closeAllModals();
-      this.loadTrackingData(); // Refresh tracking data
-    }, 1000);
+    this.trackingService.updateDeliveryOptions(this.trackingNumber, { schedule: this.scheduleForm })
+      .subscribe({
+        next: () => {
+          this.notificationService.success('Delivery scheduled', 'Your delivery has been scheduled.');
+          this.closeAllModals();
+          this.loadTrackingData();
+        },
+        error: () => {
+          this.notificationService.error('Error', 'Could not schedule delivery.');
+        }
+      });
   }
   
   saveAddressChange(): void {
-    // Validate form
     if (!this.addressForm.name || !this.addressForm.line1 || !this.addressForm.city || !this.addressForm.postalCode) {
-      alert('Please fill in all required fields');
       return;
     }
-    
-    console.log('Address data to submit:', this.addressForm);
-    
-    // Simulate API call
-    setTimeout(() => {
-      alert('Delivery address has been updated successfully!');
-      this.closeAllModals();
-      this.loadTrackingData(); // Refresh tracking data
-    }, 1000);
+
+    this.trackingService.updateDeliveryOptions(this.trackingNumber, { address: this.addressForm })
+      .subscribe({
+        next: () => {
+          this.notificationService.success('Address updated', 'Delivery address has been updated successfully.');
+          this.closeAllModals();
+          this.loadTrackingData();
+        },
+        error: () => {
+          this.notificationService.error('Error', 'Could not update address.');
+        }
+      });
   }
   
   saveHoldLocation(): void {
     if (!this.locationForm.selectedId) {
-      alert('Please select a location');
       return;
     }
-    
-    console.log('Location data to submit:', this.locationForm);
-    
-    // Simulate API call
-    setTimeout(() => {
-      alert('Package will be held at the selected location');
-      this.closeAllModals();
-      this.loadTrackingData(); // Refresh tracking data
-    }, 1000);
+
+    this.trackingService.updateDeliveryOptions(this.trackingNumber, { holdLocation: this.locationForm.selectedId })
+      .subscribe({
+        next: () => {
+          this.notificationService.success('Location selected', 'Package will be held at the selected location.');
+          this.closeAllModals();
+          this.loadTrackingData();
+        },
+        error: () => {
+          this.notificationService.error('Error', 'Could not update hold location.');
+        }
+      });
   }
   
   saveDeliveryInstructions(): void {
-    console.log('Instructions data to submit:', this.instructionsForm);
-    
-    // Simulate API call
-    setTimeout(() => {
-      alert('Delivery instructions have been saved');
-      this.closeAllModals();
-      this.loadTrackingData(); // Refresh tracking data
-    }, 1000);
+    this.trackingService.updateDeliveryOptions(this.trackingNumber, { instructions: this.instructionsForm })
+      .subscribe({
+        next: () => {
+          this.notificationService.success('Instructions saved', 'Delivery instructions have been saved.');
+          this.closeAllModals();
+          this.loadTrackingData();
+        },
+        error: () => {
+          this.notificationService.error('Error', 'Could not save instructions.');
+        }
+      });
   }
   
   searchLocations(): void {
