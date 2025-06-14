@@ -260,6 +260,19 @@
   color: #999 !important;
 }
 
+.auth-form.loading {
+  position: relative;
+  pointer-events: none;
+  opacity: 0.6;
+
+  app-loader {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+}
+
 @media (max-width: 480px) {
   .auth-container {
     padding: 0.5rem;

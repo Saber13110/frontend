@@ -19,7 +19,7 @@
     </div>
 
     <!-- Form Section -->
-    <div class="auth-form">
+    <div class="auth-form" [class.loading]="isLoading">
       <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
         <!-- Email Field -->
         <div class="form-field">
@@ -107,6 +107,7 @@
           Continuer avec Google
         </button>
       </form>
+      <app-loader *ngIf="isLoading"></app-loader>
     </div>
 
     <!-- Footer -->

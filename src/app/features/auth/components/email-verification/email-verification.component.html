@@ -17,7 +17,7 @@
       <p>Saisissez le code à 6 chiffres envoyé à <strong>{{ userEmail }}</strong></p>
     </div>
 
-    <div class="auth-form">
+    <div class="auth-form" [class.loading]="isLoading">
       <form [formGroup]="verificationForm" (ngSubmit)="onSubmit()">
         <!-- Verification Code -->
         <div class="form-field">
@@ -67,8 +67,9 @@
             <span *ngIf="canResend">Renvoyer le code</span>
             <span *ngIf="!canResend">Renvoyer dans {{ countdown }}s</span>
           </button>
-        </div>
+      </div>
       </form>
+      <app-loader *ngIf="isLoading"></app-loader>
     </div>
 
     <!-- Footer -->
