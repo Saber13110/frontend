@@ -4,7 +4,7 @@ import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { NotificationService } from '../../shared/services/notification.service';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { TrackingAdviceComponent } from './tracking-advice/tracking-advice.component';
 import { TrackingToolsComponent } from './tracking-tools/tracking-tools.component';
@@ -17,6 +17,7 @@ import { ContactUsComponent } from './contact-us/contact-us.component';
   imports: [
     CommonModule,
     FormsModule,
+    ReactiveFormsModule,
     RouterModule,
     TrackingAdviceComponent,
     TrackingToolsComponent,
@@ -28,14 +29,18 @@ import { ContactUsComponent } from './contact-us/contact-us.component';
 })
 export class HelpComponent implements OnInit {
   currentTab: string = 'tracking-advice';
-  trackingNumber: string = '';
+  trackingForm: FormGroup;
 
   constructor(
     private titleService: Title,
     private router: Router,
     private route: ActivatedRoute,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private fb: FormBuilder
   ) {
+    this.trackingForm = this.fb.group({
+      trackingNumber: ['', [Validators.pattern('^[A-Z0-9]{8,}$')]]
+    });
     // Subscribe to route changes to handle fragment navigation
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)
@@ -103,17 +108,18 @@ export class HelpComponent implements OnInit {
   }
 
   quickTrack() {
-    if (!this.trackingNumber) {
+    const trackingNumber = this.trackingForm.get('trackingNumber')?.value;
+    if (!trackingNumber) {
       this.notificationService.show('Please enter a tracking number', 'warning');
       return;
     }
 
-    this.notificationService.show(`Tracking package ${this.trackingNumber}...`, 'info');
-    
+    this.notificationService.show(`Tracking package ${trackingNumber}...`, 'info');
+
     setTimeout(() => {
       this.router.navigate(['/tracking'], {
-        queryParams: { 
-          number: this.trackingNumber,
+        queryParams: {
+          number: trackingNumber,
           type: 'quick'
         }
       });
@@ -135,9 +141,10 @@ export class HelpComponent implements OnInit {
   }
 
   onTrackingSubmit(): void {
-    if (this.trackingNumber) {
+    const trackingNumber = this.trackingForm.get('trackingNumber')?.value;
+    if (trackingNumber) {
       // Implement tracking logic
-      console.log('Tracking number submitted:', this.trackingNumber);
+      console.log('Tracking number submitted:', trackingNumber);
     }
   }
-} 
+}

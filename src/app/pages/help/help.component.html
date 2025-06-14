@@ -29,7 +29,7 @@
         <!-- ===== QUICK SEARCH ===== -->
         <section class="quick-search animate-fade-in" aria-labelledby="search-title">
             <div class="search-card">
-                <form class="search-form" (ngSubmit)="quickTrack()" role="search" aria-label="Quick package tracking">
+                <form class="search-form" [formGroup]="trackingForm" (ngSubmit)="quickTrack()" role="search" aria-label="Quick package tracking">
                     <div class="form-group">
                         <label for="quick-tracking" class="form-label">Quick Track Your Package</label>
                         <input 
@@ -38,9 +38,11 @@
                             class="form-input" 
                             placeholder="Enter tracking number (e.g., GLX123456789)"
                             aria-describedby="tracking-help"
-                            [(ngModel)]="trackingNumber"
-                            name="trackingNumber"
+                            formControlName="trackingNumber"
                         >
+                        <div class="error-message" *ngIf="trackingForm.get('trackingNumber')?.invalid && trackingForm.get('trackingNumber')?.touched">
+                            Please enter a valid tracking number
+                        </div>
                     </div>
                     <button type="submit" class="btn btn-primary search-btn">
                         <i class="fas fa-search" aria-hidden="true"></i>
