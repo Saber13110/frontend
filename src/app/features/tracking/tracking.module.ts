@@ -12,4 +12,4 @@ import { TrackingRoutingModule } from './tracking-routing.module';
     TrackingRoutingModule
   ]
 })
-export class TrackingModule { } 
+export class TrackingModule { }
