@@ -2,6 +2,8 @@ import { Routes } from '@angular/router';
 import { ADVANCED_SHIPMENT_TRACKING_ROUTES } from './pages/advanced-shipment-tracking/advanced-shipment-tracking.routes';
 import { HISTORY_ROUTES } from './pages/history/history.routes';
 import { HOME_ROUTES } from './pages/home/home.routes';
+import { CONTACT_ROUTES } from './pages/contact/contact.routes';
+import { SUPPORT_ROUTES } from './pages/support/support.routes';
 
 export const routes: Routes = [
   {
@@ -32,6 +34,14 @@ export const routes: Routes = [
   {
     path: 'help',
     loadChildren: () => import('./pages/help/help.routes').then(m => m.HELP_ROUTES)
+  },
+  {
+    path: 'contact',
+    children: CONTACT_ROUTES
+  },
+  {
+    path: 'support',
+    children: SUPPORT_ROUTES
   },
   {
     path: 'profile',
