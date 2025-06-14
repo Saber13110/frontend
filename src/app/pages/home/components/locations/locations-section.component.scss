@@ -1,3 +1,5 @@
+@use 'src/styles/globals' as *;
+@use 'sass:color';
 // Locations Section
 .locations-section {
   @include section-padding;

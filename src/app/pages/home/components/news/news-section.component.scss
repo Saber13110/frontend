@@ -1,3 +1,5 @@
+@use 'src/styles/globals' as *;
+@use 'sass:color';
 // News Section
 .news {
   @include section-padding;

@@ -1,0 +1,36 @@
+@use 'sass:color';
+$primary-color: #4D148C;
+$secondary-color: #FF6200;
+$text-color: #333;
+$light-gray: #f5f5f5;
+$border-color: #e0e0e0;
+$success-color: #28a745;
+$warning-color: #ffc107;
+$error-color: #dc3545;
+
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin section-padding {
+  padding: 80px 0;
+}
+
+@mixin container {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0;
+}
+
+@mixin card-shadow {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  }
+}

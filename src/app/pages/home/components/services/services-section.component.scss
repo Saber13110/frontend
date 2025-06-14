@@ -1,3 +1,5 @@
+@use 'src/styles/globals' as *;
+@use 'sass:color';
 // Services Section
 .services {
   @include section-padding;

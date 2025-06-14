@@ -1,3 +1,5 @@
+@use 'src/styles/globals' as *;
+@use 'sass:color';
 // Hero Section
 .hero {
   background: url('/assets/images/hero/hero-bg.jpg') center/cover no-repeat;

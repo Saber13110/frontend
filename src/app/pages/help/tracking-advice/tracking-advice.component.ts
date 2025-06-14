@@ -13,26 +13,26 @@ export class TrackingAdviceComponent {
   constructor(private notificationService: NotificationService) {}
 
   openTrackingGuide() {
-    this.notificationService.show('Opening comprehensive tracking guide...', 'info');
+    this.notificationService.info('Tracking Guide', 'Opening comprehensive tracking guide...');
   }
 
   openStatusGuide() {
-    this.notificationService.show('Opening status definitions guide...', 'info');
+    this.notificationService.info('Status Guide', 'Opening status definitions guide...');
   }
 
   openTroubleshooting() {
-    this.notificationService.show('Opening troubleshooting wizard...', 'info');
+    this.notificationService.info('Troubleshooting', 'Opening troubleshooting wizard...');
   }
 
   setupNotifications() {
-    this.notificationService.show('Opening notification preferences...', 'info');
+    this.notificationService.info('Notifications', 'Opening notification preferences...');
   }
 
   viewDeliveryTimes() {
-    this.notificationService.show('Opening delivery time calculator...', 'info');
+    this.notificationService.info('Delivery Times', 'Opening delivery time calculator...');
   }
 
   learnSecurity() {
-    this.notificationService.show('Opening security information...', 'info');
+    this.notificationService.info('Security', 'Opening security information...');
   }
-} 
+}

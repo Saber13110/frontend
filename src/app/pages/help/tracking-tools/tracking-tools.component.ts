@@ -13,26 +13,26 @@ export class TrackingToolsComponent {
   constructor(private notificationService: NotificationService) {}
 
   openBulkTracking() {
-    this.notificationService.show('Opening bulk tracking tool...', 'info');
+    this.notificationService.info('Bulk Tracking', 'Opening bulk tracking tool...');
   }
 
   openMobileApp() {
-    this.notificationService.show('Opening mobile app download page...', 'info');
+    this.notificationService.info('Mobile App', 'Opening mobile app download page...');
   }
 
   openAPI() {
-    this.notificationService.show('Opening API documentation...', 'info');
+    this.notificationService.info('API', 'Opening API documentation...');
   }
 
   openEmailTracking() {
-    this.notificationService.show('Opening email tracking setup...', 'info');
+    this.notificationService.info('Email Tracking', 'Opening email tracking setup...');
   }
 
   openReports() {
-    this.notificationService.show('Opening tracking reports...', 'info');
+    this.notificationService.info('Reports', 'Opening tracking reports...');
   }
 
   openIntegrations() {
-    this.notificationService.show('Opening integration options...', 'info');
+    this.notificationService.info('Integrations', 'Opening integration options...');
   }
-} 
+}

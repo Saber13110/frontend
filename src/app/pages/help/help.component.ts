@@ -1,11 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Renderer2 } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { NotificationService } from '../../shared/services/notification.service';
+import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { A11yModule } from '@angular/cdk/a11y';
 import { TrackingAdviceComponent } from './tracking-advice/tracking-advice.component';
 import { TrackingToolsComponent } from './tracking-tools/tracking-tools.component';
 import { FaqsComponent } from './faqs/faqs.component';
@@ -18,6 +20,7 @@ import { ContactUsComponent } from './contact-us/contact-us.component';
     CommonModule,
     FormsModule,
     RouterModule,
+    A11yModule,
     TrackingAdviceComponent,
     TrackingToolsComponent,
     FaqsComponent,
@@ -34,7 +37,9 @@ export class HelpComponent implements OnInit {
     private titleService: Title,
     private router: Router,
     private route: ActivatedRoute,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private renderer: Renderer2,
+    private liveAnnouncer: LiveAnnouncer
   ) {
     // Subscribe to route changes to handle fragment navigation
     this.router.events.pipe(
@@ -91,11 +96,10 @@ export class HelpComponent implements OnInit {
   }
 
   private initializeAccessibility() {
-    // Add ARIA labels to interactive elements
     const interactiveElements = document.querySelectorAll('[onclick], [role="button"]');
     interactiveElements.forEach(element => {
       if (!element.hasAttribute('tabindex')) {
-        element.setAttribute('tabindex', '0');
+        this.renderer.setAttribute(element as HTMLElement, 'tabindex', '0');
       }
     });
 
@@ -104,11 +108,11 @@ export class HelpComponent implements OnInit {
 
   quickTrack() {
     if (!this.trackingNumber) {
-      this.notificationService.show('Please enter a tracking number', 'warning');
+      this.notificationService.warning('Validation', 'Please enter a tracking number');
       return;
     }
 
-    this.notificationService.show(`Tracking package ${this.trackingNumber}...`, 'info');
+    this.notificationService.info('Tracking', `Tracking package ${this.trackingNumber}...`);
     
     setTimeout(() => {
       this.router.navigate(['/tracking'], {
@@ -121,17 +125,7 @@ export class HelpComponent implements OnInit {
   }
 
   private announceToScreenReader(message: string) {
-    const announcement = document.createElement('div');
-    announcement.setAttribute('aria-live', 'polite');
-    announcement.setAttribute('aria-atomic', 'true');
-    announcement.className = 'sr-only';
-    announcement.textContent = message;
-    
-    document.body.appendChild(announcement);
-    
-    setTimeout(() => {
-      document.body.removeChild(announcement);
-    }, 1000);
+    this.liveAnnouncer.announce(message);
   }
 
   onTrackingSubmit(): void {
