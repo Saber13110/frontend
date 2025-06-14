@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule, Router } from '@angular/router';
+import { TrackingService } from '../../services/tracking.service';
+import { NotificationService } from '../../../../shared/services/notification.service';
 
 // TODO: Backend - Create Tracking Interfaces
 interface TrackingRequest {
@@ -61,9 +63,8 @@ export class AllTrackingComponent implements OnInit {
 
   constructor(
     private router: Router,
-    // TODO: Inject services
-    // private trackingService: TrackingService,
-    // private notificationService: NotificationService
+    private trackingService: TrackingService,
+    private notificationService: NotificationService
   ) {}
 
   ngOnInit(): void {
@@ -103,7 +104,7 @@ export class AllTrackingComponent implements OnInit {
 
   async startBarcodeScanner(): Promise<void> {
     if (!this.isMobile) {
-      alert('Le scanner de code-barres est disponible uniquement sur mobile.');
+      this.notificationService.success('Info', 'Le scanner de code-barres est disponible uniquement sur mobile.');
       return;
     }
 
@@ -118,14 +119,14 @@ export class AllTrackingComponent implements OnInit {
       */
       
       // Simulation for development
-      alert('Scanner de code-barres activé!\n\n(Fonctionnalité à intégrer avec l\'API caméra)');
+      this.notificationService.success('Scanner', 'Scanner de code-barres activé!\n\n(Fonctionnalité à intégrer avec l\'API caméra)');
       setTimeout(() => {
         this.trackingNumber = 'GBX123456789';
         this.validateInput('tracking', this.trackingNumber);
       }, 2000);
     } catch (error) {
       console.error('Barcode scanning error:', error);
-      alert('Erreur lors du scan du code-barres.');
+      this.notificationService.error('Erreur', 'Erreur lors du scan du code-barres.');
     }
   }
 
@@ -147,7 +148,7 @@ export class AllTrackingComponent implements OnInit {
       
       // Simulation for development
       console.log('Tracking package:', this.trackingNumber);
-      alert(`Recherche du colis: ${this.trackingNumber}\n\n(Intégration API à venir)`);
+      this.notificationService.success('Recherche en cours', `Recherche du colis: ${this.trackingNumber}\n\n(Intégration API à venir)`);
       this.router.navigate(['/tracking/result'], {
         queryParams: {
           number: this.trackingNumber,
@@ -173,7 +174,7 @@ export class AllTrackingComponent implements OnInit {
         reference: this.referenceNumber,
         country: this.selectedCountry
       });
-      alert(`Recherche par référence: ${this.referenceNumber}\nPays: ${this.selectedCountry}\n\n(Intégration API à venir)`);
+      this.notificationService.success('Recherche par référence', `Recherche par référence: ${this.referenceNumber}\nPays: ${this.selectedCountry}\n\n(Intégration API à venir)`);
       this.router.navigate(['/tracking/result'], {
         queryParams: {
           number: this.referenceNumber,
@@ -198,7 +199,7 @@ export class AllTrackingComponent implements OnInit {
         tcn: this.tcnNumber,
         shipDate: this.shipDate
       });
-      alert(`Recherche TCN: ${this.tcnNumber}\nDate: ${this.shipDate}\n\n(Intégration API à venir)`);
+      this.notificationService.success('Recherche TCN', `Recherche TCN: ${this.tcnNumber}\nDate: ${this.shipDate}\n\n(Intégration API à venir)`);
       this.router.navigate(['/tracking/result'], {
         queryParams: {
           number: this.tcnNumber,
@@ -220,7 +221,7 @@ export class AllTrackingComponent implements OnInit {
     try {
       // TODO: Implement proof of delivery download
       console.log('Getting proof of delivery for:', this.proofNumber);
-      alert(`Téléchargement de la preuve de livraison pour: ${this.proofNumber}\n\n(Intégration API à venir)`);
+      this.notificationService.success('Preuve', `Téléchargement de la preuve de livraison pour: ${this.proofNumber}\n\n(Intégration API à venir)`);
     } catch (error) {
       console.error('Proof of delivery error:', error);
     } finally {
