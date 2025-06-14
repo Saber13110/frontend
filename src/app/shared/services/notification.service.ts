@@ -99,11 +99,24 @@ export class NotificationService {
   }
 
   /**
-   * Show a custom notification
-   * @param notification Notification object
+   * Show a custom notification or quick message
    */
-  show(notification: Notification): void {
-    this.notificationSubject.next(notification);
+  show(notification: Notification): void;
+  show(message: string, type: Notification['type']): void;
+  show(arg1: Notification | string, arg2?: Notification['type']): void {
+    if (typeof arg1 === 'string') {
+      const notification: Notification = {
+        id: this.getNextId(),
+        type: arg2 ?? 'info',
+        title: arg1,
+        message: '',
+        duration: 5000,
+        visible: false
+      };
+      this.notificationSubject.next(notification);
+    } else {
+      this.notificationSubject.next(arg1);
+    }
   }
 
   /**
