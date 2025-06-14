@@ -299,7 +299,7 @@
                 </div>
                 <div class="form-actions">
                     <button type="button" class="btn btn-secondary" (click)="closeAllModals()">Annuler</button>
-                    <button type="submit" class="btn btn-primary">Confirmer</button>
+                    <button type="submit" class="btn btn-primary" [disabled]="!scheduleForm.date || !scheduleForm.timeWindow">Confirmer</button>
                 </div>
             </form>
         </div>
@@ -341,7 +341,7 @@
                 </div>
                 <div class="form-actions">
                     <button type="button" class="btn btn-secondary" (click)="closeAllModals()">Annuler</button>
-                    <button type="submit" class="btn btn-primary">Confirmer</button>
+                    <button type="submit" class="btn btn-primary" [disabled]="!addressForm.name || !addressForm.line1 || !addressForm.city || !addressForm.postalCode">Confirmer</button>
                 </div>
             </form>
         </div>
