@@ -162,4 +162,36 @@ export class TrackingService {
       })
     );
   }
-} 
+
+  /**
+   * Track a package by its tracking number
+   */
+  trackByNumber(trackingNumber: string): Observable<TrackingData> {
+    return this.getTrackingData(trackingNumber);
+  }
+
+  /**
+   * Track a package using a reference number and destination country
+   */
+  trackByReference(reference: string, country: string): Observable<TrackingData> {
+    // In this demo we simply reuse the tracking number method
+    const refTracking = reference;
+    return this.getTrackingData(refTracking);
+  }
+
+  /**
+   * Track a government shipment by Transportation Control Number (TCN)
+   */
+  trackByTCN(tcn: string, shipDate: string): Observable<TrackingData> {
+    const tcnTracking = tcn;
+    return this.getTrackingData(tcnTracking);
+  }
+
+  /**
+   * Retrieve proof of delivery
+   */
+  getProofOfDelivery(trackingNumber: string): Observable<Blob> {
+    const blob = new Blob([`Proof of delivery for ${trackingNumber}`], { type: 'text/plain' });
+    return of(blob).pipe(delay(500));
+  }
+}
