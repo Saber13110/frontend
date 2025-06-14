@@ -2,15 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NotificationService } from '../../../shared/services/notification.service';
-
-interface ContactOption {
-  id: string;
-  icon: string;
-  title: string;
-  description: string;
-  link?: string;
-  isForm?: boolean;
-}
+import { ContactOption } from '../../../shared/models/contact-option.model';
+import { HelpContactService } from '../services/help-contact.service';
 
 @Component({
   selector: 'app-contact-us',
@@ -23,40 +16,12 @@ export class ContactUsComponent implements OnInit {
   contactForm: FormGroup;
   selectedOption: string | null = null;
 
-  contactOptions: ContactOption[] = [
-    {
-      id: 'chat',
-      icon: 'fa-comments',
-      title: 'Live Chat',
-      description: 'Chat with our support team in real-time',
-      link: '#chat'
-    },
-    {
-      id: 'email',
-      icon: 'fa-envelope',
-      title: 'Email Support',
-      description: 'Send us a detailed message',
-      isForm: true
-    },
-    {
-      id: 'phone',
-      icon: 'fa-phone-alt',
-      title: 'Phone Support',
-      description: 'Call us at +1 (800) 123-4567',
-      link: 'tel:+18001234567'
-    },
-    {
-      id: 'social',
-      icon: 'fa-users',
-      title: 'Social Media',
-      description: 'Connect with us on social media',
-      link: '#social'
-    }
-  ];
+  contactOptions: ContactOption[] = [];
 
   constructor(
     private fb: FormBuilder,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private contactService: HelpContactService
   ) {
     this.contactForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(2)]],
@@ -68,7 +33,9 @@ export class ContactUsComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.contactService.getContactOptions().subscribe(options => (this.contactOptions = options));
+  }
 
   selectOption(optionId: string) {
     this.selectedOption = optionId;
