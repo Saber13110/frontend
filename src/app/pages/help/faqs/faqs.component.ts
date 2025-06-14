@@ -51,9 +51,4 @@ export class FaqsComponent implements OnInit {
   selectCategory(categoryId: string) {
     this.selectedCategory = categoryId;
   }
-
-  filterFaqs(): void {
-    // Implement FAQ filtering logic
-    console.log('Filtering FAQs with:', this.searchQuery);
-  }
-} 
+}
