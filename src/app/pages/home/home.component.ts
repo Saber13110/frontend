@@ -466,7 +466,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     });
   }
 
-  // TODO: Ajouter la logique pour 'Obtain your proof' (saisie ID et bouton télécharger)
 
   // Method to generate barcode
   generateBarcode(): void {

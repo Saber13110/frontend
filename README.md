@@ -6,6 +6,10 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
 
+## Barcode scanning and proof of delivery
+
+The home page now offers quick actions to scan a barcode using the `@zxing/browser` library and to download a proof of delivery for a given tracking number. Use the **Scan Barcode** or **Obtain your proof** cards in the hero section to try these features.
+
 ## Code scaffolding
 
 Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
