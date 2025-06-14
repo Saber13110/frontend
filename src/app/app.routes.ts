@@ -30,6 +30,10 @@ export const routes: Routes = [
     children: HISTORY_ROUTES
   },
   {
+    path: 'services',
+    loadChildren: () => import('./pages/services/services.routes').then(m => m.SERVICES_ROUTES)
+  },
+  {
     path: 'help',
     loadChildren: () => import('./pages/help/help.routes').then(m => m.HELP_ROUTES)
   },
