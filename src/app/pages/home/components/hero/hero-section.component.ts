@@ -8,7 +8,7 @@ import { RouterModule } from '@angular/router';
   standalone: true,
   imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule],
   templateUrl: './hero-section.component.html',
-  styleUrls: ['../../home.component.scss']
+  styleUrls: ['../../home.component.scss', './hero-section.component.scss']
 })
 export class HeroSectionComponent {
   @Input() selectedHeroFeature: 'barcode_scan' | 'obtain_proof' | null = null;

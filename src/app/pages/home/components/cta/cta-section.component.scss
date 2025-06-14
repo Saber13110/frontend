@@ -1,0 +1,51 @@
+// CTA Section
+.cta {
+  @include section-padding;
+  background: linear-gradient(135deg, $primary-color, color.mix($primary-color, black, 90%));
+  color: white;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('/assets/images/backgrounds/cta-bg.jpg') center/cover;
+    opacity: 0.1;
+    z-index: 0;
+  }
+
+  &__content {
+    max-width: 800px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+
+  h2 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+  }
+
+  p {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+    opacity: 0.9;
+  }
+}
+
+.cta__buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+@media (max-width: 768px) {
+  .cta__buttons {
+    flex-direction: column;
+  }
+}

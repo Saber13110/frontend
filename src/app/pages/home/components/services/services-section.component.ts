@@ -8,7 +8,7 @@ import { ServiceItem } from '../../../../shared/models/service-item.model';
   standalone: true,
   imports: [CommonModule, RouterModule],
   templateUrl: './services-section.component.html',
-  styleUrls: ['../../home.component.scss']
+  styleUrls: ['../../home.component.scss', './services-section.component.scss']
 })
 export class ServicesSectionComponent {
   @Input() servicesList: ServiceItem[] = [];

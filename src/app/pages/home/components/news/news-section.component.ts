@@ -8,7 +8,7 @@ import { News } from '../../../../shared/models/news.model';
   standalone: true,
   imports: [CommonModule, RouterModule],
   templateUrl: './news-section.component.html',
-  styleUrls: ['../../home.component.scss']
+  styleUrls: ['../../home.component.scss', './news-section.component.scss']
 })
 export class NewsSectionComponent {
   @Input() news: News[] = [];

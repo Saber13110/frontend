@@ -7,6 +7,6 @@ import { RouterModule } from '@angular/router';
   standalone: true,
   imports: [CommonModule, RouterModule],
   templateUrl: './cta-section.component.html',
-  styleUrls: ['../../home.component.scss']
+  styleUrls: ['../../home.component.scss', './cta-section.component.scss']
 })
 export class CtaSectionComponent {}

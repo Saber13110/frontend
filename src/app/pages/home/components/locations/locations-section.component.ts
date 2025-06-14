@@ -7,7 +7,7 @@ import { Location } from '../../../../shared/models/location.model';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './locations-section.component.html',
-  styleUrls: ['../../home.component.scss']
+  styleUrls: ['../../home.component.scss', './locations-section.component.scss']
 })
 export class LocationsSectionComponent {
   @Input() locations: Location[] = [];

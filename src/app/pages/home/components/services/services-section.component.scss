@@ -1,0 +1,149 @@
+// Services Section
+.services {
+  @include section-padding;
+  background: $light-gray;
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: 40px; // Espace entre les éléments de service
+  }
+
+  &__display {
+    // Ces styles ne sont plus nécessaires si vous utilisez __list
+    // display: flex;
+    // justify-content: center;
+    // align-items: center;
+    // gap: 40px;
+    // flex-wrap: wrap;
+  }
+
+  &__navigation {
+    // Ces styles ne sont plus nécessaires
+    // display: flex;
+    // justify-content: center;
+    // margin-top: 20px;
+    // gap: 10px;
+
+    // .btn--icon {
+    //   ...
+    // }
+  }
+}
+
+.service-item {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  background: white;
+  border-radius: 10px;
+  overflow: hidden;
+  @include card-shadow();
+  max-width: 1200px; // Augmenter la largeur max
+  width: 100%;
+  margin: 0 auto; // Centrer l'élément
+
+  &:nth-child(even) { // Inverser l'ordre pour les éléments pairs
+    flex-direction: row-reverse;
+  }
+
+  &__image {
+    flex: 1;
+    min-width: 300px;
+    max-width: 50%; // Limiter la largeur de l'image
+    img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+  }
+
+  &__content {
+    flex: 1;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__icon {
+    font-size: 2.5rem;
+    color: $primary-color;
+    margin-bottom: 1rem;
+  }
+
+  h3 {
+    color: $text-color;
+    margin-bottom: 1rem;
+    font-size: 1.8rem;
+  }
+
+  p {
+    color: color.mix($text-color, white, 80%);
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+  }
+
+  &__link {
+    color: $secondary-color;
+    text-decoration: none;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: auto;
+    
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+@media (max-width: 1200px) {
+  .services__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .service-item {
+    flex-direction: column; // Stack image and content vertically
+
+    &:nth-child(even) {
+      flex-direction: column;
+    }
+
+    &__image {
+      width: 100%;
+      min-width: auto;
+      max-width: 100%;
+    }
+
+    &__content {
+      padding: 1.5rem;
+      text-align: center;
+    }
+
+    &__icon {
+      margin: 0 auto 1rem; // Center icon
+    }
+
+    h3,
+    p {
+      text-align: center;
+    }
+
+    &__link {
+      justify-content: center; // Center link
+    }
+  }
+
+  .services__list {
+    gap: 20px; // Ajuster l'espacement pour les petits écrans
+  }
+}
+
+@media (max-width: 480px) {
+  .services__grid {
+    grid-template-columns: 1fr;
+  }
+}
