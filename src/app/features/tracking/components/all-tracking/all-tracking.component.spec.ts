@@ -1,5 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { TrackingService } from '../../services/tracking.service';
+import { NotificationService } from '../../../../shared/services/notification.service';
 
 import { AllTrackingComponent } from './all-tracking.component';
 
@@ -8,8 +11,15 @@ describe('AllTrackingComponent', () => {
   let fixture: ComponentFixture<AllTrackingComponent>;
 
   beforeEach(async () => {
+    const trackingSpy = jasmine.createSpyObj('TrackingService', ['getTrackingData']);
+    const notifSpy = jasmine.createSpyObj('NotificationService', ['error']);
+
     await TestBed.configureTestingModule({
-      imports: [RouterTestingModule, AllTrackingComponent]
+      imports: [RouterTestingModule, HttpClientTestingModule, AllTrackingComponent],
+      providers: [
+        { provide: TrackingService, useValue: trackingSpy },
+        { provide: NotificationService, useValue: notifSpy }
+      ]
     })
     .compileComponents();
     

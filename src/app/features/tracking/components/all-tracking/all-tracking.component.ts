@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule, Router } from '@angular/router';
+import { TrackingService } from '../../services/tracking.service';
+import { NotificationService } from '../../../../shared/services/notification.service';
 
 // TODO: Backend - Create Tracking Interfaces
 interface TrackingRequest {
@@ -61,9 +63,8 @@ export class AllTrackingComponent implements OnInit {
 
   constructor(
     private router: Router,
-    // TODO: Inject services
-    // private trackingService: TrackingService,
-    // private notificationService: NotificationService
+    private trackingService: TrackingService,
+    private notificationService: NotificationService
   ) {}
 
   ngOnInit(): void {
@@ -134,32 +135,22 @@ export class AllTrackingComponent implements OnInit {
     if (!this.isTrackingValid) return;
 
     this.isLoading = true;
-    try {
-      // TODO: Implement tracking service call
-      /*
-      const result = await this.trackingService.track({
-        trackingNumber: this.trackingNumber,
-        type: 'number'
-      });
-      this.notificationService.success('Tracking information retrieved successfully');
-      // Navigate to results page or show results
-      */
-      
-      // Simulation for development
-      console.log('Tracking package:', this.trackingNumber);
-      alert(`Recherche du colis: ${this.trackingNumber}\n\n(Intégration API à venir)`);
-      this.router.navigate(['/tracking/result'], {
-        queryParams: {
-          number: this.trackingNumber,
-          type: 'number'
-        }
-      });
-    } catch (error) {
-      console.error('Tracking error:', error);
-      // this.notificationService.error('Failed to retrieve tracking information');
-    } finally {
-      this.isLoading = false;
-    }
+    this.trackingService.getTrackingData(this.trackingNumber).subscribe({
+      next: () => {
+        this.router.navigate(['/tracking/result'], {
+          queryParams: {
+            number: this.trackingNumber,
+            type: 'number'
+          }
+        });
+        this.isLoading = false;
+      },
+      error: (err: Error) => {
+        console.error('Tracking error:', err);
+        this.notificationService.error('Tracking Error', err.message);
+        this.isLoading = false;
+      }
+    });
   }
 
   async trackByReference(event: Event): Promise<void> {
@@ -167,24 +158,22 @@ export class AllTrackingComponent implements OnInit {
     if (!this.isReferenceValid) return;
 
     this.isLoading = true;
-    try {
-      // TODO: Implement reference tracking
-      console.log('Tracking by reference:', {
-        reference: this.referenceNumber,
-        country: this.selectedCountry
-      });
-      alert(`Recherche par référence: ${this.referenceNumber}\nPays: ${this.selectedCountry}\n\n(Intégration API à venir)`);
-      this.router.navigate(['/tracking/result'], {
-        queryParams: {
-          number: this.referenceNumber,
-          type: 'reference'
-        }
-      });
-    } catch (error) {
-      console.error('Reference tracking error:', error);
-    } finally {
-      this.isLoading = false;
-    }
+    this.trackingService.getTrackingData(this.referenceNumber).subscribe({
+      next: () => {
+        this.router.navigate(['/tracking/result'], {
+          queryParams: {
+            number: this.referenceNumber,
+            type: 'reference'
+          }
+        });
+        this.isLoading = false;
+      },
+      error: (err: Error) => {
+        console.error('Reference tracking error:', err);
+        this.notificationService.error('Tracking Error', err.message);
+        this.isLoading = false;
+      }
+    });
   }
 
   async trackByTCN(event: Event): Promise<void> {
@@ -192,24 +181,22 @@ export class AllTrackingComponent implements OnInit {
     if (!this.isTCNValid) return;
 
     this.isLoading = true;
-    try {
-      // TODO: Implement TCN tracking
-      console.log('Tracking by TCN:', {
-        tcn: this.tcnNumber,
-        shipDate: this.shipDate
-      });
-      alert(`Recherche TCN: ${this.tcnNumber}\nDate: ${this.shipDate}\n\n(Intégration API à venir)`);
-      this.router.navigate(['/tracking/result'], {
-        queryParams: {
-          number: this.tcnNumber,
-          type: 'tcn'
-        }
-      });
-    } catch (error) {
-      console.error('TCN tracking error:', error);
-    } finally {
-      this.isLoading = false;
-    }
+    this.trackingService.getTrackingData(this.tcnNumber).subscribe({
+      next: () => {
+        this.router.navigate(['/tracking/result'], {
+          queryParams: {
+            number: this.tcnNumber,
+            type: 'tcn'
+          }
+        });
+        this.isLoading = false;
+      },
+      error: (err: Error) => {
+        console.error('TCN tracking error:', err);
+        this.notificationService.error('Tracking Error', err.message);
+        this.isLoading = false;
+      }
+    });
   }
 
   async getProofOfDelivery(event: Event): Promise<void> {
@@ -217,15 +204,22 @@ export class AllTrackingComponent implements OnInit {
     if (!this.isProofValid) return;
 
     this.isLoading = true;
-    try {
-      // TODO: Implement proof of delivery download
-      console.log('Getting proof of delivery for:', this.proofNumber);
-      alert(`Téléchargement de la preuve de livraison pour: ${this.proofNumber}\n\n(Intégration API à venir)`);
-    } catch (error) {
-      console.error('Proof of delivery error:', error);
-    } finally {
-      this.isLoading = false;
-    }
+    this.trackingService.getTrackingData(this.proofNumber).subscribe({
+      next: () => {
+        this.router.navigate(['/tracking/result'], {
+          queryParams: {
+            number: this.proofNumber,
+            type: 'proof'
+          }
+        });
+        this.isLoading = false;
+      },
+      error: (err: Error) => {
+        console.error('Proof of delivery error:', err);
+        this.notificationService.error('Tracking Error', err.message);
+        this.isLoading = false;
+      }
+    });
   }
 }
 
