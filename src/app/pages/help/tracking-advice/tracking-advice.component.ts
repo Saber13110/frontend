@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { NotificationService } from '../../../shared/services/notification.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-tracking-advice',
@@ -10,29 +10,29 @@ import { NotificationService } from '../../../shared/services/notification.servi
   styleUrls: ['./tracking-advice.component.scss']
 })
 export class TrackingAdviceComponent {
-  constructor(private notificationService: NotificationService) {}
+  constructor(private router: Router) {}
 
   openTrackingGuide() {
-    this.notificationService.show('Opening comprehensive tracking guide...', 'info');
+    this.router.navigate(['/help/tracking-guide']);
   }
 
   openStatusGuide() {
-    this.notificationService.show('Opening status definitions guide...', 'info');
+    this.router.navigate(['/help/status-guide']);
   }
 
   openTroubleshooting() {
-    this.notificationService.show('Opening troubleshooting wizard...', 'info');
+    this.router.navigate(['/help/troubleshooting']);
   }
 
   setupNotifications() {
-    this.notificationService.show('Opening notification preferences...', 'info');
+    this.router.navigate(['/help/notification-preferences']);
   }
 
   viewDeliveryTimes() {
-    this.notificationService.show('Opening delivery time calculator...', 'info');
+    this.router.navigate(['/help/delivery-times']);
   }
 
   learnSecurity() {
-    this.notificationService.show('Opening security information...', 'info');
+    this.router.navigate(['/help/security-info']);
   }
-} 
+}

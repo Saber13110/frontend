@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { NotificationService } from '../../../shared/services/notification.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-tracking-tools',
@@ -10,29 +10,29 @@ import { NotificationService } from '../../../shared/services/notification.servi
   styleUrls: ['./tracking-tools.component.scss']
 })
 export class TrackingToolsComponent {
-  constructor(private notificationService: NotificationService) {}
+  constructor(private router: Router) {}
 
   openBulkTracking() {
-    this.notificationService.show('Opening bulk tracking tool...', 'info');
+    this.router.navigate(['/help/bulk-tracking']);
   }
 
   openMobileApp() {
-    this.notificationService.show('Opening mobile app download page...', 'info');
+    this.router.navigate(['/help/mobile-app']);
   }
 
   openAPI() {
-    this.notificationService.show('Opening API documentation...', 'info');
+    this.router.navigate(['/help/api-access']);
   }
 
   openEmailTracking() {
-    this.notificationService.show('Opening email tracking setup...', 'info');
+    this.router.navigate(['/help/email-tracking']);
   }
 
   openReports() {
-    this.notificationService.show('Opening tracking reports...', 'info');
+    this.router.navigate(['/help/tracking-reports']);
   }
 
   openIntegrations() {
-    this.notificationService.show('Opening integration options...', 'info');
+    this.router.navigate(['/help/integrations']);
   }
-} 
+}
