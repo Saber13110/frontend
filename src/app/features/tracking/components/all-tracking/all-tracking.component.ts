@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 
 // TODO: Backend - Create Tracking Interfaces
 interface TrackingRequest {
@@ -60,6 +60,7 @@ export class AllTrackingComponent implements OnInit {
   isProofValid: boolean = false;
 
   constructor(
+    private router: Router,
     // TODO: Inject services
     // private trackingService: TrackingService,
     // private notificationService: NotificationService
@@ -147,6 +148,12 @@ export class AllTrackingComponent implements OnInit {
       // Simulation for development
       console.log('Tracking package:', this.trackingNumber);
       alert(`Recherche du colis: ${this.trackingNumber}\n\n(Intégration API à venir)`);
+      this.router.navigate(['/tracking/result'], {
+        queryParams: {
+          number: this.trackingNumber,
+          type: 'number'
+        }
+      });
     } catch (error) {
       console.error('Tracking error:', error);
       // this.notificationService.error('Failed to retrieve tracking information');
@@ -162,11 +169,17 @@ export class AllTrackingComponent implements OnInit {
     this.isLoading = true;
     try {
       // TODO: Implement reference tracking
-      console.log('Tracking by reference:', { 
-        reference: this.referenceNumber, 
-        country: this.selectedCountry 
+      console.log('Tracking by reference:', {
+        reference: this.referenceNumber,
+        country: this.selectedCountry
       });
       alert(`Recherche par référence: ${this.referenceNumber}\nPays: ${this.selectedCountry}\n\n(Intégration API à venir)`);
+      this.router.navigate(['/tracking/result'], {
+        queryParams: {
+          number: this.referenceNumber,
+          type: 'reference'
+        }
+      });
     } catch (error) {
       console.error('Reference tracking error:', error);
     } finally {
@@ -181,11 +194,17 @@ export class AllTrackingComponent implements OnInit {
     this.isLoading = true;
     try {
       // TODO: Implement TCN tracking
-      console.log('Tracking by TCN:', { 
-        tcn: this.tcnNumber, 
-        shipDate: this.shipDate 
+      console.log('Tracking by TCN:', {
+        tcn: this.tcnNumber,
+        shipDate: this.shipDate
       });
       alert(`Recherche TCN: ${this.tcnNumber}\nDate: ${this.shipDate}\n\n(Intégration API à venir)`);
+      this.router.navigate(['/tracking/result'], {
+        queryParams: {
+          number: this.tcnNumber,
+          type: 'tcn'
+        }
+      });
     } catch (error) {
       console.error('TCN tracking error:', error);
     } finally {
