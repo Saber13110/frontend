@@ -1,4 +1,23 @@
 <section class="notifications">
   <h2>Notifications</h2>
-  <p>Stay informed of every update with instant alerts.</p>
+  <p class="instructions">
+    Sign up to receive shipment notifications by email or SMS.
+  </p>
+
+  <form [formGroup]="signupForm" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label for="email">Email *</label>
+      <input id="email" type="email" formControlName="email" />
+      <span class="error" *ngIf="signupForm.get('email')?.invalid && signupForm.get('email')?.touched">
+        Please enter a valid email.
+      </span>
+    </div>
+
+    <div class="form-group">
+      <label for="phone">Mobile number (optional)</label>
+      <input id="phone" type="tel" formControlName="phone" placeholder="e.g., +1 555 123 4567" />
+    </div>
+
+    <button type="submit" [disabled]="signupForm.invalid">Activate Notifications</button>
+  </form>
 </section>

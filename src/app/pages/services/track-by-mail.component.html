@@ -1,4 +1,26 @@
 <section class="track-by-mail">
   <h2>Track by Mail</h2>
-  <p>Receive shipment updates directly in your inbox.</p>
+  <p class="instructions">
+    Enter your tracking number and email address to receive shipping updates as soon as they are available.
+  </p>
+
+  <form [formGroup]="trackForm" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label for="trackingNumber">Tracking number *</label>
+      <input id="trackingNumber" type="text" formControlName="trackingNumber" />
+      <span class="error" *ngIf="trackForm.get('trackingNumber')?.invalid && trackForm.get('trackingNumber')?.touched">
+        A valid tracking number is required.
+      </span>
+    </div>
+
+    <div class="form-group">
+      <label for="email">Email *</label>
+      <input id="email" type="email" formControlName="email" />
+      <span class="error" *ngIf="trackForm.get('email')?.invalid && trackForm.get('email')?.touched">
+        Please enter a valid email address.
+      </span>
+    </div>
+
+    <button type="submit" [disabled]="trackForm.invalid">Subscribe</button>
+  </form>
 </section>
