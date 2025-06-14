@@ -20,7 +20,7 @@
     </div>
 
     <!-- Form Section -->
-    <div class="auth-form">
+    <div class="auth-form" [class.loading]="isLoading">
       <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
         
         <!-- Name Fields Row -->
@@ -197,6 +197,7 @@
           S'inscrire avec Google
         </button>
       </form>
+      <app-loader *ngIf="isLoading"></app-loader>
     </div>
 
     <!-- Footer -->

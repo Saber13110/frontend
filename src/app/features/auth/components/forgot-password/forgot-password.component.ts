@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
+import { LoaderComponent } from '../../../shared/components/loader/loader.component';
 
 // TODO: Backend - Create Password Reset Interfaces
 /*
@@ -75,7 +76,8 @@ POST /api/auth/validate-reset-token
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    RouterModule
+    RouterModule,
+    LoaderComponent
   ],
   templateUrl: './forgot-password.component.html',
   styleUrls: ['./forgot-password.component.scss']

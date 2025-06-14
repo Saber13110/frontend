@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
+import { LoaderComponent } from '../../../shared/components/loader/loader.component';
 
 // TODO: Backend - Create Login Interface
 /*
@@ -83,7 +84,8 @@ POST /api/auth/google/login
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    RouterModule
+    RouterModule,
+    LoaderComponent
   ],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
