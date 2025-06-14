@@ -1,11 +1,10 @@
 <div class="contact-container">
   <!-- Contact Options -->
   <div class="contact-options">
-    <div 
+    <div
       *ngFor="let option of contactOptions"
       class="contact-option"
       [class.active]="selectedOption === option.id"
-      (click)="option.isForm ? selectOption(option.id) : null"
     >
       <a 
         *ngIf="option.link && !option.isForm" 

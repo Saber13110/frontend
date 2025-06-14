@@ -49,7 +49,6 @@ export class HelpComponent implements OnInit {
 
   ngOnInit() {
     this.titleService.setTitle('Tracking Help & Support - Globex Logistics');
-    this.initializeAccessibility();
     
     // Handle initial fragment if present
     const fragment = this.route.snapshot.fragment;
@@ -90,17 +89,6 @@ export class HelpComponent implements OnInit {
     });
   }
 
-  private initializeAccessibility() {
-    // Add ARIA labels to interactive elements
-    const interactiveElements = document.querySelectorAll('[onclick], [role="button"]');
-    interactiveElements.forEach(element => {
-      if (!element.hasAttribute('tabindex')) {
-        element.setAttribute('tabindex', '0');
-      }
-    });
-
-    this.announceToScreenReader('Tracking help center loaded');
-  }
 
   quickTrack() {
     if (!this.trackingNumber) {
@@ -120,19 +108,6 @@ export class HelpComponent implements OnInit {
     }, 1500);
   }
 
-  private announceToScreenReader(message: string) {
-    const announcement = document.createElement('div');
-    announcement.setAttribute('aria-live', 'polite');
-    announcement.setAttribute('aria-atomic', 'true');
-    announcement.className = 'sr-only';
-    announcement.textContent = message;
-    
-    document.body.appendChild(announcement);
-    
-    setTimeout(() => {
-      document.body.removeChild(announcement);
-    }, 1000);
-  }
 
   onTrackingSubmit(): void {
     if (this.trackingNumber) {
