@@ -10,6 +10,7 @@ import { TrackingToolsComponent } from './pages/help/tracking-tools/tracking-too
 import { FaqsComponent } from './pages/help/faqs/faqs.component';
 import { ContactUsComponent } from './pages/help/contact-us/contact-us.component';
 import { NotificationService } from './shared/services/notification.service';
+import { NotificationComponent } from './shared/components/notification/notification.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { NotificationService } from './shared/services/notification.service';
     TrackingAdviceComponent,
     TrackingToolsComponent,
     FaqsComponent,
-    ContactUsComponent
+    ContactUsComponent,
+    NotificationComponent
   ],
   imports: [
     BrowserModule,

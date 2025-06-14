@@ -2,6 +2,14 @@ import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testin
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { HomeComponent } from './home.component';
+import { NotificationService } from '../../shared/services/notification.service';
+
+class MockNotificationService {
+  success = jasmine.createSpy('success');
+  warning = jasmine.createSpy('warning');
+  error = jasmine.createSpy('error');
+  info = jasmine.createSpy('info');
+}
 
 describe('HomeComponent', () => {
   let component: HomeComponent;
@@ -10,7 +18,8 @@ describe('HomeComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [RouterTestingModule, HomeComponent]
+      imports: [RouterTestingModule, HomeComponent],
+      providers: [{ provide: NotificationService, useClass: MockNotificationService }]
     })
     .compileComponents();
 
@@ -26,33 +35,26 @@ describe('HomeComponent', () => {
 
   it('should notify and navigate on tracking', fakeAsync(() => {
     const navigateSpy = spyOn(router, 'navigate');
-    const addNotifSpy = spyOn(component, 'addNotification').and.callThrough();
+    const notifService = TestBed.inject(NotificationService);
+    const successSpy = notifService.success as jasmine.Spy;
 
     component.trackingForm.get('trackingNumber')!.setValue('GBX1234567');
     component.trackPackage();
 
-    expect(addNotifSpy).toHaveBeenCalledWith(
-      'success',
+    expect(successSpy).toHaveBeenCalledWith(
       'Recherche en cours',
       'Recherche du colis #GBX1234567...'
     );
 
     tick(2000);
 
-    expect(addNotifSpy).toHaveBeenCalledWith(
-      'success',
+    expect(successSpy).toHaveBeenCalledWith(
       'Colis trouvé',
       'Colis #GBX1234567 en transit.'
     );
     expect(navigateSpy).toHaveBeenCalledWith(['/tracking/result', 'GBX1234567']);
   }));
 
-  it('should add and remove notifications', fakeAsync(() => {
-    component.addNotification('success', 'Test', 'Message');
-    expect(component.notifications.length).toBe(1);
-    tick(5000);
-    expect(component.notifications.length).toBe(0);
-  }));
 
   it('should handle feature selection', () => {
     component.trackingForm.get('trackingNumber')!.setValue('GBX000');
