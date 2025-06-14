@@ -9,8 +9,8 @@ import { takeUntil } from 'rxjs/operators';
 import { News } from '../../shared/models/news.model';
 import { Location } from '../../shared/models/location.model';
 import { FAQ } from '../../shared/models/faq.model';
-import { Notification } from '../../shared/models/notification.model';
 import { ServiceItem } from '../../shared/models/service-item.model';
+import { NotificationService } from '../../shared/services/notification.service';
 import { NewsService } from './services/news.service';
 import { LocationService } from './services/location.service';
 import { FaqService } from './services/faq.service';
@@ -21,7 +21,6 @@ import { NewsSectionComponent } from './components/news/news-section.component';
 import { LocationsSectionComponent } from './components/locations/locations-section.component';
 import { FaqSectionComponent } from './components/faq/faq-section.component';
 import { CtaSectionComponent } from './components/cta/cta-section.component';
-import { NotificationsComponent } from './components/notifications/notifications.component';
 
 // Import Google Maps types
 declare global {
@@ -44,8 +43,7 @@ declare global {
     NewsSectionComponent,
     LocationsSectionComponent,
     FaqSectionComponent,
-    CtaSectionComponent,
-    NotificationsComponent
+    CtaSectionComponent
   ],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
@@ -72,9 +70,6 @@ export class HomeComponent implements OnInit, OnDestroy {
   // === Auth fake pour afficher outils avancés (à remplacer plus tard)
   isLoggedIn = true;
 
-  // === Notifications en file d'attente
-  notifications: Notification[] = [];
-  currentNotifs: Notification[] = [];
 
   // === Liste d'actualités
   news: News[] = [];
@@ -106,7 +101,8 @@ export class HomeComponent implements OnInit, OnDestroy {
     private newsService: NewsService,
     private locationService: LocationService,
     private faqService: FaqService,
-    private serviceItemService: ServiceItemService
+    private serviceItemService: ServiceItemService,
+    private notificationService: NotificationService
   ) {
     this.trackingForm = this.fb.group({
       trackingNumber: ['', [Validators.required, Validators.pattern('^[A-Z0-9]{10,}$')]]
@@ -218,16 +214,14 @@ export class HomeComponent implements OnInit, OnDestroy {
   trackPackage(): void {
     if (!this.trackingForm.get('trackingNumber')?.value.trim()) return;
 
-    this.addNotification(
-      'success',
+    this.notificationService.success(
       'Recherche en cours',
       `Recherche du colis #${this.trackingForm.get('trackingNumber')?.value}...`
     );
 
     setTimeout(() => {
       // TODO: remplacer par appel vers FastAPI → GET /api/tracking/:id
-      this.addNotification(
-        'success',
+      this.notificationService.success(
         'Colis trouvé',
         `Colis #${this.trackingForm.get('trackingNumber')?.value} en transit.`
       );
@@ -237,28 +231,10 @@ export class HomeComponent implements OnInit, OnDestroy {
     }, 2000);
   }
 
-  // === AJOUTER NOTIFICATION FLOTTANTE
-  addNotification(type: 'success' | 'warning' | 'error', title: string, message: string): void {
-    const notification: Notification = {
-      id: Date.now(),
-      type,
-      title,
-      message,
-      duration: 5000,
-      visible: true
-    };
-    this.notifications.push(notification);
-    setTimeout(() => this.removeNotification(notification), notification.duration);
-  }
-
-  // === SUPPRIMER NOTIF
-  removeNotification(notification: Notification): void {
-    this.notifications = this.notifications.filter(n => n.id !== notification.id);
-  }
 
   // === NOTIFICATIONS AUTO (ex: alerte livraison)
   autoPushNotifications(): void {
-    const auto: Array<{type: 'success' | 'warning' | 'error', title: string, message: string}> = [
+    const auto: Array<{type: 'success' | 'warning', title: string, message: string}> = [
       {
         type: 'success',
         title: 'Livraison prévue',
@@ -274,7 +250,8 @@ export class HomeComponent implements OnInit, OnDestroy {
     let i = 0;
     const interval = setInterval(() => {
       if (i < auto.length) {
-        this.addNotification(auto[i].type, auto[i].title, auto[i].message);
+        const { type, title, message } = auto[i];
+        this.notificationService[type](title, message);
         i++;
       } else {
         clearInterval(interval);
@@ -341,14 +318,12 @@ export class HomeComponent implements OnInit, OnDestroy {
       const trackingId = this.barcodeForm.get('trackingId')?.value;
       // TODO: Implement actual barcode generation logic
       // For now, just show a notification
-      this.addNotification(
-        'success',
+      this.notificationService.success(
         'Barcode Generated',
         `Barcode for tracking ID ${trackingId} has been generated.`
       );
     } else {
-      this.addNotification(
-        'error',
+      this.notificationService.error(
         'Invalid Input',
         'Please enter a valid tracking ID (minimum 10 alphanumeric characters).'
       );

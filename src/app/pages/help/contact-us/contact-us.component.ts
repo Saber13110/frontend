@@ -77,11 +77,11 @@ export class ContactUsComponent implements OnInit {
   onSubmit(): void {
     if (this.contactForm.valid) {
       console.log('Form submitted:', this.contactForm.value);
-      this.notificationService.show('Your message has been sent. We\'ll get back to you soon!', 'success');
+      this.notificationService.success('Message sent', "Your message has been sent. We'll get back to you soon!");
       this.contactForm.reset();
       this.selectedOption = null;
     } else {
-      this.notificationService.show('Please fill in all required fields correctly.', 'error');
+      this.notificationService.error('Form invalid', 'Please fill in all required fields correctly.');
     }
   }
 
