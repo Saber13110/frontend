@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule, Router } from '@angular/router';
+import { BrowserMultiFormatReader, BrowserCodeReader } from '@zxing/browser';
 
 // TODO: Backend - Create Tracking Interfaces
 interface TrackingRequest {
@@ -107,25 +108,36 @@ export class AllTrackingComponent implements OnInit {
       return;
     }
 
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+      alert('Caméra non disponible sur cet appareil.');
+      return;
+    }
+
+    const videoElement = document.createElement('video');
+    document.body.appendChild(videoElement);
+    const reader = new BrowserMultiFormatReader();
+
     try {
-      // TODO: Implement barcode scanning
-      /*
-      const result = await this.barcodeService.startScanning();
+      const result = await reader.decodeOnceFromVideoDevice(undefined, videoElement);
       if (result) {
-        this.trackingNumber = result;
-        this.validateInput('tracking', result);
-      }
-      */
-      
-      // Simulation for development
-      alert('Scanner de code-barres activé!\n\n(Fonctionnalité à intégrer avec l\'API caméra)');
-      setTimeout(() => {
-        this.trackingNumber = 'GBX123456789';
+        this.trackingNumber = result.getText();
         this.validateInput('tracking', this.trackingNumber);
-      }, 2000);
-    } catch (error) {
+      }
+    } catch (error: any) {
       console.error('Barcode scanning error:', error);
-      alert('Erreur lors du scan du code-barres.');
+      if (error?.name === 'NotAllowedError') {
+        alert('Permission caméra refusée.');
+      } else if (error?.name === 'NotFoundError') {
+        alert('Aucune caméra détectée.');
+      } else {
+        alert('Erreur lors du scan du code-barres.');
+      }
+    } finally {
+      const stream = videoElement.srcObject as MediaStream | null;
+      stream?.getTracks().forEach(track => track.stop());
+      BrowserCodeReader.cleanVideoSource(videoElement);
+      BrowserCodeReader.releaseAllStreams();
+      videoElement.remove();
     }
   }
 
