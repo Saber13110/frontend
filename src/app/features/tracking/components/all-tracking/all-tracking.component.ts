@@ -2,6 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule, Router } from '@angular/router';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+import { MatSelectModule } from '@angular/material/select';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
 
 // TODO: Backend - Create Tracking Interfaces
 interface TrackingRequest {
@@ -35,13 +41,19 @@ interface TrackingEvent {
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    RouterModule
+    RouterModule,
+    MatTabsModule,
+    MatInputModule,
+    MatButtonModule,
+    MatSelectModule,
+    MatFormFieldModule,
+    MatIconModule
   ],
   templateUrl: './all-tracking.component.html',
   styleUrls: ['./all-tracking.component.scss']
 })
 export class AllTrackingComponent implements OnInit {
-  activeTab: string = 'tracking-number';
+  tabIndex: number = 0;
   isLoading: boolean = false;
   isMobile: boolean = false;
 
@@ -80,8 +92,9 @@ export class AllTrackingComponent implements OnInit {
     // TODO: Initialize tracking services and configurations
   }
 
-  showTab(tabId: string): void {
-    this.activeTab = tabId;
+
+  tabChange(index: number): void {
+    this.tabIndex = index;
   }
 
   validateInput(type: string, value: string): void {

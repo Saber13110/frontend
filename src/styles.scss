@@ -1,6 +1,21 @@
 /* You can add global styles to this file, and also import other style files */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+@use '@angular/material' as mat;
+
+$fedex-primary: mat.define-palette(mat.$deep-purple-palette, 700);
+$fedex-accent: mat.define-palette(mat.$orange-palette, 600);
+$fedex-warn: mat.define-palette(mat.$red-palette);
+
+$fedex-theme: mat.define-light-theme((
+  color: (
+    primary: $fedex-primary,
+    accent: $fedex-accent,
+    warn: $fedex-warn,
+  )
+));
+
+@include mat.all-component-themes($fedex-theme);
 
 /* Variables CSS globales */
 :root {

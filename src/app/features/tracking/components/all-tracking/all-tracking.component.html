@@ -18,55 +18,20 @@
     </p>
 
     <!-- ===== TRACKING TABS ===== -->
-    <div class="tracking-tabs">
-      <button 
-        class="tracking-tab" 
-        [class.active]="activeTab === 'tracking-number'"
-        (click)="showTab('tracking-number')">
-        Tracking number
-      </button>
-      <button 
-        class="tracking-tab" 
-        [class.active]="activeTab === 'track-reference'"
-        (click)="showTab('track-reference')">
-        Track by reference
-      </button>
-      <button 
-        class="tracking-tab" 
-        [class.active]="activeTab === 'track-tcn'"
-        (click)="showTab('track-tcn')">
-        Track by TCN
-      </button>
-      <button 
-        class="tracking-tab" 
-        [class.active]="activeTab === 'proof-delivery'"
-        (click)="showTab('proof-delivery')">
-        Obtain proof of delivery
-      </button>
-    </div>
+    <mat-tab-group [selectedIndex]="tabIndex" (selectedIndexChange)="tabChange($event)" class="tracking-content">
 
-    <!-- ===== TRACKING CONTENT ===== -->
-    <div class="tracking-content">
-      
       <!-- Track by Number -->
-      <div class="tracking-panel" [class.active]="activeTab === 'tracking-number'">
+      <mat-tab label="Tracking number">
+        <div class="tracking-panel">
         <p class="tracking-description">
           Enter up to 30 of your Globex tracking, door tag, or Globex Office order numbers (one per line).
         </p>
-        
+
         <form class="tracking-form" (ngSubmit)="trackPackage($event)">
-          <div class="form-group">
-            <label class="form-label" for="trackingInput">Tracking number*</label>
-            <input 
-              type="text" 
-              id="trackingInput"
-              class="form-input" 
-              placeholder="Enter tracking number"
-              [(ngModel)]="trackingNumber"
-              name="trackingNumber"
-              (input)="validateInput('tracking', trackingNumber)"
-            >
-          </div>
+          <mat-form-field appearance="fill" class="w-100">
+            <mat-label>Tracking number*</mat-label>
+            <input matInput placeholder="Enter tracking number" [(ngModel)]="trackingNumber" name="trackingNumber" (input)="validateInput('tracking', trackingNumber)">
+          </mat-form-field>
 
           <!-- ===== SCAN BARCODE SECTION ===== -->
           <div class="scan-section">
@@ -87,154 +52,107 @@
           </div>
 
           <a href="#" class="need-help">NEED HELP?</a>
-          
+
           <div style="text-align: center;">
-            <button 
-              type="submit" 
-              class="track-btn" 
-              [class.enabled]="isTrackingValid"
-              [disabled]="!isTrackingValid || isLoading">
+            <button mat-raised-button color="primary" type="submit" [disabled]="!isTrackingValid || isLoading">
               <span *ngIf="!isLoading">TRACK</span>
               <span *ngIf="isLoading">TRACKING...</span>
             </button>
           </div>
         </form>
-      </div>
+        </div>
+      </mat-tab>
 
       <!-- Track by Reference -->
-      <div class="tracking-panel" [class.active]="activeTab === 'track-reference'">
+      <mat-tab label="Track by reference">
+        <div class="tracking-panel">
         <p class="tracking-description">
           Enter your reference number or purchase order numbers.
         </p>
-        
+
         <form class="tracking-form" (ngSubmit)="trackByReference($event)">
-          <div class="form-group">
-            <label class="form-label" for="referenceInput">Reference number*</label>
-            <input 
-              type="text" 
-              id="referenceInput"
-              class="form-input" 
-              placeholder="Enter reference number"
-              [(ngModel)]="referenceNumber"
-              name="referenceNumber"
-              (input)="validateInput('reference', referenceNumber)"
-            >
-          </div>
-          
-          <div class="form-group">
-            <label class="form-label" for="countrySelect">Destination country/territory*</label>
-            <select 
-              id="countrySelect" 
-              class="form-select"
-              [(ngModel)]="selectedCountry"
-              name="selectedCountry"
-              (change)="validateInput('reference', referenceNumber)">
-              <option value="">Select country</option>
-              <option value="FR">France</option>
-              <option value="DE">Germany</option>
-              <option value="ES">Spain</option>
-              <option value="IT">Italy</option>
-              <option value="UK">United Kingdom</option>
-              <option value="US">United States</option>
-            </select>
-          </div>
+          <mat-form-field appearance="fill" class="w-100">
+            <mat-label>Reference number*</mat-label>
+            <input matInput placeholder="Enter reference number" [(ngModel)]="referenceNumber" name="referenceNumber" (input)="validateInput('reference', referenceNumber)">
+          </mat-form-field>
+
+          <mat-form-field appearance="fill" class="w-100">
+            <mat-label>Destination country/territory*</mat-label>
+            <mat-select [(ngModel)]="selectedCountry" name="selectedCountry" (selectionChange)="validateInput('reference', referenceNumber)">
+              <mat-option value="">Select country</mat-option>
+              <mat-option value="FR">France</mat-option>
+              <mat-option value="DE">Germany</mat-option>
+              <mat-option value="ES">Spain</mat-option>
+              <mat-option value="IT">Italy</mat-option>
+              <mat-option value="UK">United Kingdom</mat-option>
+              <mat-option value="US">United States</mat-option>
+            </mat-select>
+          </mat-form-field>
 
           <a href="#" class="need-help">NEED HELP?</a>
-          
+
           <div style="text-align: center;">
-            <button 
-              type="submit" 
-              class="track-btn" 
-              [class.enabled]="isReferenceValid"
-              [disabled]="!isReferenceValid || isLoading">
+            <button mat-raised-button color="primary" type="submit" [disabled]="!isReferenceValid || isLoading">
               <span *ngIf="!isLoading">TRACK</span>
               <span *ngIf="isLoading">TRACKING...</span>
             </button>
           </div>
         </form>
-      </div>
+        </div>
+      </mat-tab>
 
       <!-- Track by TCN -->
-      <div class="tracking-panel" [class.active]="activeTab === 'track-tcn'">
+      <mat-tab label="Track by TCN">
+        <div class="tracking-panel">
         <p class="tracking-description">
           Enter your Transportation Control Number (TCN) for government orders.<br>
           Do not use any spaces or the letters "TCN" preceding the number.
         </p>
-        
+
         <form class="tracking-form" (ngSubmit)="trackByTCN($event)">
-          <div class="form-group">
-            <label class="form-label" for="tcnInput">Enter TCN or tracking number*</label>
-            <input 
-              type="text" 
-              id="tcnInput"
-              class="form-input" 
-              placeholder="Enter TCN"
-              [(ngModel)]="tcnNumber"
-              name="tcnNumber"
-              (input)="validateInput('tcn', tcnNumber)"
-            >
-          </div>
-          
-          <div class="form-group">
-            <label class="form-label" for="shipDate">Ship date*</label>
-            <div style="position: relative;">
-              <input 
-                type="date" 
-                id="shipDate"
-                class="form-input"
-                [(ngModel)]="shipDate"
-                name="shipDate"
-                (change)="validateInput('tcn', tcnNumber)"
-              >
-              <i class="fas fa-calendar" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: #4d148c; pointer-events: none;"></i>
-            </div>
-            <div class="form-help">Please enter the ship date if the package was shipped more than 14 days ago.</div>
-          </div>
+          <mat-form-field appearance="fill" class="w-100">
+            <mat-label>Enter TCN or tracking number*</mat-label>
+            <input matInput placeholder="Enter TCN" [(ngModel)]="tcnNumber" name="tcnNumber" (input)="validateInput('tcn', tcnNumber)">
+          </mat-form-field>
+
+          <mat-form-field appearance="fill" class="w-100">
+            <mat-label>Ship date*</mat-label>
+            <input matInput type="date" [(ngModel)]="shipDate" name="shipDate" (dateChange)="validateInput('tcn', tcnNumber)">
+            <div mat-hint>Please enter the ship date if the package was shipped more than 14 days ago.</div>
+          </mat-form-field>
 
           <a href="#" class="need-help">NEED HELP?</a>
-          
+
           <div style="text-align: center;">
-            <button 
-              type="submit" 
-              class="track-btn" 
-              [class.enabled]="isTCNValid"
-              [disabled]="!isTCNValid || isLoading">
+            <button mat-raised-button color="primary" type="submit" [disabled]="!isTCNValid || isLoading">
               <span *ngIf="!isLoading">TRACK</span>
               <span *ngIf="isLoading">TRACKING...</span>
             </button>
           </div>
         </form>
-      </div>
+        </div>
+      </mat-tab>
 
       <!-- Proof of Delivery -->
-      <div class="tracking-panel" [class.active]="activeTab === 'proof-delivery'">
+      <mat-tab label="Obtain proof of delivery">
+        <div class="tracking-panel">
         <form class="tracking-form" (ngSubmit)="getProofOfDelivery($event)">
-          <div class="form-group">
-            <label class="form-label" for="proofInput">Tracking ID*</label>
-            <input 
-              type="text" 
-              id="proofInput"
-              class="form-input" 
-              placeholder="Enter your tracking ID"
-              [(ngModel)]="proofNumber"
-              name="proofNumber"
-              (input)="validateInput('proof', proofNumber)"
-            >
-          </div>
-          
+          <mat-form-field appearance="fill" class="w-100">
+            <mat-label>Tracking ID*</mat-label>
+            <input matInput placeholder="Enter your tracking ID" [(ngModel)]="proofNumber" name="proofNumber" (input)="validateInput('proof', proofNumber)">
+          </mat-form-field>
+
           <div style="text-align: center;">
-            <button 
-              type="submit" 
-              class="track-btn enabled" 
-              [class.enabled]="isProofValid"
-              [disabled]="!isProofValid || isLoading">
+            <button mat-raised-button color="primary" type="submit" [disabled]="!isProofValid || isLoading">
               <span *ngIf="!isLoading">DOWNLOAD</span>
               <span *ngIf="isLoading">DOWNLOADING...</span>
             </button>
           </div>
         </form>
-      </div>
-    </div>
+        </div>
+      </mat-tab>
+
+    </mat-tab-group>
   </div>
 </main>
 
