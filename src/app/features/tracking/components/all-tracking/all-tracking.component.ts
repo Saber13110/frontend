@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
 // TODO: Backend - Create Tracking Interfaces
@@ -33,7 +33,6 @@ interface TrackingEvent {
   standalone: true,
   imports: [
     CommonModule,
-    FormsModule,
     ReactiveFormsModule,
     RouterModule
   ],
@@ -45,25 +44,36 @@ export class AllTrackingComponent implements OnInit {
   isLoading: boolean = false;
   isMobile: boolean = false;
 
-  // Form values
-  trackingNumber: string = '';
-  referenceNumber: string = '';
-  selectedCountry: string = '';
-  tcnNumber: string = '';
-  shipDate: string = '';
-  proofNumber: string = '';
-
-  // Validation states
-  isTrackingValid: boolean = false;
-  isReferenceValid: boolean = false;
-  isTCNValid: boolean = false;
-  isProofValid: boolean = false;
+  // Reactive forms
+  trackingForm: FormGroup;
+  referenceForm: FormGroup;
+  tcnForm: FormGroup;
+  proofForm: FormGroup;
 
   constructor(
+    private fb: FormBuilder
     // TODO: Inject services
     // private trackingService: TrackingService,
     // private notificationService: NotificationService
-  ) {}
+  ) {
+    this.trackingForm = this.fb.group({
+      trackingNumber: ['', [Validators.required, Validators.minLength(8)]]
+    });
+
+    this.referenceForm = this.fb.group({
+      referenceNumber: ['', [Validators.required, Validators.minLength(3)]],
+      selectedCountry: ['', Validators.required]
+    });
+
+    this.tcnForm = this.fb.group({
+      tcnNumber: ['', [Validators.required, Validators.minLength(6)]],
+      shipDate: ['', Validators.required]
+    });
+
+    this.proofForm = this.fb.group({
+      proofNumber: ['', [Validators.required, Validators.minLength(8)]]
+    });
+  }
 
   ngOnInit(): void {
     this.checkDevice();
@@ -83,22 +93,7 @@ export class AllTrackingComponent implements OnInit {
     this.activeTab = tabId;
   }
 
-  validateInput(type: string, value: string): void {
-    switch(type) {
-      case 'tracking':
-        this.isTrackingValid = value.length >= 8;
-        break;
-      case 'reference':
-        this.isReferenceValid = value.length >= 3 && this.selectedCountry !== '';
-        break;
-      case 'tcn':
-        this.isTCNValid = value.length >= 6 && this.shipDate !== '';
-        break;
-      case 'proof':
-        this.isProofValid = value.length >= 8;
-        break;
-    }
-  }
+
 
   async startBarcodeScanner(): Promise<void> {
     if (!this.isMobile) {
@@ -119,8 +114,7 @@ export class AllTrackingComponent implements OnInit {
       // Simulation for development
       alert('Scanner de code-barres activé!\n\n(Fonctionnalité à intégrer avec l\'API caméra)');
       setTimeout(() => {
-        this.trackingNumber = 'GBX123456789';
-        this.validateInput('tracking', this.trackingNumber);
+        this.trackingForm.patchValue({ trackingNumber: 'GBX123456789' });
       }, 2000);
     } catch (error) {
       console.error('Barcode scanning error:', error);
@@ -128,25 +122,28 @@ export class AllTrackingComponent implements OnInit {
     }
   }
 
-  async trackPackage(event: Event): Promise<void> {
-    event.preventDefault();
-    if (!this.isTrackingValid) return;
+  async trackPackage(): Promise<void> {
+    if (this.trackingForm.invalid) {
+      this.trackingForm.markAllAsTouched();
+      return;
+    }
 
     this.isLoading = true;
     try {
       // TODO: Implement tracking service call
       /*
       const result = await this.trackingService.track({
-        trackingNumber: this.trackingNumber,
+        trackingNumber: this.trackingForm.value.trackingNumber,
         type: 'number'
       });
       this.notificationService.success('Tracking information retrieved successfully');
       // Navigate to results page or show results
       */
-      
+
       // Simulation for development
-      console.log('Tracking package:', this.trackingNumber);
-      alert(`Recherche du colis: ${this.trackingNumber}\n\n(Intégration API à venir)`);
+      const trackingNumber = this.trackingForm.value.trackingNumber;
+      console.log('Tracking package:', trackingNumber);
+      alert(`Recherche du colis: ${trackingNumber}\n\n(Intégration API à venir)`);
     } catch (error) {
       console.error('Tracking error:', error);
       // this.notificationService.error('Failed to retrieve tracking information');
@@ -155,18 +152,18 @@ export class AllTrackingComponent implements OnInit {
     }
   }
 
-  async trackByReference(event: Event): Promise<void> {
-    event.preventDefault();
-    if (!this.isReferenceValid) return;
+  async trackByReference(): Promise<void> {
+    if (this.referenceForm.invalid) {
+      this.referenceForm.markAllAsTouched();
+      return;
+    }
 
     this.isLoading = true;
     try {
       // TODO: Implement reference tracking
-      console.log('Tracking by reference:', { 
-        reference: this.referenceNumber, 
-        country: this.selectedCountry 
-      });
-      alert(`Recherche par référence: ${this.referenceNumber}\nPays: ${this.selectedCountry}\n\n(Intégration API à venir)`);
+      console.log('Tracking by reference:', this.referenceForm.value);
+      const { referenceNumber, selectedCountry } = this.referenceForm.value;
+      alert(`Recherche par référence: ${referenceNumber}\nPays: ${selectedCountry}\n\n(Intégration API à venir)`);
     } catch (error) {
       console.error('Reference tracking error:', error);
     } finally {
@@ -174,18 +171,18 @@ export class AllTrackingComponent implements OnInit {
     }
   }
 
-  async trackByTCN(event: Event): Promise<void> {
-    event.preventDefault();
-    if (!this.isTCNValid) return;
+  async trackByTCN(): Promise<void> {
+    if (this.tcnForm.invalid) {
+      this.tcnForm.markAllAsTouched();
+      return;
+    }
 
     this.isLoading = true;
     try {
       // TODO: Implement TCN tracking
-      console.log('Tracking by TCN:', { 
-        tcn: this.tcnNumber, 
-        shipDate: this.shipDate 
-      });
-      alert(`Recherche TCN: ${this.tcnNumber}\nDate: ${this.shipDate}\n\n(Intégration API à venir)`);
+      const { tcnNumber, shipDate } = this.tcnForm.value;
+      console.log('Tracking by TCN:', { tcnNumber, shipDate });
+      alert(`Recherche TCN: ${tcnNumber}\nDate: ${shipDate}\n\n(Intégration API à venir)`);
     } catch (error) {
       console.error('TCN tracking error:', error);
     } finally {
@@ -193,15 +190,18 @@ export class AllTrackingComponent implements OnInit {
     }
   }
 
-  async getProofOfDelivery(event: Event): Promise<void> {
-    event.preventDefault();
-    if (!this.isProofValid) return;
+  async getProofOfDelivery(): Promise<void> {
+    if (this.proofForm.invalid) {
+      this.proofForm.markAllAsTouched();
+      return;
+    }
 
     this.isLoading = true;
     try {
       // TODO: Implement proof of delivery download
-      console.log('Getting proof of delivery for:', this.proofNumber);
-      alert(`Téléchargement de la preuve de livraison pour: ${this.proofNumber}\n\n(Intégration API à venir)`);
+      const proofNumber = this.proofForm.value.proofNumber;
+      console.log('Getting proof of delivery for:', proofNumber);
+      alert(`Téléchargement de la preuve de livraison pour: ${proofNumber}\n\n(Intégration API à venir)`);
     } catch (error) {
       console.error('Proof of delivery error:', error);
     } finally {
