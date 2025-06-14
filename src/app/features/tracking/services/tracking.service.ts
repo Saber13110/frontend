@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, of, throwError } from 'rxjs';
 import { catchError, delay, map } from 'rxjs/operators';
 import { TrackingData } from '../models/tracking-data.model';
+import { environment } from '../../../../environments/environment';
 
 export interface HistoryItem {
   status: string;
@@ -24,7 +25,7 @@ export interface PackageInfo {
   providedIn: 'root'
 })
 export class TrackingService {
-  private apiUrl = 'http://localhost:8000/api';
+  private apiUrl = environment.apiUrl;
 
   constructor(private http: HttpClient) { }
 
