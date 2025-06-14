@@ -415,6 +415,19 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
   }
 
+  onProScan(): void {
+    this.router.navigate(['/services/pro-scan']);
+  }
+
+  onDownloadProof(): void {
+    const trackingNumber = this.trackingForm.get('trackingNumber')?.value;
+    if (trackingNumber) {
+      this.router.navigate(['/services/proof', trackingNumber]);
+    } else {
+      this.router.navigate(['/services/proof']);
+    }
+  }
+
   // TODO: Ajouter la logique pour 'Obtain your proof' (saisie ID et bouton télécharger)
 
   // Method to generate barcode
