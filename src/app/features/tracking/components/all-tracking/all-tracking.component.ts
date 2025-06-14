@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { ZXingScannerModule } from '@zxing/ngx-scanner';
 
 // TODO: Backend - Create Tracking Interfaces
 interface TrackingRequest {
@@ -35,7 +36,8 @@ interface TrackingEvent {
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    RouterModule
+    RouterModule,
+    ZXingScannerModule
   ],
   templateUrl: './all-tracking.component.html',
   styleUrls: ['./all-tracking.component.scss']
@@ -44,6 +46,7 @@ export class AllTrackingComponent implements OnInit {
   activeTab: string = 'tracking-number';
   isLoading: boolean = false;
   isMobile: boolean = false;
+  showScanner: boolean = false;
 
   // Form values
   trackingNumber: string = '';
@@ -105,27 +108,19 @@ export class AllTrackingComponent implements OnInit {
       alert('Le scanner de code-barres est disponible uniquement sur mobile.');
       return;
     }
+    this.showScanner = true;
+  }
 
-    try {
-      // TODO: Implement barcode scanning
-      /*
-      const result = await this.barcodeService.startScanning();
-      if (result) {
-        this.trackingNumber = result;
-        this.validateInput('tracking', result);
-      }
-      */
-      
-      // Simulation for development
-      alert('Scanner de code-barres activé!\n\n(Fonctionnalité à intégrer avec l\'API caméra)');
-      setTimeout(() => {
-        this.trackingNumber = 'GBX123456789';
-        this.validateInput('tracking', this.trackingNumber);
-      }, 2000);
-    } catch (error) {
-      console.error('Barcode scanning error:', error);
-      alert('Erreur lors du scan du code-barres.');
+  onCodeResult(result: string): void {
+    if (result) {
+      this.trackingNumber = result;
+      this.validateInput('tracking', result);
     }
+    this.showScanner = false;
+  }
+
+  closeScanner(): void {
+    this.showScanner = false;
   }
 
   async trackPackage(event: Event): Promise<void> {

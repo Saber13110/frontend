@@ -9,6 +9,7 @@
   </div>
 </section>
 
+
 <!-- ===== MAIN CONTENT ===== -->
 <main class="main-content">
   <div class="container">
@@ -297,3 +298,14 @@
     </div>
   </div>
 </section>
+
+<!-- Barcode scanner modal -->
+<div class="scanner-modal" *ngIf="showScanner">
+  <div class="scanner-container">
+    <zxing-scanner
+      [enable]="showScanner"
+      (scanSuccess)="onCodeResult($event)"></zxing-scanner>
+    <button type="button" class="close-btn" (click)="closeScanner()">Close</button>
+  </div>
+</div>
+
