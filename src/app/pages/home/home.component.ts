@@ -116,8 +116,6 @@ export class HomeComponent implements OnInit, OnDestroy {
   // Tracks the currently selected feature card in the hero section ('barcode_scan', 'obtain_proof', or null for default track by ID)
   selectedHeroFeature: 'barcode_scan' | 'obtain_proof' | null = null;
 
-  // Form for barcode generation
-  barcodeForm: FormGroup;
 
   constructor(
     private fb: FormBuilder,
@@ -128,9 +126,6 @@ export class HomeComponent implements OnInit, OnDestroy {
       trackingNumber: ['', [Validators.required, Validators.pattern('^[A-Z0-9]{10,}$')]]
     });
     
-    this.barcodeForm = this.fb.group({
-      trackingId: ['', [Validators.required, Validators.pattern('^[A-Z0-9]{10,}$')]]
-    });
   }
 
   ngOnInit(): void {
@@ -464,26 +459,5 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.addNotification('error', 'Erreur', 'Impossible de récupérer la preuve');
       }
     });
-  }
-
-
-  // Method to generate barcode
-  generateBarcode(): void {
-    if (this.barcodeForm.valid) {
-      const trackingId = this.barcodeForm.get('trackingId')?.value;
-      // TODO: Implement actual barcode generation logic
-      // For now, just show a notification
-      this.addNotification(
-        'success',
-        'Barcode Generated',
-        `Barcode for tracking ID ${trackingId} has been generated.`
-      );
-    } else {
-      this.addNotification(
-        'error',
-        'Invalid Input',
-        'Please enter a valid tracking ID (minimum 10 alphanumeric characters).'
-      );
-    }
   }
 }
