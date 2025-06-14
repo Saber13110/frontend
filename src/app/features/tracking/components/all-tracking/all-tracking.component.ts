@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
+import { firstValueFrom } from 'rxjs';
+import { TrackingService } from '../../services/tracking.service';
+import { NotificationService } from '../../../shared/services/notification.service';
 
 // TODO: Backend - Create Tracking Interfaces
 interface TrackingRequest {
@@ -60,9 +63,9 @@ export class AllTrackingComponent implements OnInit {
   isProofValid: boolean = false;
 
   constructor(
-    // TODO: Inject services
-    // private trackingService: TrackingService,
-    // private notificationService: NotificationService
+    private router: Router,
+    private trackingService: TrackingService,
+    private notificationService: NotificationService
   ) {}
 
   ngOnInit(): void {
@@ -102,7 +105,10 @@ export class AllTrackingComponent implements OnInit {
 
   async startBarcodeScanner(): Promise<void> {
     if (!this.isMobile) {
-      alert('Le scanner de code-barres est disponible uniquement sur mobile.');
+      this.notificationService.warning(
+        'Scanner indisponible',
+        'Le scanner de code-barres est disponible uniquement sur mobile.'
+      );
       return;
     }
 
@@ -117,14 +123,20 @@ export class AllTrackingComponent implements OnInit {
       */
       
       // Simulation for development
-      alert('Scanner de code-barres activé!\n\n(Fonctionnalité à intégrer avec l\'API caméra)');
+      this.notificationService.info(
+        'Scanner activé',
+        "Fonctionnalité à intégrer avec l'API caméra"
+      );
       setTimeout(() => {
         this.trackingNumber = 'GBX123456789';
         this.validateInput('tracking', this.trackingNumber);
       }, 2000);
     } catch (error) {
       console.error('Barcode scanning error:', error);
-      alert('Erreur lors du scan du code-barres.');
+      this.notificationService.error(
+        'Erreur de scan',
+        'Erreur lors du scan du code-barres.'
+      );
     }
   }
 
@@ -134,22 +146,22 @@ export class AllTrackingComponent implements OnInit {
 
     this.isLoading = true;
     try {
-      // TODO: Implement tracking service call
-      /*
-      const result = await this.trackingService.track({
-        trackingNumber: this.trackingNumber,
-        type: 'number'
+      await firstValueFrom(
+        this.trackingService.getTrackingData(this.trackingNumber)
+      );
+      this.notificationService.success(
+        'Suivi réussi',
+        'Informations de suivi récupérées avec succès.'
+      );
+      this.router.navigate(['/tracking/result'], {
+        queryParams: { number: this.trackingNumber }
       });
-      this.notificationService.success('Tracking information retrieved successfully');
-      // Navigate to results page or show results
-      */
-      
-      // Simulation for development
-      console.log('Tracking package:', this.trackingNumber);
-      alert(`Recherche du colis: ${this.trackingNumber}\n\n(Intégration API à venir)`);
     } catch (error) {
       console.error('Tracking error:', error);
-      // this.notificationService.error('Failed to retrieve tracking information');
+      this.notificationService.error(
+        'Erreur',
+        "Impossible de récupérer les informations de suivi."
+      );
     } finally {
       this.isLoading = false;
     }
@@ -162,11 +174,14 @@ export class AllTrackingComponent implements OnInit {
     this.isLoading = true;
     try {
       // TODO: Implement reference tracking
-      console.log('Tracking by reference:', { 
-        reference: this.referenceNumber, 
-        country: this.selectedCountry 
+      console.log('Tracking by reference:', {
+        reference: this.referenceNumber,
+        country: this.selectedCountry
       });
-      alert(`Recherche par référence: ${this.referenceNumber}\nPays: ${this.selectedCountry}\n\n(Intégration API à venir)`);
+      this.notificationService.info(
+        'Recherche par référence',
+        "Intégration API à venir"
+      );
     } catch (error) {
       console.error('Reference tracking error:', error);
     } finally {
@@ -181,11 +196,14 @@ export class AllTrackingComponent implements OnInit {
     this.isLoading = true;
     try {
       // TODO: Implement TCN tracking
-      console.log('Tracking by TCN:', { 
-        tcn: this.tcnNumber, 
-        shipDate: this.shipDate 
+      console.log('Tracking by TCN:', {
+        tcn: this.tcnNumber,
+        shipDate: this.shipDate
       });
-      alert(`Recherche TCN: ${this.tcnNumber}\nDate: ${this.shipDate}\n\n(Intégration API à venir)`);
+      this.notificationService.info(
+        'Recherche TCN',
+        "Intégration API à venir"
+      );
     } catch (error) {
       console.error('TCN tracking error:', error);
     } finally {
@@ -201,7 +219,10 @@ export class AllTrackingComponent implements OnInit {
     try {
       // TODO: Implement proof of delivery download
       console.log('Getting proof of delivery for:', this.proofNumber);
-      alert(`Téléchargement de la preuve de livraison pour: ${this.proofNumber}\n\n(Intégration API à venir)`);
+      this.notificationService.info(
+        'Téléchargement',
+        "Intégration API à venir"
+      );
     } catch (error) {
       console.error('Proof of delivery error:', error);
     } finally {
