@@ -53,50 +53,58 @@
 
         <!-- ===== NAVIGATION TABS ===== -->
         <nav class="nav-tabs animate-fade-in" role="tablist" aria-label="Help categories">
-            <button 
-                class="nav-tab" 
-                [class.active]="currentTab === 'tracking-advice'"
-                role="tab" 
-                [attr.aria-selected]="currentTab === 'tracking-advice'"
-                aria-controls="tracking-advice" 
-                id="advice-tab" 
-                (click)="switchTab('tracking-advice')"
+            <button
+                class="nav-tab"
+                routerLink="./advice"
+                routerLinkActive="active"
+                [routerLinkActiveOptions]="{ exact: true }"
+                #adviceRla="routerLinkActive"
+                role="tab"
+                [attr.aria-selected]="adviceRla.isActive"
+                aria-controls="tracking-advice"
+                id="advice-tab"
             >
                 <i class="fas fa-lightbulb" aria-hidden="true"></i>
                 Tracking Advice
             </button>
-            <button 
-                class="nav-tab" 
-                [class.active]="currentTab === 'tracking-tools'"
-                role="tab" 
-                [attr.aria-selected]="currentTab === 'tracking-tools'"
-                aria-controls="tracking-tools" 
-                id="tools-tab" 
-                (click)="switchTab('tracking-tools')"
+            <button
+                class="nav-tab"
+                routerLink="./tools"
+                routerLinkActive="active"
+                [routerLinkActiveOptions]="{ exact: true }"
+                #toolsRla="routerLinkActive"
+                role="tab"
+                [attr.aria-selected]="toolsRla.isActive"
+                aria-controls="tracking-tools"
+                id="tools-tab"
             >
                 <i class="fas fa-tools" aria-hidden="true"></i>
                 Tracking Tools
             </button>
-            <button 
-                class="nav-tab" 
-                [class.active]="currentTab === 'faqs'"
-                role="tab" 
-                [attr.aria-selected]="currentTab === 'faqs'"
-                aria-controls="faqs" 
-                id="faqs-tab" 
-                (click)="switchTab('faqs')"
+            <button
+                class="nav-tab"
+                routerLink="./faq"
+                routerLinkActive="active"
+                [routerLinkActiveOptions]="{ exact: true }"
+                #faqRla="routerLinkActive"
+                role="tab"
+                [attr.aria-selected]="faqRla.isActive"
+                aria-controls="faqs"
+                id="faqs-tab"
             >
                 <i class="fas fa-question-circle" aria-hidden="true"></i>
                 FAQs
             </button>
-            <button 
-                class="nav-tab" 
-                [class.active]="currentTab === 'contact-us'"
-                role="tab" 
-                [attr.aria-selected]="currentTab === 'contact-us'"
-                aria-controls="contact-us" 
-                id="contact-tab" 
-                (click)="switchTab('contact-us')"
+            <button
+                class="nav-tab"
+                routerLink="./contact"
+                routerLinkActive="active"
+                [routerLinkActiveOptions]="{ exact: true }"
+                #contactRla="routerLinkActive"
+                role="tab"
+                [attr.aria-selected]="contactRla.isActive"
+                aria-controls="contact-us"
+                id="contact-tab"
             >
                 <i class="fas fa-headset" aria-hidden="true"></i>
                 Contact Us
@@ -104,11 +112,6 @@
         </nav>
 
         <!-- ===== TAB CONTENT ===== -->
-        <div [ngSwitch]="currentTab">
-            <app-tracking-advice *ngSwitchCase="'tracking-advice'" class="tab-content active"></app-tracking-advice>
-            <app-tracking-tools *ngSwitchCase="'tracking-tools'" class="tab-content active"></app-tracking-tools>
-            <app-faqs *ngSwitchCase="'faqs'" class="tab-content active"></app-faqs>
-            <app-contact-us *ngSwitchCase="'contact-us'" class="tab-content active"></app-contact-us>
-        </div>
+        <router-outlet></router-outlet>
     </div>
 </main> 
