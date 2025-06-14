@@ -1,15 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
-import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
-import { filter } from 'rxjs/operators';
+import { Router } from '@angular/router';
 import { NotificationService } from '../../shared/services/notification.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { TrackingAdviceComponent } from './tracking-advice/tracking-advice.component';
-import { TrackingToolsComponent } from './tracking-tools/tracking-tools.component';
-import { FaqsComponent } from './faqs/faqs.component';
-import { ContactUsComponent } from './contact-us/contact-us.component';
 
 @Component({
   selector: 'app-help',
@@ -17,78 +12,25 @@ import { ContactUsComponent } from './contact-us/contact-us.component';
   imports: [
     CommonModule,
     FormsModule,
-    RouterModule,
-    TrackingAdviceComponent,
-    TrackingToolsComponent,
-    FaqsComponent,
-    ContactUsComponent
+    RouterModule
   ],
   templateUrl: './help.component.html',
   styleUrls: ['./help.component.scss']
 })
 export class HelpComponent implements OnInit {
-  currentTab: string = 'tracking-advice';
   trackingNumber: string = '';
 
   constructor(
     private titleService: Title,
     private router: Router,
-    private route: ActivatedRoute,
     private notificationService: NotificationService
-  ) {
-    // Subscribe to route changes to handle fragment navigation
-    this.router.events.pipe(
-      filter(event => event instanceof NavigationEnd)
-    ).subscribe(() => {
-      const fragment = this.route.snapshot.fragment;
-      if (fragment) {
-        this.handleFragmentNavigation(fragment);
-      }
-    });
-  }
+  ) {}
 
   ngOnInit() {
     this.titleService.setTitle('Tracking Help & Support - Globex Logistics');
     this.initializeAccessibility();
-    
-    // Handle initial fragment if present
-    const fragment = this.route.snapshot.fragment;
-    if (fragment) {
-      this.handleFragmentNavigation(fragment);
-    }
   }
 
-  private handleFragmentNavigation(fragment: string) {
-    switch (fragment) {
-      case 'advice':
-        this.currentTab = 'tracking-advice';
-        break;
-      case 'tools':
-        this.currentTab = 'tracking-tools';
-        break;
-      case 'faq':
-        this.currentTab = 'faqs';
-        break;
-      case 'contact':
-        this.currentTab = 'contact-us';
-        break;
-    }
-  }
-
-  switchTab(tab: string) {
-    this.currentTab = tab;
-    // Update URL fragment without triggering a navigation
-    const fragment = tab === 'tracking-advice' ? 'advice' :
-                    tab === 'tracking-tools' ? 'tools' :
-                    tab === 'faqs' ? 'faq' :
-                    tab === 'contact-us' ? 'contact' : '';
-    
-    this.router.navigate([], {
-      fragment,
-      relativeTo: this.route,
-      replaceUrl: true
-    });
-  }
 
   private initializeAccessibility() {
     // Add ARIA labels to interactive elements
