@@ -19,26 +19,30 @@
 
     <!-- ===== TRACKING TABS ===== -->
     <div class="tracking-tabs">
-      <button 
-        class="tracking-tab" 
+      <button
+        class="tracking-tab"
+        aria-label="Show tracking number form"
         [class.active]="activeTab === 'tracking-number'"
         (click)="showTab('tracking-number')">
         Tracking number
       </button>
-      <button 
-        class="tracking-tab" 
+      <button
+        class="tracking-tab"
+        aria-label="Show track by reference form"
         [class.active]="activeTab === 'track-reference'"
         (click)="showTab('track-reference')">
         Track by reference
       </button>
-      <button 
-        class="tracking-tab" 
+      <button
+        class="tracking-tab"
+        aria-label="Show track by TCN form"
         [class.active]="activeTab === 'track-tcn'"
         (click)="showTab('track-tcn')">
         Track by TCN
       </button>
-      <button 
-        class="tracking-tab" 
+      <button
+        class="tracking-tab"
+        aria-label="Show proof of delivery form"
         [class.active]="activeTab === 'proof-delivery'"
         (click)="showTab('proof-delivery')">
         Obtain proof of delivery
@@ -57,15 +61,17 @@
         <form class="tracking-form" (ngSubmit)="trackPackage($event)">
           <div class="form-group">
             <label class="form-label" for="trackingInput">Tracking number*</label>
-            <input 
-              type="text" 
+            <input
+              type="text"
               id="trackingInput"
-              class="form-input" 
+              class="form-input"
               placeholder="Enter tracking number"
+              aria-label="Tracking number"
               [(ngModel)]="trackingNumber"
               name="trackingNumber"
               (input)="validateInput('tracking', trackingNumber)"
             >
+            <div class="error-message" *ngIf="trackingNumber && !isTrackingValid">Tracking number must be at least 8 characters</div>
           </div>
 
           <!-- ===== SCAN BARCODE SECTION ===== -->
@@ -77,9 +83,10 @@
             <p class="scan-description">
               Use your mobile device to scan the barcode on your shipping label
             </p>
-            <button 
-              type="button" 
-              class="scan-btn" 
+            <button
+              type="button"
+              class="scan-btn"
+              aria-label="Start barcode scanner"
               (click)="startBarcodeScanner()"
               [disabled]="isLoading">
               <i class="fas fa-camera"></i> Scan Barcode
@@ -89,9 +96,10 @@
           <a href="#" class="need-help">NEED HELP?</a>
           
           <div style="text-align: center;">
-            <button 
-              type="submit" 
-              class="track-btn" 
+            <button
+              type="submit"
+              class="track-btn"
+              aria-label="Track package by number"
               [class.enabled]="isTrackingValid"
               [disabled]="!isTrackingValid || isLoading">
               <span *ngIf="!isLoading">TRACK</span>
@@ -110,22 +118,25 @@
         <form class="tracking-form" (ngSubmit)="trackByReference($event)">
           <div class="form-group">
             <label class="form-label" for="referenceInput">Reference number*</label>
-            <input 
-              type="text" 
+            <input
+              type="text"
               id="referenceInput"
-              class="form-input" 
+              class="form-input"
               placeholder="Enter reference number"
+              aria-label="Reference number"
               [(ngModel)]="referenceNumber"
               name="referenceNumber"
               (input)="validateInput('reference', referenceNumber)"
             >
+            <div class="error-message" *ngIf="referenceNumber && !isReferenceValid">Reference number and country are required</div>
           </div>
           
           <div class="form-group">
             <label class="form-label" for="countrySelect">Destination country/territory*</label>
-            <select 
-              id="countrySelect" 
+            <select
+              id="countrySelect"
               class="form-select"
+              aria-label="Destination country"
               [(ngModel)]="selectedCountry"
               name="selectedCountry"
               (change)="validateInput('reference', referenceNumber)">
@@ -142,9 +153,10 @@
           <a href="#" class="need-help">NEED HELP?</a>
           
           <div style="text-align: center;">
-            <button 
-              type="submit" 
-              class="track-btn" 
+            <button
+              type="submit"
+              class="track-btn"
+              aria-label="Track by reference"
               [class.enabled]="isReferenceValid"
               [disabled]="!isReferenceValid || isLoading">
               <span *ngIf="!isLoading">TRACK</span>
@@ -164,24 +176,27 @@
         <form class="tracking-form" (ngSubmit)="trackByTCN($event)">
           <div class="form-group">
             <label class="form-label" for="tcnInput">Enter TCN or tracking number*</label>
-            <input 
-              type="text" 
+            <input
+              type="text"
               id="tcnInput"
-              class="form-input" 
+              class="form-input"
               placeholder="Enter TCN"
+              aria-label="TCN or tracking number"
               [(ngModel)]="tcnNumber"
               name="tcnNumber"
               (input)="validateInput('tcn', tcnNumber)"
             >
+            <div class="error-message" *ngIf="tcnNumber && !isTCNValid">Enter a valid TCN and ship date</div>
           </div>
           
           <div class="form-group">
             <label class="form-label" for="shipDate">Ship date*</label>
             <div style="position: relative;">
-              <input 
-                type="date" 
+              <input
+                type="date"
                 id="shipDate"
                 class="form-input"
+                aria-label="Ship date"
                 [(ngModel)]="shipDate"
                 name="shipDate"
                 (change)="validateInput('tcn', tcnNumber)"
@@ -194,9 +209,10 @@
           <a href="#" class="need-help">NEED HELP?</a>
           
           <div style="text-align: center;">
-            <button 
-              type="submit" 
-              class="track-btn" 
+            <button
+              type="submit"
+              class="track-btn"
+              aria-label="Track by TCN"
               [class.enabled]="isTCNValid"
               [disabled]="!isTCNValid || isLoading">
               <span *ngIf="!isLoading">TRACK</span>
@@ -211,21 +227,24 @@
         <form class="tracking-form" (ngSubmit)="getProofOfDelivery($event)">
           <div class="form-group">
             <label class="form-label" for="proofInput">Tracking ID*</label>
-            <input 
-              type="text" 
+            <input
+              type="text"
               id="proofInput"
-              class="form-input" 
+              class="form-input"
               placeholder="Enter your tracking ID"
+              aria-label="Tracking ID"
               [(ngModel)]="proofNumber"
               name="proofNumber"
               (input)="validateInput('proof', proofNumber)"
             >
+            <div class="error-message" *ngIf="proofNumber && !isProofValid">Tracking ID must be at least 8 characters</div>
           </div>
           
           <div style="text-align: center;">
-            <button 
-              type="submit" 
-              class="track-btn enabled" 
+            <button
+              type="submit"
+              class="track-btn enabled"
+              aria-label="Download proof of delivery"
               [class.enabled]="isProofValid"
               [disabled]="!isProofValid || isLoading">
               <span *ngIf="!isLoading">DOWNLOAD</span>

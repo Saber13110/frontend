@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { NotificationService } from '../../../../shared/services/notification.service';
 
 // TODO: Backend - Create Tracking Interfaces
 interface TrackingRequest {
@@ -62,7 +63,7 @@ export class AllTrackingComponent implements OnInit {
   constructor(
     // TODO: Inject services
     // private trackingService: TrackingService,
-    // private notificationService: NotificationService
+    private notificationService: NotificationService
   ) {}
 
   ngOnInit(): void {
@@ -102,7 +103,7 @@ export class AllTrackingComponent implements OnInit {
 
   async startBarcodeScanner(): Promise<void> {
     if (!this.isMobile) {
-      alert('Le scanner de code-barres est disponible uniquement sur mobile.');
+      this.notificationService.warning('Mobile only', 'Le scanner de code-barres est disponible uniquement sur mobile.');
       return;
     }
 
@@ -117,14 +118,14 @@ export class AllTrackingComponent implements OnInit {
       */
       
       // Simulation for development
-      alert('Scanner de code-barres activé!\n\n(Fonctionnalité à intégrer avec l\'API caméra)');
+      this.notificationService.info('Scanner', "Scanner de code-barres activé!\n\n(Fonctionnalité à intégrer avec l'API caméra)");
       setTimeout(() => {
         this.trackingNumber = 'GBX123456789';
         this.validateInput('tracking', this.trackingNumber);
       }, 2000);
     } catch (error) {
       console.error('Barcode scanning error:', error);
-      alert('Erreur lors du scan du code-barres.');
+      this.notificationService.error('Scan error', 'Erreur lors du scan du code-barres.');
     }
   }
 
@@ -146,7 +147,7 @@ export class AllTrackingComponent implements OnInit {
       
       // Simulation for development
       console.log('Tracking package:', this.trackingNumber);
-      alert(`Recherche du colis: ${this.trackingNumber}\n\n(Intégration API à venir)`);
+      this.notificationService.info('Search', `Recherche du colis: ${this.trackingNumber}\n\n(Intégration API à venir)`);
     } catch (error) {
       console.error('Tracking error:', error);
       // this.notificationService.error('Failed to retrieve tracking information');
@@ -162,11 +163,11 @@ export class AllTrackingComponent implements OnInit {
     this.isLoading = true;
     try {
       // TODO: Implement reference tracking
-      console.log('Tracking by reference:', { 
-        reference: this.referenceNumber, 
-        country: this.selectedCountry 
+      console.log('Tracking by reference:', {
+        reference: this.referenceNumber,
+        country: this.selectedCountry
       });
-      alert(`Recherche par référence: ${this.referenceNumber}\nPays: ${this.selectedCountry}\n\n(Intégration API à venir)`);
+      this.notificationService.info('Search', `Recherche par référence: ${this.referenceNumber}\nPays: ${this.selectedCountry}\n\n(Intégration API à venir)`);
     } catch (error) {
       console.error('Reference tracking error:', error);
     } finally {
@@ -181,11 +182,11 @@ export class AllTrackingComponent implements OnInit {
     this.isLoading = true;
     try {
       // TODO: Implement TCN tracking
-      console.log('Tracking by TCN:', { 
-        tcn: this.tcnNumber, 
-        shipDate: this.shipDate 
+      console.log('Tracking by TCN:', {
+        tcn: this.tcnNumber,
+        shipDate: this.shipDate
       });
-      alert(`Recherche TCN: ${this.tcnNumber}\nDate: ${this.shipDate}\n\n(Intégration API à venir)`);
+      this.notificationService.info('Search', `Recherche TCN: ${this.tcnNumber}\nDate: ${this.shipDate}\n\n(Intégration API à venir)`);
     } catch (error) {
       console.error('TCN tracking error:', error);
     } finally {
@@ -201,7 +202,7 @@ export class AllTrackingComponent implements OnInit {
     try {
       // TODO: Implement proof of delivery download
       console.log('Getting proof of delivery for:', this.proofNumber);
-      alert(`Téléchargement de la preuve de livraison pour: ${this.proofNumber}\n\n(Intégration API à venir)`);
+      this.notificationService.info('Download', `Téléchargement de la preuve de livraison pour: ${this.proofNumber}\n\n(Intégration API à venir)`);
     } catch (error) {
       console.error('Proof of delivery error:', error);
     } finally {

@@ -3,6 +3,7 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NgClass, NgIf, NgFor, NgStyle } from '@angular/common';
+import { NotificationService } from '../../../../shared/services/notification.service';
 import { TrackingData } from '../../models/tracking-data.model';
 import { TrackingService } from '../../services/tracking.service';
 
@@ -108,7 +109,8 @@ export class TrackingResultComponent implements OnInit, AfterViewInit {
 
   constructor(
     private route: ActivatedRoute,
-    private trackingService: TrackingService
+    private trackingService: TrackingService,
+    private notificationService: NotificationService
   ) { }
 
   ngOnInit(): void {
@@ -250,7 +252,7 @@ export class TrackingResultComponent implements OnInit, AfterViewInit {
   copyToClipboard(): void {
     const trackingLink = `${window.location.origin}/tracking/${this.trackingNumber}`;
     navigator.clipboard.writeText(trackingLink).then(() => {
-      alert('Tracking link copied to clipboard!');
+      this.notificationService.success('Copied', 'Tracking link copied to clipboard!');
       this.showShareDropdown = false;
     });
   }
@@ -288,18 +290,18 @@ export class TrackingResultComponent implements OnInit, AfterViewInit {
       recipient: this.trackingData?.recipient?.name
     }));
     
-    alert('Tracking saved to favorites!');
+    this.notificationService.success('Saved', 'Tracking saved to favorites!');
     this.showSaveDropdown = false;
   }
   
   downloadAsPDF(): void {
     this.showSaveDropdown = false;
-    alert('PDF download functionality would be implemented here.\n\nPlease install file-saver package to enable this feature.');
+    this.notificationService.info('Coming soon', 'PDF download functionality would be implemented here.\n\nPlease install file-saver package to enable this feature.');
   }
   
   downloadAsExcel(): void {
     this.showSaveDropdown = false;
-    alert('Excel download functionality would be implemented here.\n\nPlease install xlsx package to enable this feature.');
+    this.notificationService.info('Coming soon', 'Excel download functionality would be implemented here.\n\nPlease install xlsx package to enable this feature.');
   }
   
   // ==== MODAL METHODS ====
@@ -333,7 +335,7 @@ export class TrackingResultComponent implements OnInit, AfterViewInit {
     
     // Simulate API call
     setTimeout(() => {
-      alert('Delivery has been scheduled successfully!');
+      this.notificationService.success('Scheduled', 'Delivery has been scheduled successfully!');
       this.closeAllModals();
       this.loadTrackingData(); // Refresh tracking data
     }, 1000);
@@ -342,7 +344,7 @@ export class TrackingResultComponent implements OnInit, AfterViewInit {
   saveAddressChange(): void {
     // Validate form
     if (!this.addressForm.name || !this.addressForm.line1 || !this.addressForm.city || !this.addressForm.postalCode) {
-      alert('Please fill in all required fields');
+      this.notificationService.error('Missing fields', 'Please fill in all required fields');
       return;
     }
     
@@ -350,7 +352,7 @@ export class TrackingResultComponent implements OnInit, AfterViewInit {
     
     // Simulate API call
     setTimeout(() => {
-      alert('Delivery address has been updated successfully!');
+      this.notificationService.success('Updated', 'Delivery address has been updated successfully!');
       this.closeAllModals();
       this.loadTrackingData(); // Refresh tracking data
     }, 1000);
@@ -358,7 +360,7 @@ export class TrackingResultComponent implements OnInit, AfterViewInit {
   
   saveHoldLocation(): void {
     if (!this.locationForm.selectedId) {
-      alert('Please select a location');
+      this.notificationService.warning('Select location', 'Please select a location');
       return;
     }
     
@@ -366,7 +368,7 @@ export class TrackingResultComponent implements OnInit, AfterViewInit {
     
     // Simulate API call
     setTimeout(() => {
-      alert('Package will be held at the selected location');
+      this.notificationService.success('Location saved', 'Package will be held at the selected location');
       this.closeAllModals();
       this.loadTrackingData(); // Refresh tracking data
     }, 1000);
@@ -377,7 +379,7 @@ export class TrackingResultComponent implements OnInit, AfterViewInit {
     
     // Simulate API call
     setTimeout(() => {
-      alert('Delivery instructions have been saved');
+      this.notificationService.success('Instructions saved', 'Delivery instructions have been saved');
       this.closeAllModals();
       this.loadTrackingData(); // Refresh tracking data
     }, 1000);
@@ -398,12 +400,12 @@ export class TrackingResultComponent implements OnInit, AfterViewInit {
   // ==== ADDITIONAL SERVICES ====
   requestProofOfDelivery(): void {
     // API call to request proof of delivery
-    alert('La preuve de livraison serait affichée ici');
+    this.notificationService.info('Info', 'La preuve de livraison serait affichée ici');
   }
   
   openCustomsClearanceInfo(): void {
     // This would typically open a modal or navigate to customs info page
-    alert('Customs clearance information would display here');
+    this.notificationService.info('Info', 'Customs clearance information would display here');
   }
 
   retry(): void {

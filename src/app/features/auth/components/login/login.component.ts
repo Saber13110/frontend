@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
+import { NotificationService } from '../../../shared/services/notification.service';
 
 // TODO: Backend - Create Login Interface
 /*
@@ -98,7 +99,7 @@ export class LoginComponent implements OnInit {
     private router: Router
     // TODO: Inject Services
     // private authService: AuthService,
-    // private notificationService: NotificationService,
+    private notificationService: NotificationService
     // private storageService: StorageService
   ) {
     this.loginForm = this.fb.group({
@@ -164,7 +165,7 @@ export class LoginComponent implements OnInit {
         // Mock login delay (remove in production)
         setTimeout(() => {
           this.isLoading = false;
-          alert('Connexion réussie ! (Version démo)');
+          this.notificationService.success('Connexion réussie !');
           this.router.navigate(['/dashboard']);
         }, 2000);
 
@@ -219,7 +220,7 @@ export class LoginComponent implements OnInit {
       */
 
       console.log('Google login clicked');
-      alert('Google OAuth sera implémenté prochainement !');
+      this.notificationService.info('Info', 'Google OAuth sera implémenté prochainement !');
     } catch (error) {
       // TODO: Handle Google login errors
       /*

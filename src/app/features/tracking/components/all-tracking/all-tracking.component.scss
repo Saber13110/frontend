@@ -271,6 +271,12 @@ body {
   }
 }
 
+.error-message {
+  color: var(--primary-red);
+  font-size: 14px;
+  margin-top: 4px;
+}
+
 // Tracking Options Section
 .tracking-options {
   background-color: var(--light-gray);

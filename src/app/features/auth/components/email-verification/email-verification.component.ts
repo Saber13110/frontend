@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router, ActivatedRoute, RouterModule } from '@angular/router';
+import { NotificationService } from '../../../shared/services/notification.service';
 
 @Component({
   selector: 'app-email-verification',
@@ -25,7 +26,8 @@ export class EmailVerificationComponent implements OnInit, OnDestroy {
   constructor(
     private fb: FormBuilder,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private notificationService: NotificationService
   ) {
     this.verificationForm = this.fb.group({
       verificationCode: ['', [
@@ -69,7 +71,7 @@ export class EmailVerificationComponent implements OnInit, OnDestroy {
       // Mock verification delay
       setTimeout(() => {
         this.isLoading = false;
-        alert('Email vérifié avec succès ! (Version démo)');
+        this.notificationService.success('Succès', 'Email vérifié avec succès ! (Version démo)');
         // TODO: Replace with actual navigation after successful verification
         this.router.navigate(['/auth/login']);
       }, 2000);
@@ -85,7 +87,7 @@ export class EmailVerificationComponent implements OnInit, OnDestroy {
       // TODO: Handle resend response
       
       console.log('Resending verification code to:', this.userEmail);
-      alert('Nouveau code envoyé ! (Version démo)');
+      this.notificationService.success('Code envoyé', 'Nouveau code envoyé ! (Version démo)');
       
       // Restart countdown
       this.startResendCountdown();

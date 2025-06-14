@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
+import { NotificationService } from '../../../shared/services/notification.service';
 
 // TODO: Backend - Create Password Reset Interfaces
 /*
@@ -94,7 +95,7 @@ export class ForgotPasswordComponent implements OnInit, OnDestroy {
     private router: Router
     // TODO: Inject Services
     // private authService: AuthService,
-    // private notificationService: NotificationService,
+    private notificationService: NotificationService
     // private emailService: EmailService
   ) {
     this.forgotPasswordForm = this.fb.group({
@@ -198,7 +199,7 @@ export class ForgotPasswordComponent implements OnInit, OnDestroy {
 
         // Mock resend
         console.log('Resending password reset email to:', this.sentToEmail);
-        alert('Email de réinitialisation renvoyé ! (Version démo)');
+        this.notificationService.success('Succès', 'Email de réinitialisation renvoyé ! (Version démo)');
         this.startResendCountdown();
 
       } catch (error) {
