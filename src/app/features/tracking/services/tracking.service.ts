@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, of, throwError } from 'rxjs';
 import { catchError, delay, map } from 'rxjs/operators';
 import { TrackingData } from '../models/tracking-data.model';
+import { environment } from '../../../../environments/environment';
 
 export interface HistoryItem {
   status: string;
@@ -24,7 +25,7 @@ export interface PackageInfo {
   providedIn: 'root'
 })
 export class TrackingService {
-  private apiUrl = 'http://localhost:8000/api';
+  private readonly API_URL = `${environment.apiUrl}/tracking`;
 
   constructor(private http: HttpClient) { }
 
@@ -162,4 +163,22 @@ export class TrackingService {
       })
     );
   }
-} 
+
+  trackByNumber(trackingNumber: string): Observable<any> {
+    return this.http.get<any>(`${this.API_URL}/${encodeURIComponent(trackingNumber)}`);
+  }
+
+  trackByReference(reference: string, country: string): Observable<any> {
+    return this.http.post<any>(`${this.API_URL}/reference`, { reference, country });
+  }
+
+  trackByTCN(tcn: string, shipDate: string): Observable<any> {
+    return this.http.post<any>(`${this.API_URL}/tcn`, { tcn, shipDate });
+  }
+
+  getProofOfDelivery(trackingNumber: string): Observable<Blob> {
+    return this.http.get(`${this.API_URL}/proof/${encodeURIComponent(trackingNumber)}`, {
+      responseType: 'blob'
+    });
+  }
+}
