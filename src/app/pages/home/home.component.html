@@ -3,7 +3,9 @@
   [trackingForm]="trackingForm"
   (submit)="onSubmit()"
   (selectFeature)="selectHeroFeature($event)"
-  (barcodeSelected)="onBarcodeFileSelected($event)">
+  (barcodeSelected)="onBarcodeFileSelected($event)"
+  (proScan)="onProScan()"
+  (downloadProof)="onDownloadProof()">
 </app-hero-section>
 
 <app-services-section [servicesList]="servicesList"></app-services-section>

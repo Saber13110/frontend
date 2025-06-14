@@ -16,6 +16,8 @@ export class HeroSectionComponent {
   @Output() submit = new EventEmitter<void>();
   @Output() selectFeature = new EventEmitter<'barcode_scan' | 'obtain_proof' | null>();
   @Output() barcodeSelected = new EventEmitter<any>();
+  @Output() proScan = new EventEmitter<void>();
+  @Output() downloadProof = new EventEmitter<void>();
 
   onSubmit() {
     this.submit.emit();
@@ -27,5 +29,13 @@ export class HeroSectionComponent {
 
   onBarcodeFileSelected(event: any) {
     this.barcodeSelected.emit(event);
+  }
+
+  onProScanClick() {
+    this.proScan.emit();
+  }
+
+  onDownloadProofClick() {
+    this.downloadProof.emit();
   }
 }
