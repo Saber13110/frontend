@@ -7,7 +7,7 @@ import { FAQ } from '../../../../shared/models/faq.model';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './faq-section.component.html',
-  styleUrls: ['../../home.component.scss']
+  styleUrls: ['../../home.component.scss', './faq-section.component.scss']
 })
 export class FaqSectionComponent {
   @Input() faqList: FAQ[] = [];
