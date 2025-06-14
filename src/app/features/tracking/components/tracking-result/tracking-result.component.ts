@@ -1,5 +1,5 @@
 import { Component, OnInit, AfterViewInit, Input, Output, EventEmitter } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NgClass, NgIf, NgFor, NgStyle } from '@angular/common';
@@ -108,16 +108,26 @@ export class TrackingResultComponent implements OnInit, AfterViewInit {
 
   constructor(
     private route: ActivatedRoute,
-    private trackingService: TrackingService
+    private trackingService: TrackingService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
-    this.route.queryParams.subscribe(params => {
-      if (params['number']) {
-        this.trackingNumber = params['number'];
-        this.loadTrackingData();
-      }
-    });
+    const nav = this.router.getCurrentNavigation();
+    const stateData = nav?.extras?.state as { data?: TrackingData } | undefined;
+    if (stateData?.data) {
+      this.trackingData = stateData.data;
+      this.trackingNumber = stateData.data.trackingNumber;
+      this.isLoading = false;
+      this.loading = false;
+    } else {
+      this.route.queryParams.subscribe(params => {
+        if (params['number']) {
+          this.trackingNumber = params['number'];
+          this.loadTrackingData();
+        }
+      });
+    }
     
     // Close dropdowns when clicking outside
     document.addEventListener('click', (event: MouseEvent) => {

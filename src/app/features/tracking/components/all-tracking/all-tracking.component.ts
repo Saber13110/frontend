@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
+import { TrackingService } from '../../services/tracking.service';
+import { NotificationService } from '../../../../shared/services/notification.service';
 
 // TODO: Backend - Create Tracking Interfaces
 interface TrackingRequest {
@@ -60,9 +62,9 @@ export class AllTrackingComponent implements OnInit {
   isProofValid: boolean = false;
 
   constructor(
-    // TODO: Inject services
-    // private trackingService: TrackingService,
-    // private notificationService: NotificationService
+    private trackingService: TrackingService,
+    private notificationService: NotificationService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -133,26 +135,23 @@ export class AllTrackingComponent implements OnInit {
     if (!this.isTrackingValid) return;
 
     this.isLoading = true;
-    try {
-      // TODO: Implement tracking service call
-      /*
-      const result = await this.trackingService.track({
-        trackingNumber: this.trackingNumber,
-        type: 'number'
-      });
-      this.notificationService.success('Tracking information retrieved successfully');
-      // Navigate to results page or show results
-      */
-      
-      // Simulation for development
-      console.log('Tracking package:', this.trackingNumber);
-      alert(`Recherche du colis: ${this.trackingNumber}\n\n(Intégration API à venir)`);
-    } catch (error) {
-      console.error('Tracking error:', error);
-      // this.notificationService.error('Failed to retrieve tracking information');
-    } finally {
-      this.isLoading = false;
-    }
+    this.trackingService.getTrackingData(this.trackingNumber).subscribe({
+      next: (data) => {
+        this.notificationService.success('Informations de suivi récupérées');
+        this.router.navigate(['./result'], {
+          queryParams: { number: this.trackingNumber },
+          state: { data }
+        });
+        this.isLoading = false;
+      },
+      error: (err: Error) => {
+        console.error('Tracking error:', err);
+        this.notificationService.error(
+          err.message || 'Erreur lors de la récupération des informations de suivi'
+        );
+        this.isLoading = false;
+      }
+    });
   }
 
   async trackByReference(event: Event): Promise<void> {
