@@ -104,11 +104,11 @@ export class HelpComponent implements OnInit {
 
   quickTrack() {
     if (!this.trackingNumber) {
-      this.notificationService.show('Please enter a tracking number', 'warning');
+      this.notificationService.warning('Warning', 'Please enter a tracking number');
       return;
     }
 
-    this.notificationService.show(`Tracking package ${this.trackingNumber}...`, 'info');
+    this.notificationService.info('Tracking', `Tracking package ${this.trackingNumber}...`);
     
     setTimeout(() => {
       this.router.navigate(['/tracking'], {
