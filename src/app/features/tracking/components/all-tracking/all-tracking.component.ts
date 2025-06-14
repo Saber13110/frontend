@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule, Router } from '@angular/router';
+import { BarcodeScannerService } from '../../../../shared/services/barcode-scanner.service';
 
 // TODO: Backend - Create Tracking Interfaces
 interface TrackingRequest {
@@ -61,6 +62,7 @@ export class AllTrackingComponent implements OnInit {
 
   constructor(
     private router: Router,
+    private barcodeScanner: BarcodeScannerService,
     // TODO: Inject services
     // private trackingService: TrackingService,
     // private notificationService: NotificationService
@@ -106,26 +108,31 @@ export class AllTrackingComponent implements OnInit {
       alert('Le scanner de code-barres est disponible uniquement sur mobile.');
       return;
     }
+    const video = document.createElement('video');
+    video.style.position = 'fixed';
+    video.style.top = '0';
+    video.style.left = '0';
+    video.style.width = '100%';
+    video.style.height = '100%';
+    video.style.zIndex = '1000';
+    document.body.appendChild(video);
 
     try {
-      // TODO: Implement barcode scanning
-      /*
-      const result = await this.barcodeService.startScanning();
+      const result = await this.barcodeScanner.startScanning(video);
       if (result) {
         this.trackingNumber = result;
         this.validateInput('tracking', result);
       }
-      */
-      
-      // Simulation for development
-      alert('Scanner de code-barres activé!\n\n(Fonctionnalité à intégrer avec l\'API caméra)');
-      setTimeout(() => {
-        this.trackingNumber = 'GBX123456789';
-        this.validateInput('tracking', this.trackingNumber);
-      }, 2000);
-    } catch (error) {
-      console.error('Barcode scanning error:', error);
-      alert('Erreur lors du scan du code-barres.');
+    } catch (error: any) {
+      if (error && error.name === 'NotAllowedError') {
+        alert('Permission caméra refusée.');
+      } else {
+        console.error('Barcode scanning error:', error);
+        alert('Erreur lors du scan du code-barres.');
+      }
+    } finally {
+      this.barcodeScanner.stopScanning();
+      document.body.removeChild(video);
     }
   }
 
