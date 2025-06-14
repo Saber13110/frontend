@@ -50,55 +50,7 @@
       
       <!-- Track by Number -->
       <div class="tracking-panel" [class.active]="activeTab === 'tracking-number'">
-        <p class="tracking-description">
-          Enter up to 30 of your Globex tracking, door tag, or Globex Office order numbers (one per line).
-        </p>
-        
-        <form class="tracking-form" (ngSubmit)="trackPackage($event)">
-          <div class="form-group">
-            <label class="form-label" for="trackingInput">Tracking number*</label>
-            <input 
-              type="text" 
-              id="trackingInput"
-              class="form-input" 
-              placeholder="Enter tracking number"
-              [(ngModel)]="trackingNumber"
-              name="trackingNumber"
-              (input)="validateInput('tracking', trackingNumber)"
-            >
-          </div>
-
-          <!-- ===== SCAN BARCODE SECTION ===== -->
-          <div class="scan-section">
-            <div class="scan-icon">
-              <i class="fas fa-qrcode"></i>
-            </div>
-            <h3 class="scan-title">Scan Barcode</h3>
-            <p class="scan-description">
-              Use your mobile device to scan the barcode on your shipping label
-            </p>
-            <button 
-              type="button" 
-              class="scan-btn" 
-              (click)="startBarcodeScanner()"
-              [disabled]="isLoading">
-              <i class="fas fa-camera"></i> Scan Barcode
-            </button>
-          </div>
-
-          <a href="#" class="need-help">NEED HELP?</a>
-          
-          <div style="text-align: center;">
-            <button 
-              type="submit" 
-              class="track-btn" 
-              [class.enabled]="isTrackingValid"
-              [disabled]="!isTrackingValid || isLoading">
-              <span *ngIf="!isLoading">TRACK</span>
-              <span *ngIf="isLoading">TRACKING...</span>
-            </button>
-          </div>
-        </form>
+        <app-tracking-search (search)="trackPackage($event)"></app-tracking-search>
       </div>
 
       <!-- Track by Reference -->

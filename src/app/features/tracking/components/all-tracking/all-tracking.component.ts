@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { TrackingSearchComponent } from '../tracking-search/tracking-search.component';
 
 // TODO: Backend - Create Tracking Interfaces
 interface TrackingRequest {
@@ -35,7 +36,8 @@ interface TrackingEvent {
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    RouterModule
+    RouterModule,
+    TrackingSearchComponent
   ],
   templateUrl: './all-tracking.component.html',
   styleUrls: ['./all-tracking.component.scss']
@@ -128,25 +130,33 @@ export class AllTrackingComponent implements OnInit {
     }
   }
 
-  async trackPackage(event: Event): Promise<void> {
-    event.preventDefault();
-    if (!this.isTrackingValid) return;
+  async trackPackage(eventOrNumber: Event | string): Promise<void> {
+    let value: string;
+    if (typeof eventOrNumber === 'string') {
+      value = eventOrNumber;
+      this.trackingNumber = value;
+    } else {
+      eventOrNumber.preventDefault();
+      value = this.trackingNumber;
+    }
+
+    if (!value || value.length < 8) return;
 
     this.isLoading = true;
     try {
       // TODO: Implement tracking service call
       /*
       const result = await this.trackingService.track({
-        trackingNumber: this.trackingNumber,
+        trackingNumber: value,
         type: 'number'
       });
       this.notificationService.success('Tracking information retrieved successfully');
       // Navigate to results page or show results
       */
-      
+
       // Simulation for development
-      console.log('Tracking package:', this.trackingNumber);
-      alert(`Recherche du colis: ${this.trackingNumber}\n\n(Intégration API à venir)`);
+      console.log('Tracking package:', value);
+      alert(`Recherche du colis: ${value}\n\n(Intégration API à venir)`);
     } catch (error) {
       console.error('Tracking error:', error);
       // this.notificationService.error('Failed to retrieve tracking information');

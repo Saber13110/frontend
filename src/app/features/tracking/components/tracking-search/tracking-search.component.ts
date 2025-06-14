@@ -1,7 +1,11 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-tracking-search',
+  standalone: true,
+  imports: [CommonModule, FormsModule],
   templateUrl: './tracking-search.component.html',
   styleUrls: ['./tracking-search.component.scss']
 })
