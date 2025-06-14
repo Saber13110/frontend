@@ -42,6 +42,18 @@ export const routes: Routes = [
     loadChildren: () => import('./pages/profile/profile.routes').then(m => m.PROFILE_ROUTES)
   },
   {
+    path: 'about',
+    loadChildren: () => import('./pages/about/about.routes').then(m => m.ABOUT_ROUTES)
+  },
+  {
+    path: 'find-location',
+    loadChildren: () => import('./pages/find-location/find-location.routes').then(m => m.FIND_LOCATION_ROUTES)
+  },
+  {
+    path: 'notifications',
+    loadChildren: () => import('./pages/notifications/notifications.routes').then(m => m.NOTIFICATIONS_ROUTES)
+  },
+  {
     path: '**',
     redirectTo: 'home'
   }
