@@ -162,4 +162,23 @@ export class TrackingService {
       })
     );
   }
-} 
+
+  trackByReference(reference: string, country: string): Observable<TrackingData> {
+    return this.getTrackingData(reference).pipe(
+      map(data => ({ ...data, trackingNumber: reference }))
+    );
+  }
+
+  trackByTCN(tcn: string, shipDate: string): Observable<TrackingData> {
+    return this.getTrackingData(tcn).pipe(
+      map(data => ({ ...data, trackingNumber: tcn }))
+    );
+  }
+
+  getProofOfDelivery(trackingNumber: string): Observable<Blob> {
+    const blob = new Blob([
+      `Proof of delivery for ${trackingNumber}`
+    ], { type: 'application/pdf' });
+    return of(blob).pipe(delay(500));
+  }
+}
