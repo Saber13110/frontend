@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule, Router } from '@angular/router';
+import { BrowserMultiFormatReader } from '@zxing/browser';
+import { NotificationService } from '../../../../shared/services/notification.service';
 
 // TODO: Backend - Create Tracking Interfaces
 interface TrackingRequest {
@@ -63,7 +65,7 @@ export class AllTrackingComponent implements OnInit {
     private router: Router,
     // TODO: Inject services
     // private trackingService: TrackingService,
-    // private notificationService: NotificationService
+    private notificationService: NotificationService
   ) {}
 
   ngOnInit(): void {
@@ -103,29 +105,42 @@ export class AllTrackingComponent implements OnInit {
 
   async startBarcodeScanner(): Promise<void> {
     if (!this.isMobile) {
-      alert('Le scanner de code-barres est disponible uniquement sur mobile.');
+      this.notificationService.info('Barcode Scanner', 'Available only on mobile devices.');
       return;
     }
 
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+      this.notificationService.error('Camera Unavailable', 'Unable to access device camera.');
+      return;
+    }
+
+    const video = document.createElement('video');
+    video.style.position = 'fixed';
+    video.style.top = '0';
+    video.style.left = '0';
+    video.style.width = '100%';
+    video.style.height = '100%';
+    video.style.objectFit = 'cover';
+    video.style.zIndex = '1000';
+    document.body.appendChild(video);
+
+    const codeReader = new BrowserMultiFormatReader();
     try {
-      // TODO: Implement barcode scanning
-      /*
-      const result = await this.barcodeService.startScanning();
-      if (result) {
-        this.trackingNumber = result;
-        this.validateInput('tracking', result);
-      }
-      */
-      
-      // Simulation for development
-      alert('Scanner de code-barres activé!\n\n(Fonctionnalité à intégrer avec l\'API caméra)');
-      setTimeout(() => {
-        this.trackingNumber = 'GBX123456789';
+      const result = await codeReader.decodeOnceFromVideoDevice(undefined, video);
+      if (result && result.getText()) {
+        this.trackingNumber = result.getText();
         this.validateInput('tracking', this.trackingNumber);
-      }, 2000);
+        this.notificationService.success('Barcode Scanned', 'Tracking number detected.');
+      } else {
+        this.notificationService.error('Scan Failed', 'No barcode detected.');
+      }
     } catch (error) {
       console.error('Barcode scanning error:', error);
-      alert('Erreur lors du scan du code-barres.');
+      this.notificationService.error('Scan Failed', 'Error scanning barcode.');
+    } finally {
+      BrowserMultiFormatReader.releaseAllStreams();
+      video.srcObject = null;
+      video.remove();
     }
   }
 
