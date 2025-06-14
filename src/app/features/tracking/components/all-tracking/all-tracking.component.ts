@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule, Router } from '@angular/router';
 
 // TODO: Backend - Create Tracking Interfaces
@@ -33,7 +33,6 @@ interface TrackingEvent {
   standalone: true,
   imports: [
     CommonModule,
-    FormsModule,
     ReactiveFormsModule,
     RouterModule
   ],
@@ -45,26 +44,24 @@ export class AllTrackingComponent implements OnInit {
   isLoading: boolean = false;
   isMobile: boolean = false;
 
-  // Form values
-  trackingNumber: string = '';
-  referenceNumber: string = '';
-  selectedCountry: string = '';
-  tcnNumber: string = '';
-  shipDate: string = '';
-  proofNumber: string = '';
-
-  // Validation states
-  isTrackingValid: boolean = false;
-  isReferenceValid: boolean = false;
-  isTCNValid: boolean = false;
-  isProofValid: boolean = false;
+  trackingForm: FormGroup;
 
   constructor(
+    private fb: FormBuilder,
     private router: Router,
     // TODO: Inject services
     // private trackingService: TrackingService,
     // private notificationService: NotificationService
-  ) {}
+  ) {
+    this.trackingForm = this.fb.group({
+      trackingNumber: ['', [Validators.required, Validators.minLength(8)]],
+      referenceNumber: ['', [Validators.required, Validators.minLength(3)]],
+      selectedCountry: ['', Validators.required],
+      tcnNumber: ['', [Validators.required, Validators.minLength(6)]],
+      shipDate: ['', Validators.required],
+      proofNumber: ['', [Validators.required, Validators.minLength(8)]]
+    });
+  }
 
   ngOnInit(): void {
     this.checkDevice();
@@ -84,22 +81,6 @@ export class AllTrackingComponent implements OnInit {
     this.activeTab = tabId;
   }
 
-  validateInput(type: string, value: string): void {
-    switch(type) {
-      case 'tracking':
-        this.isTrackingValid = value.length >= 8;
-        break;
-      case 'reference':
-        this.isReferenceValid = value.length >= 3 && this.selectedCountry !== '';
-        break;
-      case 'tcn':
-        this.isTCNValid = value.length >= 6 && this.shipDate !== '';
-        break;
-      case 'proof':
-        this.isProofValid = value.length >= 8;
-        break;
-    }
-  }
 
   async startBarcodeScanner(): Promise<void> {
     if (!this.isMobile) {
@@ -112,16 +93,16 @@ export class AllTrackingComponent implements OnInit {
       /*
       const result = await this.barcodeService.startScanning();
       if (result) {
-        this.trackingNumber = result;
-        this.validateInput('tracking', result);
+        this.trackingForm.patchValue({ trackingNumber: result });
+        this.trackingForm.get('trackingNumber')?.markAsTouched();
       }
       */
       
       // Simulation for development
       alert('Scanner de code-barres activé!\n\n(Fonctionnalité à intégrer avec l\'API caméra)');
       setTimeout(() => {
-        this.trackingNumber = 'GBX123456789';
-        this.validateInput('tracking', this.trackingNumber);
+        this.trackingForm.patchValue({ trackingNumber: 'GBX123456789' });
+        this.trackingForm.get('trackingNumber')?.markAsTouched();
       }, 2000);
     } catch (error) {
       console.error('Barcode scanning error:', error);
@@ -131,14 +112,19 @@ export class AllTrackingComponent implements OnInit {
 
   async trackPackage(event: Event): Promise<void> {
     event.preventDefault();
-    if (!this.isTrackingValid) return;
+    const trackingCtrl = this.trackingForm.get('trackingNumber');
+    if (!trackingCtrl || trackingCtrl.invalid) {
+      trackingCtrl?.markAsTouched();
+      return;
+    }
 
+    const trackingNumber = trackingCtrl.value;
     this.isLoading = true;
     try {
       // TODO: Implement tracking service call
       /*
       const result = await this.trackingService.track({
-        trackingNumber: this.trackingNumber,
+        trackingNumber,
         type: 'number'
       });
       this.notificationService.success('Tracking information retrieved successfully');
@@ -146,11 +132,11 @@ export class AllTrackingComponent implements OnInit {
       */
       
       // Simulation for development
-      console.log('Tracking package:', this.trackingNumber);
-      alert(`Recherche du colis: ${this.trackingNumber}\n\n(Intégration API à venir)`);
+      console.log('Tracking package:', trackingNumber);
+      alert(`Recherche du colis: ${trackingNumber}\n\n(Intégration API à venir)`);
       this.router.navigate(['/tracking/result'], {
         queryParams: {
-          number: this.trackingNumber,
+          number: trackingNumber,
           type: 'number'
         }
       });
@@ -164,19 +150,27 @@ export class AllTrackingComponent implements OnInit {
 
   async trackByReference(event: Event): Promise<void> {
     event.preventDefault();
-    if (!this.isReferenceValid) return;
+    const refCtrl = this.trackingForm.get('referenceNumber');
+    const countryCtrl = this.trackingForm.get('selectedCountry');
+    if (refCtrl?.invalid || countryCtrl?.invalid) {
+      refCtrl?.markAsTouched();
+      countryCtrl?.markAsTouched();
+      return;
+    }
 
+    const referenceNumber = refCtrl?.value;
+    const selectedCountry = countryCtrl?.value;
     this.isLoading = true;
     try {
       // TODO: Implement reference tracking
       console.log('Tracking by reference:', {
-        reference: this.referenceNumber,
-        country: this.selectedCountry
+        reference: referenceNumber,
+        country: selectedCountry
       });
-      alert(`Recherche par référence: ${this.referenceNumber}\nPays: ${this.selectedCountry}\n\n(Intégration API à venir)`);
+      alert(`Recherche par référence: ${referenceNumber}\nPays: ${selectedCountry}\n\n(Intégration API à venir)`);
       this.router.navigate(['/tracking/result'], {
         queryParams: {
-          number: this.referenceNumber,
+          number: referenceNumber,
           type: 'reference'
         }
       });
@@ -189,19 +183,27 @@ export class AllTrackingComponent implements OnInit {
 
   async trackByTCN(event: Event): Promise<void> {
     event.preventDefault();
-    if (!this.isTCNValid) return;
+    const tcnCtrl = this.trackingForm.get('tcnNumber');
+    const dateCtrl = this.trackingForm.get('shipDate');
+    if (tcnCtrl?.invalid || dateCtrl?.invalid) {
+      tcnCtrl?.markAsTouched();
+      dateCtrl?.markAsTouched();
+      return;
+    }
 
+    const tcnNumber = tcnCtrl?.value;
+    const shipDate = dateCtrl?.value;
     this.isLoading = true;
     try {
       // TODO: Implement TCN tracking
       console.log('Tracking by TCN:', {
-        tcn: this.tcnNumber,
-        shipDate: this.shipDate
+        tcn: tcnNumber,
+        shipDate
       });
-      alert(`Recherche TCN: ${this.tcnNumber}\nDate: ${this.shipDate}\n\n(Intégration API à venir)`);
+      alert(`Recherche TCN: ${tcnNumber}\nDate: ${shipDate}\n\n(Intégration API à venir)`);
       this.router.navigate(['/tracking/result'], {
         queryParams: {
-          number: this.tcnNumber,
+          number: tcnNumber,
           type: 'tcn'
         }
       });
@@ -214,13 +216,18 @@ export class AllTrackingComponent implements OnInit {
 
   async getProofOfDelivery(event: Event): Promise<void> {
     event.preventDefault();
-    if (!this.isProofValid) return;
+    const proofCtrl = this.trackingForm.get('proofNumber');
+    if (!proofCtrl || proofCtrl.invalid) {
+      proofCtrl?.markAsTouched();
+      return;
+    }
 
+    const proofNumber = proofCtrl.value;
     this.isLoading = true;
     try {
       // TODO: Implement proof of delivery download
-      console.log('Getting proof of delivery for:', this.proofNumber);
-      alert(`Téléchargement de la preuve de livraison pour: ${this.proofNumber}\n\n(Intégration API à venir)`);
+      console.log('Getting proof of delivery for:', proofNumber);
+      alert(`Téléchargement de la preuve de livraison pour: ${proofNumber}\n\n(Intégration API à venir)`);
     } catch (error) {
       console.error('Proof of delivery error:', error);
     } finally {
