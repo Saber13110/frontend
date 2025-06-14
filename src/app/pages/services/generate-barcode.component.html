@@ -1,4 +1,23 @@
 <section class="generate-barcode">
   <h2>Generate Barcode</h2>
-  <p>Create barcodes to easily identify your shipments.</p>
+  <p class="instructions">
+    Provide the text or tracking number you want to encode, then click generate to create a barcode you can print.
+  </p>
+
+  <form [formGroup]="barcodeForm" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label for="data">Text or tracking ID *</label>
+      <input id="data" type="text" formControlName="data" />
+      <span class="error" *ngIf="barcodeForm.get('data')?.invalid && barcodeForm.get('data')?.touched">
+        At least 5 characters are required.
+      </span>
+    </div>
+
+    <button type="submit" [disabled]="barcodeForm.invalid">Generate</button>
+  </form>
+
+  <div class="barcode-result" *ngIf="generatedData">
+    <p>Barcode data: <strong>{{ generatedData }}</strong></p>
+    <!-- Placeholder for barcode image -->
+  </div>
 </section>
