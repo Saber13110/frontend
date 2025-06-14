@@ -1,6 +1,13 @@
 # Frontend
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.3.17.
+This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.x.
+
+## Prerequisites
+
+Make sure you have the following tools installed:
+
+- **Node.js 18+** (development tested with Node 20)
+- **Angular CLI 16**: `npm install -g @angular/cli@16`
 
 ## Development server
 
