@@ -1,39 +1,7 @@
 // Import Font Awesome
 @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css');
 
-// Variables
-:root {
-  --primary-purple: #4d148c; // FedEx Purple
-  --primary-orange: #ff6600; // FedEx Orange
-  --secondary-blue: #003087; // Dark Blue
-  --light-gray: #f5f5f5;
-  --white: #ffffff;
-  --text-dark: #333333;
-  --text-light: #666666;
-  --border-color: #e0e0e0;
-  --shadow: 0 2px 10px rgba(0,0,0,0.1);
-  --transition: all 0.3s ease;
-}
 
-// Base styles
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body {
-  font-family: 'Roboto', sans-serif;
-  line-height: 1.6;
-  color: var(--text-dark);
-  background-color: var(--white);
-}
-
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 20px;
-}
 
 // Breadcrumb
 .breadcrumb {
@@ -82,56 +50,6 @@ body {
   max-width: 800px;
   margin-left: auto;
   margin-right: auto;
-}
-
-// Tracking Tabs
-.tracking-tabs {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 40px;
-  border-bottom: 1px solid var(--border-color);
-}
-
-.tracking-tab {
-  background: none;
-  border: none;
-  padding: 15px 30px;
-  font-size: 16px;
-  font-weight: 500;
-  color: var(--text-light);
-  cursor: pointer;
-  border-bottom: 3px solid transparent;
-  transition: var(--transition);
-
-  &.active {
-    color: var(--white);
-    background-color: var(--primary-purple);
-    border-bottom-color: var(--primary-purple);
-  }
-
-  &:hover:not(.active) {
-    color: var(--primary-purple);
-    background-color: var(--light-gray);
-  }
-}
-
-// Tracking Content
-.tracking-content {
-  max-width: 800px;
-  margin: 0 auto;
-}
-
-.tracking-panel {
-  display: none;
-  background-color: var(--white);
-  padding: 40px;
-  border-radius: 8px;
-  box-shadow: var(--shadow);
-  border-top: 4px solid var(--primary-purple);
-
-  &.active {
-    display: block;
-  }
 }
 
 .tracking-description {
@@ -225,36 +143,6 @@ body {
   &:disabled {
     opacity: 0.6;
     cursor: not-allowed;
-  }
-}
-
-// Track Button
-.track-btn {
-  background-color: #d0d0d0;
-  color: var(--text-dark);
-  border: none;
-  padding: 15px 40px;
-  border-radius: 4px;
-  font-size: 16px;
-  font-weight: 500;
-  cursor: pointer;
-  margin-top: 20px;
-  transition: var(--transition);
-
-  &.enabled {
-    background: var(--primary-purple);
-    color: var(--white);
-
-    &:hover:not(:disabled) {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 15px rgba(77, 20, 140, 0.3);
-    }
-  }
-
-  &:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-    transform: none;
   }
 }
 
@@ -380,38 +268,7 @@ body {
 }
 
 // Responsive Styles
-@media (max-width: 768px) {
-  .main-title {
-    font-size: 32px;
-  }
-
-  .tracking-tabs {
-    flex-wrap: wrap;
-    gap: 10px;
-  }
-
-  .tracking-tab {
-    padding: 12px 20px;
-    font-size: 14px;
-  }
-
-  .tracking-panel {
-    padding: 20px;
-  }
-
-  .tracking-options__content,
-  .mobile-tracking__content {
-    grid-template-columns: 1fr;
-    gap: 40px;
-  }
-
-  .app-downloads {
-    flex-direction: column;
-    align-items: center;
-  }
-}
-
-@media (max-width: 480px) {
+@media
   .container {
     padding: 0 15px;
   }
@@ -419,21 +276,6 @@ body {
   .main-content {
     padding: 40px 0;
   }
-
-  .tracking-tabs {
-    flex-direction: column;
-  }
-
-  .tracking-tab {
-    border-bottom: none;
-    border-left: 3px solid transparent;
-
-    &.active {
-      border-left-color: var(--primary-purple);
-      border-bottom-color: transparent;
-    }
-  }
-
   .tracking-options,
   .mobile-tracking {
     padding: 60px 0;

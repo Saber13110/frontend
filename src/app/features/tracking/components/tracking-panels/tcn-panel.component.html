@@ -1,0 +1,20 @@
+<form (ngSubmit)="onSubmit($event)" class="tracking-form">
+  <mat-form-field appearance="outline" class="w-100">
+    <mat-label>Enter TCN or tracking number*</mat-label>
+    <input matInput [(ngModel)]="tcnNumber" name="tcnNumber" (input)="validate()" placeholder="Enter TCN">
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="w-100">
+    <mat-label>Ship date*</mat-label>
+    <input matInput [matDatepicker]="picker" [(ngModel)]="shipDate" name="shipDate" (dateChange)="validate()">
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+  </mat-form-field>
+
+  <div class="text-center mt-20">
+    <button mat-raised-button color="primary" type="submit" [disabled]="!isValid || isLoading">
+      <span *ngIf="!isLoading">TRACK</span>
+      <span *ngIf="isLoading">TRACKING...</span>
+    </button>
+  </div>
+</form>

@@ -1,0 +1,13 @@
+<form (ngSubmit)="onSubmit($event)" class="tracking-form">
+  <mat-form-field appearance="outline" class="w-100">
+    <mat-label>Tracking ID*</mat-label>
+    <input matInput [(ngModel)]="proofNumber" name="proofNumber" (input)="validate(proofNumber)" placeholder="Enter your tracking ID">
+  </mat-form-field>
+
+  <div class="text-center mt-20">
+    <button mat-raised-button color="primary" type="submit" [disabled]="!isValid || isLoading">
+      <span *ngIf="!isLoading">DOWNLOAD</span>
+      <span *ngIf="isLoading">DOWNLOADING...</span>
+    </button>
+  </div>
+</form>

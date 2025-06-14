@@ -1,0 +1,26 @@
+<form (ngSubmit)="onSubmit($event)" class="tracking-form">
+  <mat-form-field appearance="outline" class="w-100">
+    <mat-label>Reference number*</mat-label>
+    <input matInput [(ngModel)]="referenceNumber" name="referenceNumber" (input)="validate()" placeholder="Enter reference number">
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="w-100">
+    <mat-label>Destination country/territory*</mat-label>
+    <mat-select [(ngModel)]="selectedCountry" name="selectedCountry" (selectionChange)="validate()">
+      <mat-option value="">Select country</mat-option>
+      <mat-option value="FR">France</mat-option>
+      <mat-option value="DE">Germany</mat-option>
+      <mat-option value="ES">Spain</mat-option>
+      <mat-option value="IT">Italy</mat-option>
+      <mat-option value="UK">United Kingdom</mat-option>
+      <mat-option value="US">United States</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <div class="text-center mt-20">
+    <button mat-raised-button color="primary" type="submit" [disabled]="!isValid || isLoading">
+      <span *ngIf="!isLoading">TRACK</span>
+      <span *ngIf="isLoading">TRACKING...</span>
+    </button>
+  </div>
+</form>

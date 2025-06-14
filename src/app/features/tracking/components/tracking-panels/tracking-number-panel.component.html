@@ -1,0 +1,19 @@
+<form (ngSubmit)="onSubmit($event)" class="tracking-form">
+  <mat-form-field appearance="outline" class="w-100">
+    <mat-label>Tracking number*</mat-label>
+    <input matInput [(ngModel)]="trackingNumber" name="trackingNumber" (input)="validate(trackingNumber)" placeholder="Enter tracking number">
+  </mat-form-field>
+
+  <div class="scan-section">
+    <button mat-stroked-button color="primary" type="button" (click)="scanBarcode.emit()" [disabled]="isLoading">
+      Scan Barcode
+    </button>
+  </div>
+
+  <div class="text-center mt-20">
+    <button mat-raised-button color="primary" type="submit" [disabled]="!isValid || isLoading">
+      <span *ngIf="!isLoading">TRACK</span>
+      <span *ngIf="isLoading">TRACKING...</span>
+    </button>
+  </div>
+</form>
