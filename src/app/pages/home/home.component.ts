@@ -11,6 +11,10 @@ import { Location } from '../../shared/models/location.model';
 import { FAQ } from '../../shared/models/faq.model';
 import { Notification } from '../../shared/models/notification.model';
 import { ServiceItem } from '../../shared/models/service-item.model';
+import { NewsService } from '../../shared/services/news.service';
+import { LocationService } from '../../shared/services/location.service';
+import { FaqService } from '../../shared/services/faq.service';
+import { ServicesService } from '../../shared/services/services.service';
 import { HeroSectionComponent } from './components/hero/hero-section.component';
 import { ServicesSectionComponent } from './components/services/services-section.component';
 import { NewsSectionComponent } from './components/news/news-section.component';
@@ -98,7 +102,11 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   constructor(
     private fb: FormBuilder,
-    private router: Router
+    private router: Router,
+    private newsService: NewsService,
+    private locationService: LocationService,
+    private faqService: FaqService,
+    private servicesService: ServicesService
   ) {
     this.trackingForm = this.fb.group({
       trackingNumber: ['', [Validators.required, Validators.pattern('^[A-Z0-9]{10,}$')]]
@@ -111,10 +119,10 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.autoPushNotifications();
-    this.initializeNews();
-    this.initializeLocations();
-    this.initializeFAQ();
-    this.initializeServices();
+    this.loadNews();
+    this.loadLocations();
+    this.loadFAQ();
+    this.loadServices();
     
     // Initialize map after a short delay to ensure DOM is ready
     setTimeout(() => {
@@ -132,120 +140,40 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.markers.forEach(marker => marker.setMap(null));
   }
 
-  private initializeNews(): void {
-    this.news = [
-      {
-        id: 1,
-        title: "Nouveau service de livraison express",
-        content: "Nous lançons notre nouveau service de livraison express en 24h sur tout le territoire marocain.",
-        image: "./assets/images/news/shipping-routes.jpg",
-        imageUrl: "./assets/images/news/shipping-routes.jpg",
-        date: new Date("2024-03-15"),
-        category: "Services",
-        summary: "Un nouveau service de livraison express pour une livraison plus rapide...",
-        slug: "nouveau-service-express"
-      },
-      {
-        id: 2,
-        title: "Expansion de notre réseau de distribution",
-        content: "Nous ouvrons 5 nouvelles agences dans les principales villes du Maroc pour mieux vous servir.",
-        image: "./assets/images/news/expansion.jpg",
-        imageUrl: "./assets/images/news/expansion.jpg",
-        date: new Date("2024-03-10"),
-        category: "Développement",
-        summary: "Nous étendons notre réseau de distribution à de nouvelles villes...",
-        slug: "expansion-reseau"
-      },
-      {
-        id: 3,
-        title: "Partenariat stratégique avec les leaders du e-commerce",
-        content: "Nous renforçons notre présence dans le e-commerce avec de nouveaux partenariats stratégiques.",
-        image: "./assets/images/news/partnership.jpg",
-        imageUrl: "./assets/images/news/partnership.jpg",
-        date: new Date("2024-03-05"),
-        category: "Partenariats",
-        summary: "Nous annonçons un nouveau partenariat pour améliorer nos services...",
-        slug: "partenariat-ecommerce"
-      }
-    ];
+  private loadNews(): void {
+    this.newsService.getNews()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: news => this.news = news,
+        error: err => console.error('Error fetching news', err)
+      });
   }
 
-  private initializeLocations(): void {
-    this.locations = [
-      {
-        id: 1,
-        name: "Agence Centrale - Casablanca",
-        address: "123 Boulevard Hassan II, Casablanca",
-        phone: "+212 522-123456",
-        email: "casablanca@globex.ma",
-        hours: "Lun-Sam: 8h-20h",
-        coordinates: { lat: 33.5731, lng: -7.5898 }
-      },
-      {
-        id: 2,
-        name: "Agence Rabat",
-        address: "45 Avenue Mohammed V, Rabat",
-        phone: "+212 537-123456",
-        email: "rabat@globex.ma",
-        hours: "Lun-Sam: 8h-20h",
-        coordinates: { lat: 34.0209, lng: -6.8416 }
-      },
-      {
-        id: 3,
-        name: "Agence Marrakech",
-        address: "78 Rue Ibn Sina, Marrakech",
-        phone: "+212 524-123456",
-        email: "marrakech@globex.ma",
-        hours: "Lun-Sam: 8h-20h",
-        coordinates: { lat: 31.6295, lng: -7.9811 }
-      }
-    ];
+  private loadLocations(): void {
+    this.locationService.getLocations()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: locations => this.locations = locations,
+        error: err => console.error('Error fetching locations', err)
+      });
   }
 
-  private initializeFAQ(): void {
-    this.faqList = [
-      {
-        question: "Comment suivre mon colis ?",
-        answer: "Entrez votre numéro de suivi dans la barre de recherche en haut de la page pour suivre votre colis en temps réel.",
-        isOpen: false
-      },
-      {
-        question: "Quels sont les délais de livraison ?",
-        answer: "Les délais de livraison varient selon le service choisi : Express (24h), Standard (2-3 jours), Économique (3-5 jours).",
-        isOpen: false
-      },
-      {
-        question: "Comment contacter le service client ?",
-        answer: "Notre service client est disponible 24/7 par téléphone au +212 522-123456 ou par email à support@globex.ma.",
-        isOpen: false
-      }
-    ];
+  private loadFAQ(): void {
+    this.faqService.getFaqs()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: faqs => this.faqList = faqs,
+        error: err => console.error('Error fetching FAQ', err)
+      });
   }
 
-  private initializeServices(): void {
-    this.servicesList = [
-      {
-        title: 'Suivi par courrier',
-        description: 'Recevez les mises \u00e0 jour de vos colis directement par e-mail',
-        image: 'assets/images/services/track-by-mail.jpg',
-        icon: 'fas fa-envelope',
-        link: '/services/track-by-mail'
-      },
-      {
-        title: 'G\u00e9n\u00e9rer un code-barres',
-        description: 'Cr\u00e9ez un code-barres pour identifier facilement vos colis',
-        image: 'assets/images/services/generate-barcode.jpg',
-        icon: 'fas fa-barcode',
-        link: '/services/generate-barcode'
-      },
-      {
-        title: 'Activer les notifications',
-        description: 'Soyez alert\u00e9 instantan\u00e9ment de chaque mise \u00e0 jour',
-        image: 'assets/images/services/activate-notifications.jpg',
-        icon: 'fas fa-bell',
-        link: '/services/notifications'
-      }
-    ];
+  private loadServices(): void {
+    this.servicesService.getServices()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: services => this.servicesList = services,
+        error: err => console.error('Error fetching services', err)
+      });
   }
 
   private initializeMap() {
