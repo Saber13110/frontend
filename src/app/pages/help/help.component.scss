@@ -183,48 +183,15 @@
   }
 }
 
-// Navigation Tabs
-.nav-tabs {
-  background: var(--white);
-  border-radius: var(--border-radius-lg);
-  padding: 8px;
+// Material Navigation Tabs
+.mat-tab-group.custom-tabs {
   margin-bottom: 40px;
-  box-shadow: var(--shadow);
-  border: 1px solid var(--gray-200);
-  display: flex;
-  justify-content: center;
-  overflow-x: auto;
 }
 
-.nav-tab {
-  flex: 1;
-  padding: 16px 24px;
-  border: none;
-  background: transparent;
-  color: var(--gray-600);
-  font-size: 15px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: var(--transition);
-  border-radius: var(--border-radius);
-  white-space: nowrap;
-  min-width: 160px;
+.mat-tab-label {
   display: flex;
   align-items: center;
-  justify-content: center;
   gap: 8px;
-
-  &:hover {
-    background: var(--gray-50);
-    color: var(--gray-900);
-  }
-
-  &.active {
-    background: var(--primary-purple);
-    color: var(--white);
-    font-weight: 600;
-    box-shadow: var(--shadow);
-  }
 }
 
 // Tab Content
@@ -283,14 +250,9 @@
     flex-direction: column;
   }
 
-  .nav-tabs {
+  .mat-tab-group.custom-tabs {
     flex-direction: column;
     gap: 4px;
-  }
-
-  .nav-tab {
-    min-width: auto;
-    text-align: center;
   }
 }
 

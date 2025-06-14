@@ -6,6 +6,10 @@ import { NotificationService } from '../../shared/services/notification.service'
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import { TrackingAdviceComponent } from './tracking-advice/tracking-advice.component';
 import { TrackingToolsComponent } from './tracking-tools/tracking-tools.component';
 import { FaqsComponent } from './faqs/faqs.component';
@@ -18,6 +22,10 @@ import { ContactUsComponent } from './contact-us/contact-us.component';
     CommonModule,
     FormsModule,
     RouterModule,
+    MatTabsModule,
+    MatInputModule,
+    MatButtonModule,
+    MatFormFieldModule,
     TrackingAdviceComponent,
     TrackingToolsComponent,
     FaqsComponent,
@@ -29,6 +37,7 @@ import { ContactUsComponent } from './contact-us/contact-us.component';
 export class HelpComponent implements OnInit {
   currentTab: string = 'tracking-advice';
   trackingNumber: string = '';
+  tabLabels: string[] = ['tracking-advice', 'tracking-tools', 'faqs', 'contact-us'];
 
   constructor(
     private titleService: Title,

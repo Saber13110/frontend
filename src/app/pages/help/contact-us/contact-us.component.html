@@ -47,67 +47,42 @@
         <p>Fill out the form below and we'll get back to you as soon as possible.</p>
       </div>
 
-      <div class="form-group">
-        <label for="name">Name *</label>
-        <input 
-          type="text" 
-          id="name" 
-          formControlName="name"
-          [class.error]="contactForm.get('name')?.invalid && contactForm.get('name')?.touched"
-        >
-        <span class="error-message" *ngIf="contactForm.get('name')?.invalid && contactForm.get('name')?.touched">
+      <mat-form-field appearance="fill" class="w-100">
+        <mat-label>Name *</mat-label>
+        <input matInput id="name" formControlName="name">
+        <mat-error *ngIf="contactForm.get('name')?.invalid && contactForm.get('name')?.touched">
           {{ getErrorMessage('name') }}
-        </span>
-      </div>
+        </mat-error>
+      </mat-form-field>
 
-      <div class="form-group">
-        <label for="email">Email *</label>
-        <input 
-          type="email" 
-          id="email" 
-          formControlName="email"
-          [class.error]="contactForm.get('email')?.invalid && contactForm.get('email')?.touched"
-        >
-        <span class="error-message" *ngIf="contactForm.get('email')?.invalid && contactForm.get('email')?.touched">
+      <mat-form-field appearance="fill" class="w-100">
+        <mat-label>Email *</mat-label>
+        <input matInput type="email" id="email" formControlName="email">
+        <mat-error *ngIf="contactForm.get('email')?.invalid && contactForm.get('email')?.touched">
           {{ getErrorMessage('email') }}
-        </span>
-      </div>
+        </mat-error>
+      </mat-form-field>
 
-      <div class="form-group">
-        <label for="subject">Subject *</label>
-        <input 
-          type="text" 
-          id="subject" 
-          formControlName="subject"
-          [class.error]="contactForm.get('subject')?.invalid && contactForm.get('subject')?.touched"
-        >
-        <span class="error-message" *ngIf="contactForm.get('subject')?.invalid && contactForm.get('subject')?.touched">
+      <mat-form-field appearance="fill" class="w-100">
+        <mat-label>Subject *</mat-label>
+        <input matInput id="subject" formControlName="subject">
+        <mat-error *ngIf="contactForm.get('subject')?.invalid && contactForm.get('subject')?.touched">
           {{ getErrorMessage('subject') }}
-        </span>
-      </div>
+        </mat-error>
+      </mat-form-field>
 
-      <div class="form-group">
-        <label for="trackingNumber">Tracking Number (Optional)</label>
-        <input 
-          type="text" 
-          id="trackingNumber" 
-          formControlName="trackingNumber"
-          placeholder="e.g., GLX123456789"
-        >
-      </div>
+      <mat-form-field appearance="fill" class="w-100">
+        <mat-label>Tracking Number (Optional)</mat-label>
+        <input matInput id="trackingNumber" formControlName="trackingNumber" placeholder="e.g., GLX123456789">
+      </mat-form-field>
 
-      <div class="form-group">
-        <label for="message">Message *</label>
-        <textarea 
-          id="message" 
-          formControlName="message"
-          rows="5"
-          [class.error]="contactForm.get('message')?.invalid && contactForm.get('message')?.touched"
-        ></textarea>
-        <span class="error-message" *ngIf="contactForm.get('message')?.invalid && contactForm.get('message')?.touched">
+      <mat-form-field appearance="fill" class="w-100">
+        <mat-label>Message *</mat-label>
+        <textarea matInput id="message" formControlName="message" rows="5"></textarea>
+        <mat-error *ngIf="contactForm.get('message')?.invalid && contactForm.get('message')?.touched">
           {{ getErrorMessage('message') }}
-        </span>
-      </div>
+        </mat-error>
+      </mat-form-field>
 
       <div class="form-group">
         <label for="attachments">Attachments</label>
@@ -128,10 +103,10 @@
       </div>
 
       <div class="form-actions">
-        <button type="button" class="btn-secondary" (click)="selectedOption = null">
+        <button mat-stroked-button type="button" (click)="selectedOption = null">
           Cancel
         </button>
-        <button type="submit" class="btn-primary" [disabled]="contactForm.invalid">
+        <button mat-raised-button color="primary" type="submit" [disabled]="contactForm.invalid">
           Send Message
           <i class="fas fa-paper-plane" aria-hidden="true"></i>
         </button>

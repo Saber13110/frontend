@@ -2,13 +2,10 @@
   <!-- Search and Filter Section -->
   <div class="search-filter">
     <div class="search-box">
-      <i class="fas fa-search" aria-hidden="true"></i>
-      <input 
-        type="text" 
-        [(ngModel)]="searchQuery" 
-        placeholder="Search FAQs..."
-        aria-label="Search frequently asked questions"
-      >
+      <mat-form-field appearance="outline" class="w-100">
+        <mat-label>Search FAQs</mat-label>
+        <input matInput [(ngModel)]="searchQuery" placeholder="Search FAQs..." aria-label="Search frequently asked questions">
+      </mat-form-field>
     </div>
     <div class="category-filter">
       <button 

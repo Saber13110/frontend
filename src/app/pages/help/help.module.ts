@@ -2,6 +2,11 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 import { HelpComponent } from './help.component';
 import { TrackingAdviceComponent } from './tracking-advice/tracking-advice.component';
@@ -22,7 +27,12 @@ import { HELP_ROUTES } from './help.routes';
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
+    BrowserAnimationsModule,
+    MatTabsModule,
+    MatInputModule,
+    MatButtonModule,
+    MatFormFieldModule,
     RouterModule.forChild(HELP_ROUTES)
   ]
 })
-export class HelpModule { } 
+export class HelpModule { }
