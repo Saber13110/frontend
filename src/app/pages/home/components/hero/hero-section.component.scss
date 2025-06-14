@@ -1,3 +1,6 @@
+@use "sass:color";
+@use "../../../../../styles/variables" as *;
+@use "../../../../../styles/mixins" as *;
 // Hero Section
 .hero {
   background: url('/assets/images/hero/hero-bg.jpg') center/cover no-repeat;

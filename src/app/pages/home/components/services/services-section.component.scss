@@ -1,3 +1,6 @@
+@use "sass:color";
+@use "../../../../../styles/variables" as *;
+@use "../../../../../styles/mixins" as *;
 // Services Section
 .services {
   @include section-padding;
