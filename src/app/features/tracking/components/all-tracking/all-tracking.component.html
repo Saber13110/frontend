@@ -54,7 +54,7 @@
           Enter up to 30 of your Globex tracking, door tag, or Globex Office order numbers (one per line).
         </p>
         
-        <form class="tracking-form" (ngSubmit)="trackPackage($event)">
+        <form class="tracking-form" [formGroup]="trackingForm" (ngSubmit)="trackPackage($event)">
           <div class="form-group">
             <label class="form-label" for="trackingInput">Tracking number*</label>
             <input 
@@ -62,9 +62,7 @@
               id="trackingInput"
               class="form-input" 
               placeholder="Enter tracking number"
-              [(ngModel)]="trackingNumber"
-              name="trackingNumber"
-              (input)="validateInput('tracking', trackingNumber)"
+              formControlName="trackingNumber"
             >
           </div>
 
@@ -92,8 +90,8 @@
             <button 
               type="submit" 
               class="track-btn" 
-              [class.enabled]="isTrackingValid"
-              [disabled]="!isTrackingValid || isLoading">
+              [class.enabled]="trackingForm.valid"
+              [disabled]="trackingForm.invalid || isLoading">
               <span *ngIf="!isLoading">TRACK</span>
               <span *ngIf="isLoading">TRACKING...</span>
             </button>
@@ -107,7 +105,7 @@
           Enter your reference number or purchase order numbers.
         </p>
         
-        <form class="tracking-form" (ngSubmit)="trackByReference($event)">
+        <form class="tracking-form" [formGroup]="referenceForm" (ngSubmit)="trackByReference($event)">
           <div class="form-group">
             <label class="form-label" for="referenceInput">Reference number*</label>
             <input 
@@ -115,20 +113,16 @@
               id="referenceInput"
               class="form-input" 
               placeholder="Enter reference number"
-              [(ngModel)]="referenceNumber"
-              name="referenceNumber"
-              (input)="validateInput('reference', referenceNumber)"
+              formControlName="referenceNumber"
             >
           </div>
           
           <div class="form-group">
             <label class="form-label" for="countrySelect">Destination country/territory*</label>
-            <select 
-              id="countrySelect" 
+            <select
+              id="countrySelect"
               class="form-select"
-              [(ngModel)]="selectedCountry"
-              name="selectedCountry"
-              (change)="validateInput('reference', referenceNumber)">
+              formControlName="selectedCountry">
               <option value="">Select country</option>
               <option value="FR">France</option>
               <option value="DE">Germany</option>
@@ -145,8 +139,8 @@
             <button 
               type="submit" 
               class="track-btn" 
-              [class.enabled]="isReferenceValid"
-              [disabled]="!isReferenceValid || isLoading">
+              [class.enabled]="referenceForm.valid"
+              [disabled]="referenceForm.invalid || isLoading">
               <span *ngIf="!isLoading">TRACK</span>
               <span *ngIf="isLoading">TRACKING...</span>
             </button>
@@ -161,7 +155,7 @@
           Do not use any spaces or the letters "TCN" preceding the number.
         </p>
         
-        <form class="tracking-form" (ngSubmit)="trackByTCN($event)">
+        <form class="tracking-form" [formGroup]="tcnForm" (ngSubmit)="trackByTCN($event)">
           <div class="form-group">
             <label class="form-label" for="tcnInput">Enter TCN or tracking number*</label>
             <input 
@@ -169,9 +163,7 @@
               id="tcnInput"
               class="form-input" 
               placeholder="Enter TCN"
-              [(ngModel)]="tcnNumber"
-              name="tcnNumber"
-              (input)="validateInput('tcn', tcnNumber)"
+              formControlName="tcnNumber"
             >
           </div>
           
@@ -182,9 +174,7 @@
                 type="date" 
                 id="shipDate"
                 class="form-input"
-                [(ngModel)]="shipDate"
-                name="shipDate"
-                (change)="validateInput('tcn', tcnNumber)"
+                formControlName="shipDate"
               >
               <i class="fas fa-calendar" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: #4d148c; pointer-events: none;"></i>
             </div>
@@ -197,8 +187,8 @@
             <button 
               type="submit" 
               class="track-btn" 
-              [class.enabled]="isTCNValid"
-              [disabled]="!isTCNValid || isLoading">
+              [class.enabled]="tcnForm.valid"
+              [disabled]="tcnForm.invalid || isLoading">
               <span *ngIf="!isLoading">TRACK</span>
               <span *ngIf="isLoading">TRACKING...</span>
             </button>
@@ -208,7 +198,7 @@
 
       <!-- Proof of Delivery -->
       <div class="tracking-panel" [class.active]="activeTab === 'proof-delivery'">
-        <form class="tracking-form" (ngSubmit)="getProofOfDelivery($event)">
+        <form class="tracking-form" [formGroup]="proofForm" (ngSubmit)="getProofOfDelivery($event)">
           <div class="form-group">
             <label class="form-label" for="proofInput">Tracking ID*</label>
             <input 
@@ -216,9 +206,7 @@
               id="proofInput"
               class="form-input" 
               placeholder="Enter your tracking ID"
-              [(ngModel)]="proofNumber"
-              name="proofNumber"
-              (input)="validateInput('proof', proofNumber)"
+              formControlName="proofNumber"
             >
           </div>
           
@@ -226,8 +214,8 @@
             <button 
               type="submit" 
               class="track-btn enabled" 
-              [class.enabled]="isProofValid"
-              [disabled]="!isProofValid || isLoading">
+              [class.enabled]="proofForm.valid"
+              [disabled]="proofForm.invalid || isLoading">
               <span *ngIf="!isLoading">DOWNLOAD</span>
               <span *ngIf="isLoading">DOWNLOADING...</span>
             </button>
