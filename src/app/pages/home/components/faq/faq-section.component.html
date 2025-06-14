@@ -6,7 +6,7 @@
     </div>
     <div class="faq__container">
       <div class="faq__item" *ngFor="let faq of faqList">
-        <button class="faq__question" (click)="toggle.emit(faq)">
+        <button class="faq__question" (click)="toggle.emit(faq)" aria-label="Toggle answer for {{faq.question}}">
           <span>{{faq.question}}</span>
           <i class="fas" [class.fa-chevron-down]="!faq.isOpen" [class.fa-chevron-up]="faq.isOpen"></i>
         </button>

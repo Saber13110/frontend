@@ -22,8 +22,8 @@
       <div *ngIf="selectedHeroFeature === null" class="tracking-form">
         <form [formGroup]="trackingForm" (ngSubmit)="onSubmit()">
           <div class="tracking-form__input-group">
-            <input type="text" formControlName="trackingNumber" class="tracking-form__input" placeholder="Enter your tracking number">
-            <button type="submit" class="tracking-form__btn">
+            <input type="text" formControlName="trackingNumber" class="tracking-form__input" placeholder="Enter your tracking number" aria-label="Tracking number">
+            <button type="submit" class="tracking-form__btn" aria-label="Track package">
               <i class="fas fa-search"></i>
               Track
             </button>
@@ -36,17 +36,17 @@
         <div class="upload-box" (click)="fileInput.click()">
           <i class="fas fa-cloud-upload-alt upload-icon"></i>
           <p>Drag and drop or click to upload</p>
-          <input type="file" accept="image/*" (change)="onBarcodeFileSelected($event)" #fileInput hidden>
+          <input type="file" accept="image/*" (change)="onBarcodeFileSelected($event)" #fileInput hidden aria-label="Upload barcode image">
         </div>
-        <button class="btn btn--primary mt-3" (click)="onProScanClick()">Pro Scan</button>
+        <button class="btn btn--primary mt-3" (click)="onProScanClick()" aria-label="Pro Scan">Pro Scan</button>
       </div>
 
       <div *ngIf="selectedHeroFeature === 'obtain_proof'" class="obtain-proof-option">
         <p>Enter tracking ID to download your proof of delivery.</p>
         <form [formGroup]="trackingForm" (ngSubmit)="onDownloadProofClick()">
           <div class="tracking-form__input-group">
-            <input type="text" formControlName="trackingNumber" class="tracking-form__input" placeholder="Enter tracking ID">
-            <button type="button" class="tracking-form__btn" (click)="onDownloadProofClick()">
+            <input type="text" formControlName="trackingNumber" class="tracking-form__input" placeholder="Enter tracking ID" aria-label="Tracking ID">
+            <button type="button" class="tracking-form__btn" (click)="onDownloadProofClick()" aria-label="Download proof">
               <i class="fas fa-download"></i>
               Download Proof
             </button>
