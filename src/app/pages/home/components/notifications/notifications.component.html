@@ -6,7 +6,7 @@
        [class.notification--error]="notification.type === 'error'">
     <div class="notification__header">
       <span class="notification__title">{{notification.title}}</span>
-      <button class="notification__close" (click)="remove.emit(notification)">
+      <button class="notification__close" (click)="remove.emit(notification)" aria-label="Close notification">
         <i class="fas fa-times"></i>
       </button>
     </div>
