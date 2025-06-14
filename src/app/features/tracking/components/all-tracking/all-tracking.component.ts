@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { BrowserCodeReader, BrowserMultiFormatReader } from '@zxing/browser';
 
 // TODO: Backend - Create Tracking Interfaces
 interface TrackingRequest {
@@ -44,6 +45,9 @@ export class AllTrackingComponent implements OnInit {
   activeTab: string = 'tracking-number';
   isLoading: boolean = false;
   isMobile: boolean = false;
+  isScanning: boolean = false;
+
+  private codeReader: BrowserMultiFormatReader | null = null;
 
   // Form values
   trackingNumber: string = '';
@@ -107,24 +111,21 @@ export class AllTrackingComponent implements OnInit {
     }
 
     try {
-      // TODO: Implement barcode scanning
-      /*
-      const result = await this.barcodeService.startScanning();
-      if (result) {
-        this.trackingNumber = result;
-        this.validateInput('tracking', result);
+      this.isScanning = true;
+      if (!this.codeReader) {
+        this.codeReader = new BrowserMultiFormatReader();
       }
-      */
-      
-      // Simulation for development
-      alert('Scanner de code-barres activé!\n\n(Fonctionnalité à intégrer avec l\'API caméra)');
-      setTimeout(() => {
-        this.trackingNumber = 'GBX123456789';
-        this.validateInput('tracking', this.trackingNumber);
-      }, 2000);
+
+      const videoElem = document.getElementById('scannerPreview') as HTMLVideoElement;
+      const result = await this.codeReader.decodeOnceFromVideoDevice(undefined, videoElem);
+      this.trackingNumber = result.getText();
+      this.validateInput('tracking', this.trackingNumber);
     } catch (error) {
       console.error('Barcode scanning error:', error);
       alert('Erreur lors du scan du code-barres.');
+    } finally {
+      this.isScanning = false;
+      BrowserCodeReader.releaseAllStreams();
     }
   }
 

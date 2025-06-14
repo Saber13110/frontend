@@ -77,13 +77,17 @@
             <p class="scan-description">
               Use your mobile device to scan the barcode on your shipping label
             </p>
-            <button 
-              type="button" 
-              class="scan-btn" 
+            <button
+              type="button"
+              class="scan-btn"
               (click)="startBarcodeScanner()"
-              [disabled]="isLoading">
+              [disabled]="isLoading || isScanning">
               <i class="fas fa-camera"></i> Scan Barcode
             </button>
+            <div *ngIf="isScanning" class="scan-status">
+              <video id="scannerPreview" autoplay muted playsinline></video>
+              <p>Scanning...</p>
+            </div>
           </div>
 
           <a href="#" class="need-help">NEED HELP?</a>

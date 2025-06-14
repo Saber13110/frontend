@@ -228,6 +228,17 @@ body {
   }
 }
 
+.scan-status {
+  margin-top: 15px;
+
+  video {
+    width: 100%;
+    max-height: 200px;
+    border-radius: 4px;
+    background: #000;
+  }
+}
+
 // Track Button
 .track-btn {
   background-color: #d0d0d0;
