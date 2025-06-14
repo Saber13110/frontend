@@ -152,7 +152,7 @@ export class TrackingService {
     if (!trackingNumber || !trackingNumber.trim()) {
       return throwError(() => new Error('Numéro de suivi invalide'));
     }
-    
+
     // For demo, just return success
     return of({ success: true }).pipe(
       delay(500),
@@ -162,4 +162,92 @@ export class TrackingService {
       })
     );
   }
-} 
+
+  /**
+   * Track a package by its tracking number
+   * @param trackingNumber Tracking number to search
+   */
+  trackPackage(trackingNumber: string): Observable<any> {
+    if (!trackingNumber || !trackingNumber.trim()) {
+      return throwError(() => new Error('Numéro de suivi invalide'));
+    }
+
+    // For demo purposes reuse getTrackingData
+    return this.getTrackingData(trackingNumber).pipe(
+      catchError(error => {
+        console.error('Error tracking package:', error);
+        return throwError(() => new Error('Une erreur est survenue lors du suivi du colis'));
+      })
+    );
+  }
+
+  /**
+   * Track a shipment by reference number
+   * @param reference Reference number
+   * @param country Destination country
+   */
+  trackByReference(reference: string, country: string): Observable<any> {
+    if (!reference || !reference.trim() || !country) {
+      return throwError(() => new Error('Référence ou pays invalide'));
+    }
+
+    const mockResponse = {
+      reference,
+      country,
+      status: 'IN-TRANSIT'
+    };
+
+    return of(mockResponse).pipe(
+      delay(1000),
+      catchError(error => {
+        console.error('Error tracking by reference:', error);
+        return throwError(() => new Error('Une erreur est survenue lors du suivi par référence'));
+      })
+    );
+  }
+
+  /**
+   * Track a shipment using a TCN number
+   * @param tcn Transportation Control Number
+   * @param shipDate Ship date associated with the TCN
+   */
+  trackByTCN(tcn: string, shipDate: string): Observable<any> {
+    if (!tcn || !tcn.trim() || !shipDate) {
+      return throwError(() => new Error('TCN ou date d\'expédition invalide'));
+    }
+
+    const mockResponse = {
+      tcn,
+      shipDate,
+      status: 'IN-TRANSIT'
+    };
+
+    return of(mockResponse).pipe(
+      delay(1000),
+      catchError(error => {
+        console.error('Error tracking by TCN:', error);
+        return throwError(() => new Error('Une erreur est survenue lors du suivi TCN'));
+      })
+    );
+  }
+
+  /**
+   * Obtain proof of delivery for a tracking number
+   * @param trackingNumber Tracking number
+   */
+  getProofOfDelivery(trackingNumber: string): Observable<any> {
+    if (!trackingNumber || !trackingNumber.trim()) {
+      return throwError(() => new Error('Numéro de suivi invalide'));
+    }
+
+    const mockUrl = 'https://example.com/proof/' + trackingNumber + '.pdf';
+
+    return of({ url: mockUrl }).pipe(
+      delay(1000),
+      catchError(error => {
+        console.error('Error getting proof of delivery:', error);
+        return throwError(() => new Error('Une erreur est survenue lors de la récupération de la preuve de livraison'));
+      })
+    );
+  }
+}

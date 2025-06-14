@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { TrackingService } from '../../services/tracking.service';
+import { NotificationService } from '../../../../shared/services/notification.service';
 
 // TODO: Backend - Create Tracking Interfaces
 interface TrackingRequest {
@@ -60,9 +62,8 @@ export class AllTrackingComponent implements OnInit {
   isProofValid: boolean = false;
 
   constructor(
-    // TODO: Inject services
-    // private trackingService: TrackingService,
-    // private notificationService: NotificationService
+    private trackingService: TrackingService,
+    private notificationService: NotificationService
   ) {}
 
   ngOnInit(): void {
@@ -133,26 +134,16 @@ export class AllTrackingComponent implements OnInit {
     if (!this.isTrackingValid) return;
 
     this.isLoading = true;
-    try {
-      // TODO: Implement tracking service call
-      /*
-      const result = await this.trackingService.track({
-        trackingNumber: this.trackingNumber,
-        type: 'number'
-      });
-      this.notificationService.success('Tracking information retrieved successfully');
-      // Navigate to results page or show results
-      */
-      
-      // Simulation for development
-      console.log('Tracking package:', this.trackingNumber);
-      alert(`Recherche du colis: ${this.trackingNumber}\n\n(Intégration API à venir)`);
-    } catch (error) {
-      console.error('Tracking error:', error);
-      // this.notificationService.error('Failed to retrieve tracking information');
-    } finally {
-      this.isLoading = false;
-    }
+    this.trackingService.trackPackage(this.trackingNumber).subscribe({
+      next: () => {
+        this.notificationService.success('Succès', 'Informations de suivi récupérées');
+        this.isLoading = false;
+      },
+      error: (err: Error) => {
+        this.notificationService.error('Erreur', err.message);
+        this.isLoading = false;
+      }
+    });
   }
 
   async trackByReference(event: Event): Promise<void> {
@@ -160,18 +151,16 @@ export class AllTrackingComponent implements OnInit {
     if (!this.isReferenceValid) return;
 
     this.isLoading = true;
-    try {
-      // TODO: Implement reference tracking
-      console.log('Tracking by reference:', { 
-        reference: this.referenceNumber, 
-        country: this.selectedCountry 
-      });
-      alert(`Recherche par référence: ${this.referenceNumber}\nPays: ${this.selectedCountry}\n\n(Intégration API à venir)`);
-    } catch (error) {
-      console.error('Reference tracking error:', error);
-    } finally {
-      this.isLoading = false;
-    }
+    this.trackingService.trackByReference(this.referenceNumber, this.selectedCountry).subscribe({
+      next: () => {
+        this.notificationService.success('Succès', 'Recherche par référence effectuée');
+        this.isLoading = false;
+      },
+      error: (err: Error) => {
+        this.notificationService.error('Erreur', err.message);
+        this.isLoading = false;
+      }
+    });
   }
 
   async trackByTCN(event: Event): Promise<void> {
@@ -179,18 +168,16 @@ export class AllTrackingComponent implements OnInit {
     if (!this.isTCNValid) return;
 
     this.isLoading = true;
-    try {
-      // TODO: Implement TCN tracking
-      console.log('Tracking by TCN:', { 
-        tcn: this.tcnNumber, 
-        shipDate: this.shipDate 
-      });
-      alert(`Recherche TCN: ${this.tcnNumber}\nDate: ${this.shipDate}\n\n(Intégration API à venir)`);
-    } catch (error) {
-      console.error('TCN tracking error:', error);
-    } finally {
-      this.isLoading = false;
-    }
+    this.trackingService.trackByTCN(this.tcnNumber, this.shipDate).subscribe({
+      next: () => {
+        this.notificationService.success('Succès', 'Recherche TCN effectuée');
+        this.isLoading = false;
+      },
+      error: (err: Error) => {
+        this.notificationService.error('Erreur', err.message);
+        this.isLoading = false;
+      }
+    });
   }
 
   async getProofOfDelivery(event: Event): Promise<void> {
@@ -198,15 +185,16 @@ export class AllTrackingComponent implements OnInit {
     if (!this.isProofValid) return;
 
     this.isLoading = true;
-    try {
-      // TODO: Implement proof of delivery download
-      console.log('Getting proof of delivery for:', this.proofNumber);
-      alert(`Téléchargement de la preuve de livraison pour: ${this.proofNumber}\n\n(Intégration API à venir)`);
-    } catch (error) {
-      console.error('Proof of delivery error:', error);
-    } finally {
-      this.isLoading = false;
-    }
+    this.trackingService.getProofOfDelivery(this.proofNumber).subscribe({
+      next: () => {
+        this.notificationService.success('Succès', 'Preuve de livraison disponible');
+        this.isLoading = false;
+      },
+      error: (err: Error) => {
+        this.notificationService.error('Erreur', err.message);
+        this.isLoading = false;
+      }
+    });
   }
 }
 
