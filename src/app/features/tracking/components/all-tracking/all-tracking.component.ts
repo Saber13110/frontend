@@ -2,6 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule, Router } from '@angular/router';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
 
 // TODO: Backend - Create Tracking Interfaces
 interface TrackingRequest {
@@ -35,7 +42,14 @@ interface TrackingEvent {
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    RouterModule
+    RouterModule,
+    MatTabsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    MatButtonModule,
+    MatDatepickerModule,
+    MatNativeDateModule
   ],
   templateUrl: './all-tracking.component.html',
   styleUrls: ['./all-tracking.component.scss']
@@ -80,8 +94,10 @@ export class AllTrackingComponent implements OnInit {
     // TODO: Initialize tracking services and configurations
   }
 
-  showTab(tabId: string): void {
-    this.activeTab = tabId;
+  tabLabels: string[] = ['tracking-number', 'track-reference', 'track-tcn', 'proof-delivery'];
+
+  onTabChange(index: number): void {
+    this.activeTab = this.tabLabels[index];
   }
 
   validateInput(type: string, value: string): void {
