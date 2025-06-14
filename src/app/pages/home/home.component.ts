@@ -18,6 +18,7 @@ import { LocationsSectionComponent } from './components/locations/locations-sect
 import { FaqSectionComponent } from './components/faq/faq-section.component';
 import { CtaSectionComponent } from './components/cta/cta-section.component';
 import { NotificationsComponent } from './components/notifications/notifications.component';
+import { MapLoaderService } from '../../shared/services/map-loader.service';
 
 // Import Google Maps types
 declare global {
@@ -98,7 +99,8 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   constructor(
     private fb: FormBuilder,
-    private router: Router
+    private router: Router,
+    private mapLoader: MapLoaderService
   ) {
     this.trackingForm = this.fb.group({
       trackingNumber: ['', [Validators.required, Validators.pattern('^[A-Z0-9]{10,}$')]]
@@ -116,10 +118,16 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.initializeFAQ();
     this.initializeServices();
     
-    // Initialize map after a short delay to ensure DOM is ready
-    setTimeout(() => {
-      this.initializeMap();
-    }, 1000);
+    this.mapLoader.load()
+      .then(() => {
+        // Initialize map after a short delay to ensure DOM is ready
+        setTimeout(() => {
+          this.initializeMap();
+        }, 1000);
+      })
+      .catch(err => {
+        console.error('Failed to load Google Maps', err);
+      });
   }
 
   ngOnDestroy() {
