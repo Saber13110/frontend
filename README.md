@@ -25,3 +25,7 @@ Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To u
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+
+## Google Maps API Key
+
+The home page integrates Google Maps for displaying locations. Replace `YOUR_GOOGLE_MAPS_API_KEY` in `src/index.html` with your actual API key.
