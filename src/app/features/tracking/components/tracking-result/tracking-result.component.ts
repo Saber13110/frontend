@@ -252,7 +252,7 @@ export class TrackingResultComponent implements OnInit, AfterViewInit {
   copyToClipboard(): void {
     const trackingLink = `${window.location.origin}/tracking/${this.trackingNumber}`;
     navigator.clipboard.writeText(trackingLink).then(() => {
-      alert('Tracking link copied to clipboard!');
+      this.notificationService.success('Lien copié', 'Tracking link copied to clipboard!');
       this.showShareDropdown = false;
     });
   }
@@ -290,18 +290,18 @@ export class TrackingResultComponent implements OnInit, AfterViewInit {
       recipient: this.trackingData?.recipient?.name
     }));
     
-    alert('Tracking saved to favorites!');
+    this.notificationService.success('Enregistré', 'Tracking saved to favorites!');
     this.showSaveDropdown = false;
   }
   
   downloadAsPDF(): void {
     this.showSaveDropdown = false;
-    alert('PDF download functionality would be implemented here.\n\nPlease install file-saver package to enable this feature.');
+    this.notificationService.info('Information', 'PDF download functionality would be implemented here.\n\nPlease install file-saver package to enable this feature.');
   }
   
   downloadAsExcel(): void {
     this.showSaveDropdown = false;
-    alert('Excel download functionality would be implemented here.\n\nPlease install xlsx package to enable this feature.');
+    this.notificationService.info('Information', 'Excel download functionality would be implemented here.\n\nPlease install xlsx package to enable this feature.');
   }
   
   // ==== MODAL METHODS ====
@@ -408,12 +408,12 @@ export class TrackingResultComponent implements OnInit, AfterViewInit {
   // ==== ADDITIONAL SERVICES ====
   requestProofOfDelivery(): void {
     // API call to request proof of delivery
-    alert('La preuve de livraison serait affichée ici');
+    this.notificationService.info('Information', 'La preuve de livraison serait affichée ici');
   }
   
   openCustomsClearanceInfo(): void {
     // This would typically open a modal or navigate to customs info page
-    alert('Customs clearance information would display here');
+    this.notificationService.info('Information', 'Customs clearance information would display here');
   }
 
   retry(): void {
