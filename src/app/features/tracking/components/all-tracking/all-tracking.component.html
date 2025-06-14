@@ -54,18 +54,19 @@
           Enter up to 30 of your Globex tracking, door tag, or Globex Office order numbers (one per line).
         </p>
         
-        <form class="tracking-form" (ngSubmit)="trackPackage($event)">
+        <form class="tracking-form" [formGroup]="form" (ngSubmit)="trackPackage($event)">
           <div class="form-group">
             <label class="form-label" for="trackingInput">Tracking number*</label>
-            <input 
-              type="text" 
+            <input
+              type="text"
               id="trackingInput"
-              class="form-input" 
+              class="form-input"
               placeholder="Enter tracking number"
-              [(ngModel)]="trackingNumber"
-              name="trackingNumber"
-              (input)="validateInput('tracking', trackingNumber)"
+              formControlName="trackingNumber"
             >
+            <span class="error" *ngIf="form.get('trackingNumber')?.invalid && form.get('trackingNumber')?.touched">
+              A valid tracking number is required.
+            </span>
           </div>
 
           <!-- ===== SCAN BARCODE SECTION ===== -->
@@ -89,11 +90,11 @@
           <a href="#" class="need-help">NEED HELP?</a>
           
           <div style="text-align: center;">
-            <button 
-              type="submit" 
-              class="track-btn" 
-              [class.enabled]="isTrackingValid"
-              [disabled]="!isTrackingValid || isLoading">
+            <button
+              type="submit"
+              class="track-btn"
+              [class.enabled]="form.get('trackingNumber')?.valid"
+              [disabled]="form.get('trackingNumber')?.invalid || isLoading">
               <span *ngIf="!isLoading">TRACK</span>
               <span *ngIf="isLoading">TRACKING...</span>
             </button>
@@ -107,28 +108,27 @@
           Enter your reference number or purchase order numbers.
         </p>
         
-        <form class="tracking-form" (ngSubmit)="trackByReference($event)">
+        <form class="tracking-form" [formGroup]="form" (ngSubmit)="trackByReference($event)">
           <div class="form-group">
             <label class="form-label" for="referenceInput">Reference number*</label>
-            <input 
-              type="text" 
+            <input
+              type="text"
               id="referenceInput"
-              class="form-input" 
+              class="form-input"
               placeholder="Enter reference number"
-              [(ngModel)]="referenceNumber"
-              name="referenceNumber"
-              (input)="validateInput('reference', referenceNumber)"
+              formControlName="referenceNumber"
             >
+            <span class="error" *ngIf="form.get('referenceNumber')?.invalid && form.get('referenceNumber')?.touched">
+              Reference number is required.
+            </span>
           </div>
           
           <div class="form-group">
             <label class="form-label" for="countrySelect">Destination country/territory*</label>
-            <select 
-              id="countrySelect" 
+            <select
+              id="countrySelect"
               class="form-select"
-              [(ngModel)]="selectedCountry"
-              name="selectedCountry"
-              (change)="validateInput('reference', referenceNumber)">
+              formControlName="selectedCountry">
               <option value="">Select country</option>
               <option value="FR">France</option>
               <option value="DE">Germany</option>
@@ -137,16 +137,19 @@
               <option value="UK">United Kingdom</option>
               <option value="US">United States</option>
             </select>
+            <span class="error" *ngIf="form.get('selectedCountry')?.invalid && form.get('selectedCountry')?.touched">
+              Destination country is required.
+            </span>
           </div>
 
           <a href="#" class="need-help">NEED HELP?</a>
           
           <div style="text-align: center;">
-            <button 
-              type="submit" 
-              class="track-btn" 
-              [class.enabled]="isReferenceValid"
-              [disabled]="!isReferenceValid || isLoading">
+            <button
+              type="submit"
+              class="track-btn"
+              [class.enabled]="form.get('referenceNumber')?.valid && form.get('selectedCountry')?.valid"
+              [disabled]="form.get('referenceNumber')?.invalid || form.get('selectedCountry')?.invalid || isLoading">
               <span *ngIf="!isLoading">TRACK</span>
               <span *ngIf="isLoading">TRACKING...</span>
             </button>
@@ -161,44 +164,46 @@
           Do not use any spaces or the letters "TCN" preceding the number.
         </p>
         
-        <form class="tracking-form" (ngSubmit)="trackByTCN($event)">
+        <form class="tracking-form" [formGroup]="form" (ngSubmit)="trackByTCN($event)">
           <div class="form-group">
             <label class="form-label" for="tcnInput">Enter TCN or tracking number*</label>
-            <input 
-              type="text" 
+            <input
+              type="text"
               id="tcnInput"
-              class="form-input" 
+              class="form-input"
               placeholder="Enter TCN"
-              [(ngModel)]="tcnNumber"
-              name="tcnNumber"
-              (input)="validateInput('tcn', tcnNumber)"
+              formControlName="tcnNumber"
             >
+            <span class="error" *ngIf="form.get('tcnNumber')?.invalid && form.get('tcnNumber')?.touched">
+              TCN number is required.
+            </span>
           </div>
           
           <div class="form-group">
             <label class="form-label" for="shipDate">Ship date*</label>
             <div style="position: relative;">
-              <input 
-                type="date" 
+              <input
+                type="date"
                 id="shipDate"
                 class="form-input"
-                [(ngModel)]="shipDate"
-                name="shipDate"
-                (change)="validateInput('tcn', tcnNumber)"
+                formControlName="shipDate"
               >
               <i class="fas fa-calendar" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: #4d148c; pointer-events: none;"></i>
             </div>
             <div class="form-help">Please enter the ship date if the package was shipped more than 14 days ago.</div>
+            <span class="error" *ngIf="form.get('shipDate')?.invalid && form.get('shipDate')?.touched">
+              Ship date is required.
+            </span>
           </div>
 
           <a href="#" class="need-help">NEED HELP?</a>
           
           <div style="text-align: center;">
-            <button 
-              type="submit" 
-              class="track-btn" 
-              [class.enabled]="isTCNValid"
-              [disabled]="!isTCNValid || isLoading">
+            <button
+              type="submit"
+              class="track-btn"
+              [class.enabled]="form.get('tcnNumber')?.valid && form.get('shipDate')?.valid"
+              [disabled]="form.get('tcnNumber')?.invalid || form.get('shipDate')?.invalid || isLoading">
               <span *ngIf="!isLoading">TRACK</span>
               <span *ngIf="isLoading">TRACKING...</span>
             </button>
@@ -208,26 +213,27 @@
 
       <!-- Proof of Delivery -->
       <div class="tracking-panel" [class.active]="activeTab === 'proof-delivery'">
-        <form class="tracking-form" (ngSubmit)="getProofOfDelivery($event)">
+        <form class="tracking-form" [formGroup]="form" (ngSubmit)="getProofOfDelivery($event)">
           <div class="form-group">
             <label class="form-label" for="proofInput">Tracking ID*</label>
-            <input 
-              type="text" 
+            <input
+              type="text"
               id="proofInput"
-              class="form-input" 
+              class="form-input"
               placeholder="Enter your tracking ID"
-              [(ngModel)]="proofNumber"
-              name="proofNumber"
-              (input)="validateInput('proof', proofNumber)"
+              formControlName="proofNumber"
             >
+            <span class="error" *ngIf="form.get('proofNumber')?.invalid && form.get('proofNumber')?.touched">
+              A valid tracking ID is required.
+            </span>
           </div>
           
           <div style="text-align: center;">
-            <button 
-              type="submit" 
-              class="track-btn enabled" 
-              [class.enabled]="isProofValid"
-              [disabled]="!isProofValid || isLoading">
+            <button
+              type="submit"
+              class="track-btn enabled"
+              [class.enabled]="form.get('proofNumber')?.valid"
+              [disabled]="form.get('proofNumber')?.invalid || isLoading">
               <span *ngIf="!isLoading">DOWNLOAD</span>
               <span *ngIf="isLoading">DOWNLOADING...</span>
             </button>
