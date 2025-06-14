@@ -77,13 +77,14 @@
             <p class="scan-description">
               Use your mobile device to scan the barcode on your shipping label
             </p>
-            <button 
-              type="button" 
-              class="scan-btn" 
+          <button
+              type="button"
+              class="scan-btn"
               (click)="startBarcodeScanner()"
               [disabled]="isLoading">
               <i class="fas fa-camera"></i> Scan Barcode
             </button>
+            <video #videoPreview style="display:none;"></video>
           </div>
 
           <a href="#" class="need-help">NEED HELP?</a>

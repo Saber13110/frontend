@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { BarcodeService } from '../../services/barcode.service';
 
 // TODO: Backend - Create Tracking Interfaces
 interface TrackingRequest {
@@ -59,8 +60,10 @@ export class AllTrackingComponent implements OnInit {
   isTCNValid: boolean = false;
   isProofValid: boolean = false;
 
+  @ViewChild('videoPreview') videoPreview?: ElementRef<HTMLVideoElement>;
+
   constructor(
-    // TODO: Inject services
+    private barcodeService: BarcodeService,
     // private trackingService: TrackingService,
     // private notificationService: NotificationService
   ) {}
@@ -101,27 +104,23 @@ export class AllTrackingComponent implements OnInit {
   }
 
   async startBarcodeScanner(): Promise<void> {
-    if (!this.isMobile) {
-      alert('Le scanner de code-barres est disponible uniquement sur mobile.');
+    if (!this.barcodeService.isSupported()) {
+      alert('Scanning is not supported by this browser.');
+      return;
+    }
+
+    const video = this.videoPreview?.nativeElement;
+    if (!video) {
+      alert('Video element not available for scanning.');
       return;
     }
 
     try {
-      // TODO: Implement barcode scanning
-      /*
-      const result = await this.barcodeService.startScanning();
+      const result = await this.barcodeService.scan(video);
       if (result) {
         this.trackingNumber = result;
         this.validateInput('tracking', result);
       }
-      */
-      
-      // Simulation for development
-      alert('Scanner de code-barres activé!\n\n(Fonctionnalité à intégrer avec l\'API caméra)');
-      setTimeout(() => {
-        this.trackingNumber = 'GBX123456789';
-        this.validateInput('tracking', this.trackingNumber);
-      }, 2000);
     } catch (error) {
       console.error('Barcode scanning error:', error);
       alert('Erreur lors du scan du code-barres.');
