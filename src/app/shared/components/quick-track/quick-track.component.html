@@ -1,0 +1,23 @@
+<form
+  (ngSubmit)="track()"
+  class="quick-track-form"
+  role="search"
+  aria-label="Quick package tracking"
+>
+  <div class="form-group" *ngIf="label">
+    <label [for]="'qt-number'" class="form-label">{{ label }}</label>
+  </div>
+  <div class="tracking-input-group">
+    <input
+      type="text"
+      id="qt-number"
+      [placeholder]="placeholder"
+      [(ngModel)]="trackingNumber"
+      name="trackingNumber"
+      class="quick-input"
+    />
+    <button type="submit" class="btn-track">
+      {{ buttonText }}
+    </button>
+  </div>
+</form>

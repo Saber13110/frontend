@@ -1,22 +1,21 @@
 import { Component, OnInit, HostListener, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { FormsModule } from '@angular/forms';
 import { Router, NavigationEnd } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
+import { QuickTrackComponent } from '../quick-track/quick-track.component';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule],
+  imports: [CommonModule, RouterModule, QuickTrackComponent],
   templateUrl: './navbar.component.html',
-  styleUrls: ['./navbar.component.scss']
+  styleUrls: ['./navbar.component.scss'],
 })
 export class NavbarComponent implements OnInit, OnDestroy {
   showSearch = false;
   notificationCount = 0;
-  quickTrackingNumber: string = '';
   activeDropdown: string | null = null;
   isMobileMenuOpen = false;
   private routerSubscription: Subscription;
@@ -24,11 +23,11 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
   constructor(private router: Router) {
     // S'abonner aux événements de navigation pour fermer les menus
-    this.routerSubscription = this.router.events.pipe(
-      filter(event => event instanceof NavigationEnd)
-    ).subscribe(() => {
-      this.closeAllMenus();
-    });
+    this.routerSubscription = this.router.events
+      .pipe(filter((event) => event instanceof NavigationEnd))
+      .subscribe(() => {
+        this.closeAllMenus();
+      });
   }
 
   ngOnInit(): void {
@@ -59,19 +58,6 @@ export class NavbarComponent implements OnInit, OnDestroy {
     }
   }
 
-  quickTrack(): void {
-    if (this.quickTrackingNumber?.trim()) {
-      this.router.navigate(['/tracking'], {
-        queryParams: { 
-          number: this.quickTrackingNumber.trim(),
-          type: 'quick'
-        }
-      });
-      this.quickTrackingNumber = '';
-      this.closeAllMenus();
-    }
-  }
-
   toggleMobileMenu(): void {
     this.isMobileMenuOpen = !this.isMobileMenuOpen;
     if (!this.isMobileMenuOpen) {
@@ -82,7 +68,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
   toggleDropdown(event: Event, dropdown: string): void {
     event.preventDefault();
     event.stopPropagation();
-    
+
     if (this.activeDropdown === dropdown) {
       this.activeDropdown = null;
     } else {
@@ -92,8 +78,13 @@ export class NavbarComponent implements OnInit, OnDestroy {
     // Sur mobile, ajuster le scroll pour voir le menu déroulant
     if (!this.isDesktop && this.activeDropdown) {
       setTimeout(() => {
-        const dropdownElement = (event.target as HTMLElement).closest('.dropdown');
-        dropdownElement?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        const dropdownElement = (event.target as HTMLElement).closest(
+          '.dropdown',
+        );
+        dropdownElement?.scrollIntoView({
+          behavior: 'smooth',
+          block: 'nearest',
+        });
       }, 100);
     }
   }
@@ -101,9 +92,11 @@ export class NavbarComponent implements OnInit, OnDestroy {
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent): void {
     const target = event.target as HTMLElement;
-    if (!target.closest('.dropdown') && 
-        !target.closest('.navbar__toggle') && 
-        !target.closest('.navbar__search')) {
+    if (
+      !target.closest('.dropdown') &&
+      !target.closest('.navbar__toggle') &&
+      !target.closest('.navbar__search')
+    ) {
       this.closeAllMenus();
     }
   }

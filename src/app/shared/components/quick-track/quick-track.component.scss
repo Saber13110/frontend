@@ -1,0 +1,21 @@
+.quick-track-form {
+  display: flex;
+  gap: 0.5rem;
+  align-items: flex-end;
+}
+
+.quick-input {
+  flex: 1;
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.btn-track {
+  padding: 0.5rem 1rem;
+  background: #4d148c;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
